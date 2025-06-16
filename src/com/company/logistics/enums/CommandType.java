@@ -1,0 +1,12 @@
+package com.company.logistics.enums;
+
+public enum CommandType {
+    CREATEPACKAGE,
+    CREATEROUTE,
+    ASSIGNPACKAGETOROUTE,
+    ASSIGNTRUCKTOROUTE,
+    FINDROUTE,
+    LISTPACKAGEINFO,
+    LISTTRUCKINFO,
+    LISTROUTEINFO
+}
