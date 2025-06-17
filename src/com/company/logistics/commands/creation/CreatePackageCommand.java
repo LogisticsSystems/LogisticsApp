@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class CreatePackageCommand implements Command {
-    public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 5;
+    public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 4;
 
     private final LogisticsRepository repository;
 
@@ -38,7 +38,7 @@ public class CreatePackageCommand implements Command {
 
     private void parseParameters(List<String> parameters) {
         this.contactInfo = parameters.get(0);
-        this.weight = ParsingHelpers.tryParseDouble(parameters.get(1), "weight");
+        this.weight = ParsingHelpers.tryParseDouble(parameters.get(1), "Weight");
         this.startLocation = ParsingHelpers.tryParseEnum(parameters.get(2),
                 City.class,
                 String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(2)));

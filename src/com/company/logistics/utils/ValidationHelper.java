@@ -8,8 +8,34 @@ import java.util.Map;
 public class ValidationHelper {
 
     public static void validateArgumentsCount(List<String> parameters, int EXPECTED_NUMBER_OF_ARGUMENTS) {
-        //TODO
+        if(parameters.size()<EXPECTED_NUMBER_OF_ARGUMENTS){
+            throw new IllegalArgumentException(String.format(ErrorMessages.INVALID_ARGUMENTS_COUNT
+                    ,EXPECTED_NUMBER_OF_ARGUMENTS,parameters.size()));
+        }
     }
+
+    public static void validateDoubleNonNegative(double dataToValidate,String type){
+        if(dataToValidate<0){
+            throw new IllegalArgumentException(String.format(ErrorMessages.NEGATIVE_DOUBLE,type));
+        }
+    }
+
+    public static void valideStringLenght(String stringToValidate, int minLenght, int maxLenght, String type){
+        validateIntRange(stringToValidate.length()
+                ,minLenght
+                ,maxLenght
+                ,type);
+    }
+
+    private static void validateIntRange(int numToValidate, int minLenght, int maxLenght, String type) {
+
+        if(numToValidate<minLenght || numToValidate>maxLenght){
+            throw new IllegalArgumentException(String.format(ErrorMessages.STRING_NOT_IN_RANGE
+                    ,type,minLenght,maxLenght));
+        }
+    }
+
+
 
 
     // Validation methods specific to DistanceMap operations
@@ -42,4 +68,6 @@ public class ValidationHelper {
             throw new IllegalArgumentException(String.format(ErrorMessages.NO_DISTANCE_DEFINED, from, to));
         }
     }
+
+
 }

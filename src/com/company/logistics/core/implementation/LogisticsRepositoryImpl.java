@@ -51,12 +51,13 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
                                          City startLocation,
                                          City endLocation) {
         DeliveryPackage pack = new DeliveryPackageImpl(
-                nextId.getAndIncrement(),
+                nextId.get(),
                 startLocation,
                 endLocation,
                 weight,
                 contactInfo
         );
+        nextId.incrementAndGet();
         packages.add(pack);
         return pack;
     }
@@ -73,26 +74,34 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         return route;
     }
 
+
     @Override
-    public void assignToRoute(int packageId, int routeId) {
-
-    }
-
-    /*@Override
     public void assignPackageToRoute(int packageId, int routeId) {
+        //TODO validate if route contains pack cities
         DeliveryPackage pack = findPackageById(packageId);
         Route route = findRouteById(routeId);
+        if(pack.isAssignedToRoute()){
+            throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED
+                    ,"Package"
+                    ,"route"));
+        }
         route.assignPackage(pack);
-        pack.assignToRoute(route);
+        pack.assignToRoute();
     }
 
     @Override
     public void assignTruckToRoute(int truckId, int routeId) {
         Truck truck = findTruckById(truckId);
         Route route = findRouteById(routeId);
+        if(truck.isAssignedToRoute()){
+            throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED
+                    ,"Truck"
+                    ,"route"));
+        }
         route.assignTruck(truck);
-        truck.assignToRoute(route);
-    }*/
+        truck.assignToRoute();
+
+    }
 
     @Override
     public List<Route> findRoutes(City startLocation, City endLocation) {

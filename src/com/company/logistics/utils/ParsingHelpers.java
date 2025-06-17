@@ -1,28 +1,52 @@
 package com.company.logistics.utils;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ParsingHelpers {
 
     public static int tryParseInt(String valueToParse, String parameterName) {
-        //TODO
-        return 0;
+        try{
+            return Integer.parseInt(valueToParse);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
+                    ,parameterName,"number"));
+        }
+
     }
 
     public static double tryParseDouble(String valueToParse, String parameterName) {
-        //TODO
-        return 0;
+        try{
+            return Double.parseDouble(valueToParse);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
+                    ,parameterName,"fractional number"));
+        }
     }
 
     public static <E extends Enum<E>> E tryParseEnum(String valueToParse, Class<E> type, String errorMessage) {
-        //TODO
-
-        return null;
+        try{
+            return Enum.valueOf(type,valueToParse);
+        } catch (Exception e) {
+            String enumName=type.getSimpleName();
+            E[] enumValues=type.getEnumConstants();
+            String options= Arrays.stream(enumValues)
+                    .map(Enum::name)
+                    .collect(Collectors.joining(", "));
+            throw new IllegalArgumentException(String.format(ErrorMessages.INVALID_ENUM_VALUE
+                    ,enumName
+                    ,options));
+        }
     }
 
     public static LocalDateTime tryParseDateTime(String valueToParse) {
-        //TODO
-        return null;
+        try{
+            return LocalDateTime.parse(valueToParse);
+        }catch (Exception e){
+            throw new IllegalArgumentException(String.format(ErrorMessages.INCORRECT_DATE_TIME_INPUT));
+        }
     }
 
 }

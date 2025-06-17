@@ -26,7 +26,7 @@ public class AssignPackageToRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        repository.assignToRoute(this.packageId, this.routeId);
+        repository.assignPackageToRoute(this.packageId, this.routeId);
 
         return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Package", this.packageId, this.routeId);
     }

@@ -20,9 +20,9 @@ public interface LogisticsRepository {
 
     Route createRoute(List<City> locations, LocalDateTime departureTime);
 
-    // This is used for both Trucks and Packages, if you need to make two methods for the two,
-    //  please also do so for the commands
-    void assignToRoute(int packageId, int routeId);
+    void assignPackageToRoute(int packageId, int routeId);
+    void assignTruckToRoute(int truckId, int routeId);
+
 
     List<Route> findRoutes(City startLocation, City endLocation);
 

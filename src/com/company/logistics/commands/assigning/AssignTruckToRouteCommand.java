@@ -26,7 +26,7 @@ public class AssignTruckToRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        repository.assignToRoute(this.truckId, this.routeId);
+        repository.assignTruckToRoute(this.truckId, this.routeId);
 
         return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Truck", this.truckId, this.routeId);
     }

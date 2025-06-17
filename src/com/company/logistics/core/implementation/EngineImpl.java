@@ -29,6 +29,7 @@ public class EngineImpl implements Engine {
                 }
 
                 if (inputLine.equalsIgnoreCase(TERMINATION_COMMAND)) {
+                    //TODO Save command logic
                     break;
                 }
 

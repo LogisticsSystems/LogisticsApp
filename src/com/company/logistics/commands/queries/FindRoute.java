@@ -44,10 +44,10 @@ public class FindRoute implements Command {
     private void parseParameters(List<String> parameters) {
         this.startLocation = ParsingHelpers.tryParseEnum(parameters.get(0),
                 City.class,
-                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(2)));
+                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(0)));
         this.endLocation = ParsingHelpers.tryParseEnum(parameters.get(1),
                 City.class,
-                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(3)));
+                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(1)));
     }
 
 
