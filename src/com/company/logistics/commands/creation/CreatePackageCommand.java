@@ -4,6 +4,7 @@ import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.*;
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.City;
+import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -30,7 +31,7 @@ public class CreatePackageCommand implements Command {
 
         parseParameters(parameters);
 
-        Package createdPackage = repository.createPackage(this.contactInfo, this.weight, this.startLocation, this.endLocation);
+        DeliveryPackage createdPackage = repository.createPackage(this.contactInfo, this.weight, this.startLocation, this.endLocation);
 
         return String.format(CommandsConstants.PACKAGE_CREATED_MESSAGE, createdPackage.getId());
     }

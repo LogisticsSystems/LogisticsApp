@@ -16,7 +16,7 @@ public interface LogisticsRepository {
 
     List<Route> getRoutes();
 
-    Package createPackage(String contactInfo, double weight, City startLocation, City endLocation);
+    DeliveryPackage createPackage(String contactInfo, double weight, City startLocation, City endLocation);
 
     Route createRoute(List<City> locations, LocalDateTime departureTime);
 
