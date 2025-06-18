@@ -1,6 +1,7 @@
 package com.company.logistics.core.implementation;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.core.services.routing.RouteScheduleService;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.loading.vehicles.contracts.VehicleLoader;
 import com.company.logistics.models.contracts.DeliveryPackage;
@@ -20,12 +21,15 @@ import java.util.stream.Collectors;
 
 public class LogisticsRepositoryImpl implements LogisticsRepository {
     private final AtomicInteger nextId = new AtomicInteger(1);
+
+    private final RouteScheduleService routeScheduleService;
     private final List<DeliveryPackage> packages = new ArrayList<>();
     private final List<Route> routes   = new ArrayList<>();
     private final List<Truck> trucks;
 
-    public LogisticsRepositoryImpl(VehicleLoader vehicleLoader) {
+    public LogisticsRepositoryImpl(VehicleLoader vehicleLoader, RouteScheduleService routeScheduleService) {
         this.trucks = new ArrayList<>(vehicleLoader.loadVehicles());
+        this.routeScheduleService = routeScheduleService;
     }
 
     @Override
@@ -63,41 +67,45 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
     }
 
     @Override
-    public Route createRoute(List<City> locations,
-                             LocalDateTime departureTime) {
-        Route route = new RouteImpl(
-                nextId.getAndIncrement(),
-                locations,
-                departureTime
-        );
+    public Route createRoute(List<City> locations, LocalDateTime departureTime) {
+        Route route = new RouteImpl(nextId.get(), locations, departureTime);
+        nextId.getAndIncrement();
+
+        List<LocalDateTime> schedule = routeScheduleService.computeSchedule(locations, departureTime);
+        route.setSchedule(schedule);
+
         routes.add(route);
         return route;
     }
 
-
     @Override
     public void assignPackageToRoute(int packageId, int routeId) {
-        //TODO validate if route contains pack cities
         DeliveryPackage pack = findPackageById(packageId);
         Route route = findRouteById(routeId);
-        if(pack.isAssignedToRoute()){
-            throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED
-                    ,"Package"
-                    ,"route"));
-        }
+
+        if(pack.isAssignedToRoute()) { throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED, "Package", "route")); }
+
+        ValidationHelper.validatePackageRouteCompatibility(
+                pack.getStartLocation(),
+                pack.getEndLocation(),
+                route.getLocations()
+        );
+
         route.assignPackage(pack);
         pack.assignToRoute();
+
+        LocalDateTime eta = routeScheduleService.getEtaForCity(pack.getEndLocation(), route.getLocations(), route.getSchedule());
+        pack.setExpectedArrival(eta);
     }
 
     @Override
     public void assignTruckToRoute(int truckId, int routeId) {
+        // TODO: validate truck range
         Truck truck = findTruckById(truckId);
         Route route = findRouteById(routeId);
-        if(truck.isAssignedToRoute()){
-            throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED
-                    ,"Truck"
-                    ,"route"));
-        }
+
+        if(truck.isAssignedToRoute()){ throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED, "Truck", "route")); }
+
         route.assignTruck(truck);
         truck.assignToRoute();
 

@@ -33,12 +33,10 @@ public class FindRoute implements Command {
         List<Route> routes = repository.findRoutes(this.startLocation, this.endLocation);
 
         if (routes.isEmpty()) {
-            return String.format(CommandsConstants.NO_MATCHING_ROUTES_MESSAGE,
-                    this.startLocation, this.endLocation);
+            return String.format(CommandsConstants.NO_MATCHING_ROUTES_MESSAGE, this.startLocation, this.endLocation);
         }
-        else {
-            return ListingHelpers.elementsToString(routes);
-        }
+
+        return ListingHelpers.elementsToString(routes);
     }
 
     private void parseParameters(List<String> parameters) {

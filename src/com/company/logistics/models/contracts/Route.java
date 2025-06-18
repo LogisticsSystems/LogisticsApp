@@ -6,12 +6,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface Route extends Identifyable, Printable{
-
-    //TODO
     LocalDateTime getDepartureTime();
-    void assignPackage(DeliveryPackage pkg);
-    void assignTruck(Truck truck);
+
     List<City> getLocations();
+
+    List<LocalDateTime> getSchedule();
+
+    void setSchedule(List<LocalDateTime> schedule);
+
+    void assignPackage(DeliveryPackage pkg);
+
+    void assignTruck(Truck truck);
+
+    List<DeliveryPackage> getAssignedPackages();
+
+    List<Truck> getAssignedTrucks();
 }
 
 

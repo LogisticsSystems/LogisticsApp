@@ -2,107 +2,75 @@ package com.company.logistics.models.delivery;
 
 import com.company.logistics.enums.City;
 import com.company.logistics.models.contracts.DeliveryPackage;
-import com.company.logistics.models.contracts.Route;
+import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class DeliveryPackageImpl implements DeliveryPackage {
 
-    private static final int CONTACT_INFO_MIN_LENGTH=5;//(name-1char surname-1char phoneNumber-1char)+2spaces
-    private static final int CONTACT_INFO_MAX_LENGHT=57;//(name-20char surname-20char phoneNumber-15char)+2spaces
-    private int id;
-    private City startLocation;
-    private City endLocation;
-    private double weightKg;
-    private String contactInfo;
-    private boolean isAssignedToRoute;
-    private boolean isAssignedToTruck;
+    private static final int CONTACT_INFO_MIN_LENGTH = 5;
+    private static final int CONTACT_INFO_MAX_LENGTH = 57;
+
+    private final int id;
+    private final City startLocation;
+    private final City endLocation;
+    private final double weightKg;
+    private final String contactInfo;
+
+    private boolean isAssignedToRoute = false;
+    private boolean isAssignedToTruck = false;
+    private LocalDateTime expectedArrival;
 
     public DeliveryPackageImpl(int id,
                                City startLocation,
                                City endLocation,
                                double weightKg,
                                String contactInfo) {
-        setId(id);
-        setStartLocation(startLocation);
-        setEndLocation(endLocation);
-        setWeightKg(weightKg);
-        setContactInfo(contactInfo);
-        isAssignedToRoute=false;
-        isAssignedToTruck=false;
+        ValidationHelper.validateIntPositive(id, "Package ID");
+        ValidationHelper.validateNotNull(startLocation, "StartLocation");
+        ValidationHelper.validateNotNull(endLocation,   "EndLocation");
+        ValidationHelper.validateDoubleNonNegative(weightKg, "Weight(kg)");
+        ValidationHelper.valideStringLenght(contactInfo, CONTACT_INFO_MIN_LENGTH, CONTACT_INFO_MAX_LENGTH, "ContactInfo");
 
-
-    }
-
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    private void setId(int id) {
-        this.id = id;
-    }
-
-    public City getStartLocation() {
-        return startLocation;
-    }
-
-    private void setStartLocation(City startLocation) {
+        this.id            = id;
         this.startLocation = startLocation;
+        this.endLocation   = endLocation;
+        this.weightKg      = weightKg;
+        this.contactInfo   = contactInfo;
     }
 
-    public City getEndLocation() {
-        return endLocation;
-    }
+    @Override public int    getId()              { return id; }
+    @Override public City   getStartLocation()  { return startLocation; }
+    @Override public City   getEndLocation()    { return endLocation; }
+    @Override public double getWeightKg()       { return weightKg; }
+    @Override public String getContactInfo()    { return contactInfo; }
 
-    private void setEndLocation(City endLocation) {
-        this.endLocation = endLocation;
-    }
+    @Override public boolean isAssignedToRoute() { return isAssignedToRoute; }
+    @Override public void    assignToRoute()     { this.isAssignedToRoute = true; }
 
-    public double getWeightKg() {
-        return weightKg;
-    }
+    @Override public boolean isAssignedToTruck() { return isAssignedToTruck; }
+    @Override public void    assignToTruck()     { this.isAssignedToTruck = true; }
 
-    private void setWeightKg(double weightKg) {
-        ValidationHelper.validateDoubleNonNegative(weightKg,"Weight(kg)");
-        this.weightKg=weightKg;
-    }
-
-    public String getContactInfo() {
-        return contactInfo;
-    }
-
-    private void setContactInfo(String contactInfo) {
-        ValidationHelper.valideStringLenght(contactInfo
-                ,CONTACT_INFO_MIN_LENGTH
-                ,CONTACT_INFO_MAX_LENGHT
-                ,"Contact information");
-        this.contactInfo=contactInfo;
-    }
-    @Override
-    public boolean isAssignedToRoute() {
-        return isAssignedToRoute;
-    }
-    @Override
-    public void assignToRoute() {
-        isAssignedToRoute = true;
-    }
-    @Override
-    public boolean isAssignedToTruck() {
-        return isAssignedToTruck;
-    }
-    @Override
-    public void assignToTruck() {
-        isAssignedToTruck = true;
+    @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
+    @Override public void setExpectedArrival(LocalDateTime eta) {
+        this.expectedArrival = eta;
     }
 
     @Override
-    public void assignToRoute(Route route) {
+    public String print() {
+        StringBuilder sb = new StringBuilder();
 
+        sb.append(String.format(PrintConstants.PACKAGE_HEADER, id))
+                .append(String.format(PrintConstants.PACKAGE_BASIC_TEMPLATE, startLocation, endLocation, weightKg, contactInfo));
+
+        if (isAssignedToRoute() && expectedArrival != null) {
+            sb.append(String.format(PrintConstants.PACKAGE_ETA_LINE, expectedArrival));
+        }
+
+        return sb.toString();
     }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -114,16 +82,5 @@ public class DeliveryPackageImpl implements DeliveryPackage {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    @Override
-    public String print() {
-        return "DeliveryPackage {" +
-                "id=" + id +
-                ", startLocation= " + Objects.toString(startLocation, "N/A") +
-                ", endLocation= " + Objects.toString(endLocation, "N/A") +
-                ", weightKg= " + String.format("%.2f", weightKg) + "kg" + // Форматиране до 2 десетични знака
-                ", contactInfo= '" + (contactInfo != null ? contactInfo : "N/A") + '\'' +
-                '}';
     }
 }

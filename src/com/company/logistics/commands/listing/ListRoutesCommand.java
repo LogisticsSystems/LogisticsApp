@@ -12,8 +12,8 @@ public class ListRoutesCommand implements Command {
 
     private final List<Route> routes;
 
-    public ListRoutesCommand(LogisticsRepository agencyRepository) {
-        routes = agencyRepository.getRoutes();
+    public ListRoutesCommand(LogisticsRepository repository) {
+        routes = repository.getRoutes();
     }
 
     public String execute(List<String> parameters) {

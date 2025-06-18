@@ -14,6 +14,26 @@ public class ValidationHelper {
         }
     }
 
+    public static <T> void validateListSizeAtLeast(List<T> list, String name, int minSize) {
+        validateNotNull(list, name);
+        if (list.size() < minSize) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.MIN_LIST_SIZE, name, minSize));
+        }
+    }
+
+    public static <T> void validateListSizeEquals(List<T> list, String name, int expectedSize) {
+        validateNotNull(list, name);
+        if (list.size() != expectedSize) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.EXACT_LIST_SIZE, name, expectedSize));
+        }
+    }
+
+    public static void validateIntPositive(int intToValidate, String type) {
+        if (intToValidate <= 0) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.NON_POSITIVE_INT, type));
+        }
+    }
+
     public static void validateDoubleNonNegative(double dataToValidate,String type){
         if(dataToValidate<0){
             throw new IllegalArgumentException(String.format(ErrorMessages.NEGATIVE_DOUBLE,type));
@@ -35,8 +55,24 @@ public class ValidationHelper {
         }
     }
 
+    public static void validatePackageRouteCompatibility(City start, City end, List<City> stops) {
+        validateNotNull(start, "startLocation");
+        validateNotNull(end,   "endLocation");
 
+        int idxFrom = stops.indexOf(start);
+        if (idxFrom < 0) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, start));
+        }
 
+        int idxTo = stops.indexOf(end);
+        if (idxTo < 0) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, end));
+        }
+
+        if (idxTo <= idxFrom) {
+            throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
+        }
+    }
 
     // Validation methods specific to DistanceMap and SpeedMap operations
     public static void validateNotAlreadyInitialized(Object instance, String name) {

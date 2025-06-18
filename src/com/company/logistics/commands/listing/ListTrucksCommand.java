@@ -12,8 +12,8 @@ public class ListTrucksCommand implements Command {
 
     private final List<Truck> trucks;
 
-    public ListTrucksCommand(LogisticsRepository agencyRepository) {
-        trucks = agencyRepository.getTrucks();
+    public ListTrucksCommand(LogisticsRepository repository) {
+        trucks = repository.getTrucks();
     }
 
     public String execute(List<String> parameters) {

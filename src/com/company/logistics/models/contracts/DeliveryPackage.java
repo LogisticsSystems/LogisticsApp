@@ -1,10 +1,21 @@
 package com.company.logistics.models.contracts;
 
+import com.company.logistics.enums.City;
+
+import java.time.LocalDateTime;
+
 public interface DeliveryPackage extends Identifyable, Printable {
-    //TODO
-    void assignToRoute(Route route);
+    City getStartLocation();
+    City getEndLocation();
+    double getWeightKg();
+    String getContactInfo();
+
     boolean isAssignedToRoute();
-    boolean isAssignedToTruck();
     void assignToRoute();
+
+    boolean isAssignedToTruck();
     void assignToTruck();
+
+    LocalDateTime getExpectedArrival();
+    void setExpectedArrival(LocalDateTime eta);
 }

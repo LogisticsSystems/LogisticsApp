@@ -12,8 +12,8 @@ public class ListPackagesCommand implements Command {
 
     private final List<DeliveryPackage> packages;
 
-    public ListPackagesCommand(LogisticsRepository agencyRepository) {
-        packages = agencyRepository.getPackages();
+    public ListPackagesCommand(LogisticsRepository repository) {
+        packages = repository.getPackages();
     }
 
     public String execute(List<String> parameters) {

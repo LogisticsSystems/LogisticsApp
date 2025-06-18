@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface LogisticsRepository {
-
     List<DeliveryPackage> getPackages();
 
     List<Truck> getTrucks();
@@ -21,10 +20,8 @@ public interface LogisticsRepository {
     Route createRoute(List<City> locations, LocalDateTime departureTime);
 
     void assignPackageToRoute(int packageId, int routeId);
+
     void assignTruckToRoute(int truckId, int routeId);
 
-
     List<Route> findRoutes(City startLocation, City endLocation);
-
-
 }

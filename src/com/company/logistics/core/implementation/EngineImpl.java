@@ -1,7 +1,7 @@
 package com.company.logistics.core.implementation;
 
 import com.company.logistics.core.contracts.Engine;
-import com.company.logistics.core.services.EngineHelper;
+import com.company.logistics.core.services.engine.EngineHelper;
 
 import java.util.Scanner;
 
