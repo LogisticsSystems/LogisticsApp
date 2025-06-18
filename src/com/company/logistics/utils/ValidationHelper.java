@@ -38,7 +38,7 @@ public class ValidationHelper {
 
 
 
-    // Validation methods specific to DistanceMap operations
+    // Validation methods specific to DistanceMap and SpeedMap operations
     public static void validateNotAlreadyInitialized(Object instance, String name) {
         if (instance != null) {
             throw new IllegalStateException(String.format(ErrorMessages.ALREADY_INITIALIZED, name));
@@ -69,5 +69,22 @@ public class ValidationHelper {
         }
     }
 
+    public static <K, V> void validateKeyPairInNestedMap(
+            K from,
+            K to,
+            Map<K, Map<K, V>> map,
+            String unknownFromMsg,
+            String noValueMsg
+    ) {
+        validateNotNull(from, "from");
+        validateNotNull(to,   "to");
+        if (!map.containsKey(from)) {
+            throw new IllegalArgumentException(String.format(unknownFromMsg, from));
+        }
+        Map<K, V> inner = map.get(from);
+        if (!inner.containsKey(to)) {
+            throw new IllegalArgumentException(String.format(noValueMsg, from, to));
+        }
+    }
 
 }

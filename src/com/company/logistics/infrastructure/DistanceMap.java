@@ -2,6 +2,7 @@ package com.company.logistics.infrastructure;
 
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.loading.distances.contracts.DistanceLoader;
+import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ public final class DistanceMap {
     }
 
     public int getDistance(City from, City to) {
-        ValidationHelper.validateCityInDistanceMap(from, to, distances);
+        ValidationHelper.validateKeyPairInNestedMap(from, to, distances, ErrorMessages.UNKNOWN_FROM_CITY, ErrorMessages.NO_DISTANCE_DEFINED);
         return distances.get(from).get(to);
     }
 
@@ -50,6 +51,4 @@ public final class DistanceMap {
         }
         return Collections.unmodifiableMap(result);
     }
-
-
 }
