@@ -9,6 +9,8 @@ import com.company.logistics.commands.listing.ListPackagesCommand;
 import com.company.logistics.commands.listing.ListRoutesCommand;
 import com.company.logistics.commands.listing.ListTrucksCommand;
 import com.company.logistics.commands.queries.FindRoute;
+import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
+import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.CommandType;
@@ -16,10 +18,17 @@ import com.company.logistics.utils.ValidationHelper;
 
 public class CommandFactoryImpl implements CommandFactory {
     private static final String INVALID_COMMAND = "Invalid command name: %s";
+    private final EngineContext engineContext;
+
+    public CommandFactoryImpl(EngineContext engineContext) {
+        this.engineContext = engineContext;
+    }
 
     @Override
-    public Command createCommandFromCommandName(String commandTypeAsString, LogisticsRepository repository) {
+    public Command createCommandFromCommandName(String commandTypeAsString) {
         ValidationHelper.validateNotNull(commandTypeAsString, "commandName");
+
+        LogisticsRepository repository = engineContext.getRepository();
         ValidationHelper.validateNotNull(repository, "repository");
 
         CommandType type;
@@ -36,8 +45,10 @@ public class CommandFactoryImpl implements CommandFactory {
             case ASSIGNTRUCKTOROUTE  -> new AssignTruckToRouteCommand(repository);
             case FINDROUTE           -> new FindRoute(repository);
             case LISTPACKAGEINFO     -> new ListPackagesCommand(repository);
-            case LISTTRUCKINFO       -> new ListTrucksCommand(repository);
             case LISTROUTEINFO       -> new ListRoutesCommand(repository);
+            case LISTTRUCKINFO       -> new ListTrucksCommand(repository);
+
+            case CHANGESPEEDMODEL    -> new ChangeSpeedModelCommand(engineContext);
         };
     }
 }

@@ -21,6 +21,14 @@ public class ValidationHelper {
         }
     }
 
+    public static <T> void validateListSizeAtMost(List<T> list, String name, int maxSize, String errorMessageFormat) {
+        validateNotNull(list, name);
+        int actual = list.size();
+        if (actual > maxSize) {
+            throw new IllegalStateException(String.format(errorMessageFormat, actual, maxSize));
+        }
+    }
+
     public static <T> void validateListSizeEquals(List<T> list, String name, int expectedSize) {
         validateNotNull(list, name);
         if (list.size() != expectedSize) {
@@ -90,18 +98,6 @@ public class ValidationHelper {
     public static void validateNotNull(Object obj, String paramName) {
         if (obj == null) {
             throw new IllegalArgumentException(String.format(ErrorMessages.NOT_NULL, paramName));
-        }
-    }
-
-    public static void validateCityInDistanceMap(City from, City to, Map<City, Map<City, Integer>> distances) {
-        validateNotNull(from, "from city");
-        validateNotNull(to, "to city");
-        if (!distances.containsKey(from)) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.UNKNOWN_FROM_CITY, from));
-        }
-        Map<City, Integer> row = distances.get(from);
-        if (!row.containsKey(to)) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.NO_DISTANCE_DEFINED, from, to));
         }
     }
 

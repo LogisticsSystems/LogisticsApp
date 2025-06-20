@@ -6,25 +6,32 @@ import com.company.logistics.infrastructure.SpeedMap;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class SeasonalSpeedService implements SpeedService {
-    private static final Map<Month, Double> MONTH_FACTORS = Map.ofEntries(
-            Map.entry(Month.DECEMBER, 1.10), // summer ↑10%
-            Map.entry(Month.JANUARY,  1.10),
-            Map.entry(Month.FEBRUARY, 1.10),
+    private static final double DEFAULT_FACTOR = 1.00;
+    private static final double SUMMER_FACTOR  = 1.10;
+    private static final double WINTER_FACTOR  = 0.85;
 
-            Map.entry(Month.JUNE,     0.85), // winter ↓15%
-            Map.entry(Month.JULY,     0.85),
-            Map.entry(Month.AUGUST,   0.85)
-            // all other months will default to 1.00
-    );
+    private static final Map<Month, Double> MONTH_FACTORS = new EnumMap<>(Month.class);
+
+    static {
+        // summer
+        MONTH_FACTORS.put(Month.DECEMBER, SUMMER_FACTOR);
+        MONTH_FACTORS.put(Month.JANUARY,  SUMMER_FACTOR);
+        MONTH_FACTORS.put(Month.FEBRUARY, SUMMER_FACTOR);
+        // winter
+        MONTH_FACTORS.put(Month.JUNE,     WINTER_FACTOR);
+        MONTH_FACTORS.put(Month.JULY,     WINTER_FACTOR);
+        MONTH_FACTORS.put(Month.AUGUST,   WINTER_FACTOR);
+    }
 
     @Override
     public double getSpeed(City from, City to, LocalDateTime departure) {
-        double baseSpeed = SpeedMap.getInstance().getBaseSpeed(from, to);
-        Month month = departure.getMonth();
-        double factor = MONTH_FACTORS.getOrDefault(month, 1.00);
-        return baseSpeed * factor;
+        double base   = SpeedMap.getInstance().getBaseSpeed(from, to);
+        Month  month  = departure.getMonth();
+        double factor = MONTH_FACTORS.getOrDefault(month, DEFAULT_FACTOR);
+        return base * factor;
     }
 }

@@ -1,7 +1,7 @@
 package com.company.logistics.core.implementation;
 
 import com.company.logistics.core.contracts.Engine;
-import com.company.logistics.core.services.engine.EngineHelper;
+import com.company.logistics.core.services.engine.CommandProcessor;
 
 import java.util.Scanner;
 
@@ -9,10 +9,10 @@ public class EngineImpl implements Engine {
     private static final String TERMINATION_COMMAND = "Exit";
     private static final String EMPTY_COMMAND_ERROR = "Command cannot be empty.";
 
-    private final EngineHelper engineHelper;
+    private final CommandProcessor commandProcessor;
 
-    public EngineImpl(EngineHelper engineHelper) {
-        this.engineHelper = engineHelper;
+    public EngineImpl(CommandProcessor commandProcessor) {
+        this.commandProcessor = commandProcessor;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class EngineImpl implements Engine {
                     break;
                 }
 
-                String executionResult = engineHelper.processCommand(inputLine);
+                String executionResult = commandProcessor.processCommand(inputLine);
                 System.out.println(executionResult);
 
             } catch (Exception ex) {

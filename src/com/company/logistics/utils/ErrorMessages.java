@@ -31,8 +31,12 @@ public final class ErrorMessages {
     public static final String NO_PACKAGE_WITH_ID        = "No package with ID: %d";
     public static final String NO_ROUTE_WITH_ID          = "No route with ID: %d";
     public static final String NO_TRUCK_WITH_ID          = "No truck with ID: %d";
+    public static final String UNKNOWN_SPEED_MODEL       = "Unknown speed model: %s";
 
     // --- Assignment -------------------------------------------------
     public static final String ALREADY_ASSIGNED          = "%s is already assigned to %s.";
     public static final String CITY_NOT_ON_ROUTE         = "City %s not on route";
+
+    // --- Speed model max routes -------------------------------------------------
+    public static final String SPEED_MODEL_MAX_ROUTES_EXCEED = "Cannot change speed model with %d routes; please limit to %d or fewer.";
 }
