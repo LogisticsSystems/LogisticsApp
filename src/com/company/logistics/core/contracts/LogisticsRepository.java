@@ -21,7 +21,7 @@ public interface LogisticsRepository {
 
     void assignPackageToRoute(int packageId, int routeId);
 
-    void assignTruckToRoute(int truckId, int routeId);
+    String assignTruckToRoute(int truckId, int routeId);
 
     List<Route> findRoutes(City startLocation, City endLocation);
 }

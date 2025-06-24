@@ -49,6 +49,11 @@ public class RouteImpl implements Route {
         assignedPackages.add(pkg);
     }
 
+    @Override public void removePackage(DeliveryPackage pkg){
+        ValidationHelper.validateNotNull(pkg, "Package");
+        assignedPackages.remove(pkg);
+    }
+
     @Override public void assignTruck(Truck truck) {
         ValidationHelper.validateNotNull(truck, "Truck");
         assignedTrucks.add(truck);

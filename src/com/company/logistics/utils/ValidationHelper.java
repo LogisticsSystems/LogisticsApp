@@ -1,6 +1,7 @@
 package com.company.logistics.utils;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.DistanceMap;
+import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
 
@@ -71,13 +72,19 @@ public class ValidationHelper {
         double truckRange= truck.getMaxRangeKm();
         List<City> routeLocations=route.getLocations();
         int routeDistance=0;
-        for(int i=1;i<routeLocations.size();i++){
-            City city1=routeLocations.get(i-1);
-            City city2=routeLocations.get(i);
-            routeDistance+=DistanceMap.getInstance().getDistance(city1,city2);
-        }
+        int endIndex=routeLocations.size()-1;
+        City start=routeLocations.get(0);
+        City end=routeLocations.get(endIndex);
+        routeDistance+=DistanceMap.getInstance().getDistance(start,end);
+
         if(truckRange<routeDistance){
             throw new IllegalArgumentException(ErrorMessages.TRUCK_RANGE_INSUFFICIENT);
+        }
+    }
+
+    public static void validateTruckCapacity(Truck truck, double packageTotalWeight){
+        if(truck.getCapacityKg()<packageTotalWeight){
+            throw new IllegalArgumentException(ErrorMessages.ROUTE_PACKAGES_OVERWEIGHT);
         }
     }
 
