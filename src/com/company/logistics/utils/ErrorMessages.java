@@ -36,6 +36,7 @@ public final class ErrorMessages {
     // --- Assignment -------------------------------------------------
     public static final String ALREADY_ASSIGNED          = "%s is already assigned to %s.";
     public static final String CITY_NOT_ON_ROUTE         = "City %s not on route";
+    public static final String TRUCK_RANGE_INSUFFICIENT  = "The truck's maximum range is insufficient to complete the route";
 
     // --- Speed model max routes -------------------------------------------------
     public static final String SPEED_MODEL_MAX_ROUTES_EXCEED = "Cannot change speed model with %d routes; please limit to %d or fewer.";

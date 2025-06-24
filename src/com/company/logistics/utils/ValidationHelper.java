@@ -1,5 +1,8 @@
 package com.company.logistics.utils;
 import com.company.logistics.enums.City;
+import com.company.logistics.infrastructure.DistanceMap;
+import com.company.logistics.models.contracts.Route;
+import com.company.logistics.models.contracts.Truck;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +63,21 @@ public class ValidationHelper {
         if(numToValidate<minLenght || numToValidate>maxLenght){
             throw new IllegalArgumentException(String.format(ErrorMessages.STRING_NOT_IN_RANGE
                     ,type,minLenght,maxLenght));
+        }
+    }
+
+    public static void validateTruckRange(Truck truck, Route route){
+        DistanceMap distanceMap=DistanceMap.getInstance();
+        double truckRange= truck.getMaxRangeKm();
+        List<City> routeLocations=route.getLocations();
+        int routeDistance=0;
+        for(int i=1;i<routeLocations.size();i++){
+            City city1=routeLocations.get(i-1);
+            City city2=routeLocations.get(i);
+            routeDistance+=DistanceMap.getInstance().getDistance(city1,city2);
+        }
+        if(truckRange<routeDistance){
+            throw new IllegalArgumentException(ErrorMessages.TRUCK_RANGE_INSUFFICIENT);
         }
     }
 

@@ -103,7 +103,7 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         // TODO: validate truck range
         Truck truck = findTruckById(truckId);
         Route route = findRouteById(routeId);
-
+        ValidationHelper.validateTruckRange(truck,route);
         if(truck.isAssignedToRoute()){ throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED, "Truck", "route")); }
 
         route.assignTruck(truck);
