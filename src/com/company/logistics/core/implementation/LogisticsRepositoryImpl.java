@@ -122,41 +122,77 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         //Checks if the route distance exceeds the truck maximum range
         ValidationHelper.validateTruckRange(truck,route);
 
-        //If capacity is exceeded find a truck with more capacity
+        //Call to the method that handles cases
+        return tryAssignTruckToRoute(truck,route,truckId,routeId,packagesWeight);
+
+
+    }
+
+
+//-------- Assing Truck Helpers ----------------------------------------------------------------------------------------
+
+    private double getRoutePackagesWeight(Route route){
+        // Sums total package weight on a route
+        return route.getAssignedPackages().stream()
+                .mapToDouble(DeliveryPackage::getWeightKg)
+                .sum();
+    }
+
+    private Optional<Truck> findBiggerTruckIfAvailable(double packagesWeight){
+        // Finds first available truck with enough capacity
+        return getTrucks().stream()
+                .filter(t->!t.isAssignedToRoute())//find available trucks
+                .filter(t->t.getCapacityKg()>=packagesWeight)
+                .findFirst();
+    }
+
+    private String assignAlternativeTruckToRoute(Truck truck,Route route, Truck alternative, int truckId,int routeId) {
+        //Assigns alternative truck to the route
+        handleAssignition(alternative,route);
+        return String.format(CommandsConstants.ALTERNATIVE_TRUCK_ASSIGNED,truckId, alternative.getId(), routeId);
+    }
+
+    private void redistributeOverflowPackages(Route route,Route newRoute,double totalWeight,double truckCapacity) {
+        // Moves packages until weight fits in truck
+        for(DeliveryPackage pkg:route.getAssignedPackages()){
+            if(totalWeight<=truckCapacity){
+                break;
+            }
+            route.removePackage(pkg);
+            newRoute.assignPackage(pkg);
+            totalWeight-=pkg.getWeightKg();
+        }
+    }
+
+    private void handleAssignition(Truck truck,Route route){
+        // Assigns truck and sets it as busy
+        route.assignTruck(truck);
+        truck.assignToRoute();
+    }
+    private String tryAssignTruckToRoute(Truck truck, Route route, int truckId, int routeId, double packagesWeight){
+        //Main entry: Validates capcity and handles cases
         try {
             //normal case when the truck has a capacity
             ValidationHelper.validateTruckCapacity(truck, packagesWeight);
-            route.assignTruck(truck);
-            truck.assignToRoute();
+            handleAssignition(truck,route);
             return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Truck", truckId, routeId);
         } catch (IllegalArgumentException e){
             //When the truck doesn't have enough capacity, it finds a bigger truck
             Optional<Truck> alternative=findBiggerTruckIfAvailable(packagesWeight);
             if(alternative.isPresent()){
-                route.assignTruck(alternative.get());
-                alternative.get().assignToRoute();
-                return String.format(CommandsConstants.ALTERNATIVE_TRUCK_ASSIGNED,truckId, alternative.get().getId(), routeId);
+                return assignAlternativeTruckToRoute(truck,route, alternative.get(),truckId,routeId);
             }else{
                 //If no bigger truck is found it creates a new route with the same locations
                 //and adds to it the overflow packages.
                 Route newRoute=createRoute(route.getLocations(),route.getDepartureTime());
                 double totalWeight=getRoutePackagesWeight(route);
-                for(DeliveryPackage pkg:route.getAssignedPackages()){
-                    if(totalWeight<=truck.getCapacityKg()){
-                        break;
-                    }
-                    route.removePackage(pkg);
-                    newRoute.assignPackage(pkg);
-                    totalWeight-=pkg.getWeightKg();
-                }
-                route.assignTruck(truck);
-                truck.assignToRoute();
+                redistributeOverflowPackages(route,newRoute,totalWeight,truck.getCapacityKg());
+                handleAssignition(truck,route);
 
                 //Assign truck to the new route
                 Optional<Truck> secondTruck=findBiggerTruckIfAvailable(getRoutePackagesWeight(newRoute));
                 if(secondTruck.isPresent()){
-                    newRoute.assignTruck(secondTruck.get());
-                    secondTruck.get().assignToRoute();
+                    handleAssignition(secondTruck.get(), newRoute);
                     return String.format(CommandsConstants.NEW_ROUTE_AND_TRUCKS_ASSIGNED
                             ,routeId
                             ,newRoute.getId()
@@ -167,25 +203,8 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
             }
         }
         return "";
-
     }
-
-
-
-
-    private double getRoutePackagesWeight(Route route){
-        return route.getAssignedPackages().stream()
-                .mapToDouble(DeliveryPackage::getWeightKg)
-                .sum();
-    }
-
-    private Optional<Truck> findBiggerTruckIfAvailable(double packagesWeight){
-        return getTrucks().stream()
-                .filter(t->!t.isAssignedToRoute())//find available trucks
-                .filter(t->t.getCapacityKg()>=packagesWeight)
-                .findFirst();//find the first truck that can load the packages
-    }
-
+//----------------------------------------------------------------------------------------------------------------------
     @Override
     public List<Route> findRoutes(City startLocation, City endLocation) {
         ValidationHelper.validateNotNull(startLocation, "startLocation");
