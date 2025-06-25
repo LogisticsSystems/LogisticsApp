@@ -16,7 +16,6 @@ public class CreateRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
     public static final String ROUTE_CREATED_MESSAGE = "Route was created with ID %d.";
 
-
     private final LogisticsRepository repository;
 
     private List<City> locations;
@@ -43,6 +42,5 @@ public class CreateRouteCommand implements Command {
                 .map(c -> ParsingHelpers.tryParseEnum(c, City.class, CommandsConstants.INVALID_CITY_MESSAGE))
                 .toList();
         this.departureTime = ParsingHelpers.tryParseDateTime(parameters.get(1));
-
     }
 }

@@ -34,9 +34,14 @@ public class TruckImpl implements Truck {
     @Override public boolean isAssignedToRoute() { return isAssignedToRoute; }
 
     @Override
+    public void unassignFromToRoute() { isAssignedToRoute = false; }
+
+    @Override
     public void assignToRoute() {
         isAssignedToRoute = true;
     }
+
+
 
     @Override
     public String print() {
@@ -46,7 +51,7 @@ public class TruckImpl implements Truck {
                 .append(String.format(PrintConstants.TRUCK_NAME_LINE, name))
                 .append(String.format(PrintConstants.TRUCK_CAPACITY_LINE, capacityKg))
                 .append(String.format(PrintConstants.TRUCK_RANGE_LINE, maxRangeKm))
-                .append(isAssignedToRoute ? PrintConstants.TRUCK_STATUS_ASSIGNED : PrintConstants.TRUCK_STATUS_UNASSIGNED);
+                .append(isAssignedToRoute ? String.format(PrintConstants.TRUCK_STATUS_ASSIGNED) : String.format(PrintConstants.TRUCK_STATUS_UNASSIGNED));
 
         return sb.toString();
     }

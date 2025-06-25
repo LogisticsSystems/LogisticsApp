@@ -21,6 +21,9 @@ public interface Route extends Identifyable, Printable{
     List<DeliveryPackage> getAssignedPackages();
 
     List<Truck> getAssignedTrucks();
+
+    void removePackage(int packageId);
+    void removeTrucks();
 }
 
 

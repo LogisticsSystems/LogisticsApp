@@ -21,6 +21,7 @@ public final class ErrorMessages {
     public static final String INCORRECT_DATE_TIME_INPUT = "Invalid date/time format";
     public static final String INVALID_ENUM_VALUE        = "%s must be one of %s";
     public static final String PACKAGE_ROUTE_MISMATCH    = "Package start city %s must come before end city %s on the route";
+    public static final String PACKAGE_STATUS_ERROR    = "Package should be in status %s for this command.";
 
     // --- Map lookups -------------------------------------------------
     public static final String UNKNOWN_FROM_CITY         = "Unknown from city: %s";

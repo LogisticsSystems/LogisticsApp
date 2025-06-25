@@ -5,6 +5,7 @@ import com.company.logistics.commands.assigning.AssignTruckToRouteCommand;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.commands.creation.CreatePackageCommand;
 import com.company.logistics.commands.creation.CreateRouteCommand;
+import com.company.logistics.commands.delivery.DeliverPackageCommand;
 import com.company.logistics.commands.listing.ListPackagesCommand;
 import com.company.logistics.commands.listing.ListRoutesCommand;
 import com.company.logistics.commands.listing.ListTrucksCommand;
@@ -47,6 +48,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case LISTPACKAGEINFO     -> new ListPackagesCommand(repository);
             case LISTROUTEINFO       -> new ListRoutesCommand(repository);
             case LISTTRUCKINFO       -> new ListTrucksCommand(repository);
+            case DELIVERPACKAGE      -> new DeliverPackageCommand(repository);
 
             case CHANGESPEEDMODEL    -> new ChangeSpeedModelCommand(engineContext);
         };

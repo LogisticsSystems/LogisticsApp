@@ -13,7 +13,7 @@ public class ListingHelpers {
         String newLine = System.lineSeparator();
         return elements.stream()
                 .map(Printable::print)
-                .collect(Collectors.joining(newLine));
+                .collect(Collectors.joining(newLine)) + PrintConstants.LINE_BREAK;
     }
 
 }

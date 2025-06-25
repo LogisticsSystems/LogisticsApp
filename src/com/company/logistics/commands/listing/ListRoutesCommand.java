@@ -5,6 +5,7 @@ import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.utils.ListingHelpers;
+import com.company.logistics.utils.PrintConstants;
 
 import java.util.List;
 
@@ -21,6 +22,6 @@ public class ListRoutesCommand implements Command {
             return String.format(CommandsConstants.NONE_FOUND_MESSAGE, "routes");
         }
 
-        return ListingHelpers.elementsToString(routes);
+        return PrintConstants.LINE_BREAK + "\n" + ListingHelpers.elementsToString(routes);
     }
 }

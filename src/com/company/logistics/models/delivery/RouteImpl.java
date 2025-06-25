@@ -8,9 +8,13 @@ import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class RouteImpl implements Route {
@@ -62,6 +66,19 @@ public class RouteImpl implements Route {
     }
 
     @Override
+    public void removePackage(int packageId) {
+        assignedPackages.removeIf(p -> p.getId() == packageId);
+    }
+
+    @Override
+    public void removeTrucks() {
+        for (int i = 0; i < assignedTrucks.size(); i++) {
+            assignedTrucks.remove(0);
+        }
+        //TODO there has to be a better way...
+    }
+
+    @Override
     public String print() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format(PrintConstants.ROUTE_HEADER, id));
@@ -70,7 +87,16 @@ public class RouteImpl implements Route {
         List<LocalDateTime> etas = getSchedule();
 
         for (int i = 0; i < stops.size(); i++) {
-            sb.append(String.format(PrintConstants.ROUTE_STOP_TEMPLATE, i + 1, stops.get(i), etas.get(i)));
+            sb.append(String.format(PrintConstants.ROUTE_STOP_TEMPLATE,
+                    stops.get(i),
+                    DateTimeFormatter.ofPattern(PrintConstants.DATE_TIME_FORMAT).format(etas.get(i))));
+
+            if (i != stops.size() - 1) {
+                sb.append(" →");
+            }
+            else {
+                sb.append("\n");
+            }
         }
 
         if (!assignedTrucks.isEmpty()) {
@@ -79,12 +105,18 @@ public class RouteImpl implements Route {
                     .collect(Collectors.joining(", "));
             sb.append(String.format(PrintConstants.ROUTE_TRUCK_LINE, truckIds));
         }
+        else {
+            sb.append(String.format(PrintConstants.ROUTE_TRUCK_LINE, "No truck assigned"));
+        }
 
         if (!assignedPackages.isEmpty()) {
             String pkgIds = assignedPackages.stream()
                     .map(p -> String.valueOf(p.getId()))
                     .collect(Collectors.joining(", "));
             sb.append(String.format(PrintConstants.ROUTE_PACKAGES_LINE, pkgIds));
+        }
+        else {
+            sb.append(String.format(PrintConstants.ROUTE_PACKAGES_LINE, "No packages assigned"));
         }
 
         return sb.toString();

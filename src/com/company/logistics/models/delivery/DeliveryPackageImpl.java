@@ -1,11 +1,13 @@
 package com.company.logistics.models.delivery;
 
 import com.company.logistics.enums.City;
+import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class DeliveryPackageImpl implements DeliveryPackage {
@@ -18,9 +20,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
     private final City endLocation;
     private final double weightKg;
     private final String contactInfo;
-
-    private boolean isAssignedToRoute = false;
-    private boolean isAssignedToTruck = false;
+    private PackageStatus status;
     private LocalDateTime expectedArrival;
 
     public DeliveryPackageImpl(int id,
@@ -39,6 +39,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         this.endLocation   = endLocation;
         this.weightKg      = weightKg;
         this.contactInfo   = contactInfo;
+        this.status        = PackageStatus.UNASSIGNED;
     }
 
     @Override public int    getId()              { return id; }
@@ -46,16 +47,69 @@ public class DeliveryPackageImpl implements DeliveryPackage {
     @Override public City   getEndLocation()    { return endLocation; }
     @Override public double getWeightKg()       { return weightKg; }
     @Override public String getContactInfo()    { return contactInfo; }
-
-    @Override public boolean isAssignedToRoute() { return isAssignedToRoute; }
-    @Override public void    assignToRoute()     { this.isAssignedToRoute = true; }
-
-    @Override public boolean isAssignedToTruck() { return isAssignedToTruck; }
-    @Override public void    assignToTruck()     { this.isAssignedToTruck = true; }
+    @Override public PackageStatus getStatus()    { return status; }
 
     @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
     @Override public void setExpectedArrival(LocalDateTime eta) {
         this.expectedArrival = eta;
+    }
+
+
+    //TODO ordinal
+    @Override
+    public void advancePackageStatus() {
+        PackageStatus nextStatus;
+        PackageStatus currentStatus = getStatus();
+
+        PackageStatus[] statuses = PackageStatus.values();
+
+
+        switch (this.status) {
+            case PackageStatus.UNASSIGNED:
+                nextStatus = PackageStatus.PENDING;
+                break;
+            case PackageStatus.PENDING:
+                nextStatus = PackageStatus.IN_TRANSIT;
+                break;
+            case PackageStatus.IN_TRANSIT:
+                nextStatus = PackageStatus.DELIVERED;
+                break;
+            default:
+                throw new IllegalArgumentException(String.format(PrintConstants.PACKAGE_ALREADY_DELIVERED,
+                        this.id,
+                        this.status));
+        }
+
+        this.status = nextStatus;
+        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE,
+                this.id,
+                this.status);
+    }
+
+    @Override
+    public void revertPackageStatus() {
+        PackageStatus nextStatus;
+
+        switch (this.status) {
+            case PackageStatus.PENDING:
+                nextStatus = PackageStatus.UNASSIGNED;
+                break;
+            case PackageStatus.IN_TRANSIT:
+                nextStatus = PackageStatus.PENDING;
+                break;
+            case PackageStatus.DELIVERED:
+                nextStatus = PackageStatus.IN_TRANSIT;
+                break;
+            default:
+                throw new IllegalArgumentException(String.format(PrintConstants.PACKAGE_ALREADY_DELIVERED,
+                        this.id,
+                        this.status));
+        }
+
+        this.status = nextStatus;
+        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE,
+                this.id,
+                this.status);
     }
 
     @Override
@@ -63,11 +117,19 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         StringBuilder sb = new StringBuilder();
 
         sb.append(String.format(PrintConstants.PACKAGE_HEADER, id))
-                .append(String.format(PrintConstants.PACKAGE_BASIC_TEMPLATE, startLocation, endLocation, weightKg, contactInfo));
+                .append(String.format(PrintConstants.PACKAGE_BASIC_TEMPLATE,
+                        startLocation,
+                        endLocation,
+                        weightKg,
+                        contactInfo,
+                        status));
 
-        if (isAssignedToRoute() && expectedArrival != null) {
-            sb.append(String.format(PrintConstants.PACKAGE_ETA_LINE, expectedArrival));
+        if (status == PackageStatus.IN_TRANSIT && expectedArrival != null) {
+            sb.append(String.format(PrintConstants.PACKAGE_ETA_LINE,
+                    DateTimeFormatter.ofPattern(PrintConstants.DATE_TIME_FORMAT).format(expectedArrival)));
         }
+
+
 
         return sb.toString();
     }

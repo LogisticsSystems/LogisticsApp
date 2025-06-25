@@ -10,4 +10,5 @@ public interface Truck extends Identifyable, Printable {
     void assignToRoute();
 
     boolean isAssignedToRoute();
+    void unassignFromToRoute();
 }

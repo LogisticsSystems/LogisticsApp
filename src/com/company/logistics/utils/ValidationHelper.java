@@ -1,5 +1,7 @@
 package com.company.logistics.utils;
 import com.company.logistics.enums.City;
+import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.models.contracts.DeliveryPackage;
 
 import java.util.List;
 import java.util.Map;
@@ -79,6 +81,14 @@ public class ValidationHelper {
 
         if (idxTo <= idxFrom) {
             throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
+        }
+    }
+
+    public static void validatePackageStatus(DeliveryPackage pkg, PackageStatus expectedStatus) {
+
+        if(pkg.getStatus() != expectedStatus){
+            throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_STATUS_ERROR
+                    ,expectedStatus));
         }
     }
 
