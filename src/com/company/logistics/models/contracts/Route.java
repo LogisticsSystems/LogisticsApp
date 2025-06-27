@@ -4,8 +4,9 @@ import com.company.logistics.enums.City;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
-public interface Route extends Identifyable, Printable{
+public interface Route extends Identifyable, Printable {
     LocalDateTime getDepartureTime();
 
     List<City> getLocations();
@@ -20,10 +21,11 @@ public interface Route extends Identifyable, Printable{
 
     List<DeliveryPackage> getAssignedPackages();
 
-    List<Truck> getAssignedTrucks();
+    Optional<Truck> getAssignedTruck();
 
     void removePackage(int packageId);
-    void removeTrucks();
+
+    void unassignTruck();
 }
 
 

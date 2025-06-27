@@ -40,4 +40,8 @@ public final class ErrorMessages {
 
     // --- Speed model max routes -------------------------------------------------
     public static final String SPEED_MODEL_MAX_ROUTES_EXCEED = "Cannot change speed model with %d routes; please limit to %d or fewer.";
+
+    // --- Truck/Route capacity/range guards ----------------------------
+    public static final String TRUCK_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Truck %d to Route %d: load %.0fkg exceeds capacity %.0fkg";
+    public static final String ROUTE_DISTANCE_EXCEEDS_RANGE = "Cannot assign Truck %d to Route %d: route distance %.0fkm exceeds range %.0fkm";
 }

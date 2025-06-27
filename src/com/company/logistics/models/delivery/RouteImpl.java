@@ -9,12 +9,7 @@ import com.company.logistics.utils.ValidationHelper;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RouteImpl implements Route {
@@ -24,7 +19,7 @@ public class RouteImpl implements Route {
     private final List<City> locations;
     private final LocalDateTime departureTime;
     private final List<DeliveryPackage> assignedPackages = new ArrayList<>();
-    private final List<Truck> assignedTrucks = new ArrayList<>();
+    private Truck assignedTruck;
 
     private List<LocalDateTime> schedule = List.of();
 
@@ -38,9 +33,9 @@ public class RouteImpl implements Route {
         this.departureTime = departureTime;
     }
 
-    @Override public int getId()                    { return id; }
+    @Override public int getId()                      { return id; }
     @Override public LocalDateTime getDepartureTime() { return departureTime; }
-    @Override public List<City> getLocations()      { return List.copyOf(locations); }
+    @Override public List<City> getLocations()        { return List.copyOf(locations); }
 
     @Override public List<LocalDateTime> getSchedule() { return schedule; }
     @Override public void setSchedule(List<LocalDateTime> schedule) {
@@ -55,14 +50,15 @@ public class RouteImpl implements Route {
 
     @Override public void assignTruck(Truck truck) {
         ValidationHelper.validateNotNull(truck, "Truck");
-        assignedTrucks.add(truck);
+        assignedTruck = truck;
     }
 
     @Override public List<DeliveryPackage> getAssignedPackages() {
         return List.copyOf(assignedPackages);
     }
-    @Override public List<Truck> getAssignedTrucks() {
-        return List.copyOf(assignedTrucks);
+
+    public Optional<Truck> getAssignedTruck() {
+        return Optional.ofNullable(assignedTruck);
     }
 
     @Override
@@ -71,55 +67,54 @@ public class RouteImpl implements Route {
     }
 
     @Override
-    public void removeTrucks() {
-        for (int i = 0; i < assignedTrucks.size(); i++) {
-            assignedTrucks.remove(0);
-        }
-        //TODO there has to be a better way...
-    }
+    public void unassignTruck() { assignedTruck = null; }
 
     @Override
     public String print() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format(PrintConstants.ROUTE_HEADER, id));
 
-        List<City> stops     = getLocations();
-        List<LocalDateTime> etas = getSchedule();
-
-        for (int i = 0; i < stops.size(); i++) {
-            sb.append(String.format(PrintConstants.ROUTE_STOP_TEMPLATE,
-                    stops.get(i),
-                    DateTimeFormatter.ofPattern(PrintConstants.DATE_TIME_FORMAT).format(etas.get(i))));
-
-            if (i != stops.size() - 1) {
-                sb.append(" →");
-            }
-            else {
-                sb.append("\n");
-            }
-        }
-
-        if (!assignedTrucks.isEmpty()) {
-            String truckIds = assignedTrucks.stream()
-                    .map(t -> String.valueOf(t.getId()))
-                    .collect(Collectors.joining(", "));
-            sb.append(String.format(PrintConstants.ROUTE_TRUCK_LINE, truckIds));
-        }
-        else {
-            sb.append(String.format(PrintConstants.ROUTE_TRUCK_LINE, "No truck assigned"));
-        }
-
-        if (!assignedPackages.isEmpty()) {
-            String pkgIds = assignedPackages.stream()
-                    .map(p -> String.valueOf(p.getId()))
-                    .collect(Collectors.joining(", "));
-            sb.append(String.format(PrintConstants.ROUTE_PACKAGES_LINE, pkgIds));
-        }
-        else {
-            sb.append(String.format(PrintConstants.ROUTE_PACKAGES_LINE, "No packages assigned"));
-        }
+        appendHeader(sb);
+        appendStops(sb);
+        appendTruckLine(sb);
+        appendPackageLine(sb);
 
         return sb.toString();
+    }
+
+    private void appendHeader(StringBuilder sb) {
+        sb.append(String.format(PrintConstants.ROUTE_HEADER, id));
+    }
+
+    private void appendStops(StringBuilder sb) {
+        var stops = getLocations();
+        var etas  = getSchedule();
+        for (int i = 0; i < stops.size(); i++) {
+            sb.append(String.format(
+                    PrintConstants.ROUTE_STOP_TEMPLATE,
+                    stops.get(i),
+                    DateTimeFormatter.ofPattern(PrintConstants.DATE_TIME_FORMAT)
+                            .format(etas.get(i))
+            ));
+            // add arrow between stops, newline at end
+            if (i < stops.size() - 1) sb.append(" →");
+            else                      sb.append("\n");
+        }
+    }
+
+    private void appendTruckLine(StringBuilder sb) {
+        String truckPart = getAssignedTruck()
+                .map(t -> String.valueOf(t.getId()))
+                .orElse("No truck assigned");
+        sb.append(String.format(PrintConstants.ROUTE_TRUCK_LINE, truckPart));
+    }
+
+    private void appendPackageLine(StringBuilder sb) {
+        String pkgPart = getAssignedPackages().isEmpty()
+                ? "No packages assigned"
+                : getAssignedPackages().stream()
+                .map(p -> String.valueOf(p.getId()))
+                .collect(Collectors.joining(", "));
+        sb.append(String.format(PrintConstants.ROUTE_PACKAGES_LINE, pkgPart));
     }
 
     @Override public boolean equals(Object o) {

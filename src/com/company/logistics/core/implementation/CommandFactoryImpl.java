@@ -14,6 +14,7 @@ import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.core.services.delivery.PackageDeliveryService;
 import com.company.logistics.enums.CommandType;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -30,7 +31,10 @@ public class CommandFactoryImpl implements CommandFactory {
         ValidationHelper.validateNotNull(commandTypeAsString, "commandName");
 
         LogisticsRepository repository = engineContext.getRepository();
+        PackageDeliveryService deliveryService = engineContext.getDeliveryService();
+
         ValidationHelper.validateNotNull(repository, "repository");
+        ValidationHelper.validateNotNull(deliveryService, "delivery service");
 
         CommandType type;
         try {
@@ -48,7 +52,8 @@ public class CommandFactoryImpl implements CommandFactory {
             case LISTPACKAGEINFO     -> new ListPackagesCommand(repository);
             case LISTROUTEINFO       -> new ListRoutesCommand(repository);
             case LISTTRUCKINFO       -> new ListTrucksCommand(repository);
-            case DELIVERPACKAGE      -> new DeliverPackageCommand(repository);
+
+            case DELIVERPACKAGE      -> new DeliverPackageCommand(deliveryService);
 
             case CHANGESPEEDMODEL    -> new ChangeSpeedModelCommand(engineContext);
         };

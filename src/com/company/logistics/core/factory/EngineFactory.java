@@ -7,6 +7,7 @@ import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.core.implementation.CommandFactoryImpl;
 import com.company.logistics.core.implementation.EngineImpl;
 import com.company.logistics.core.implementation.LogisticsRepositoryImpl;
+import com.company.logistics.core.services.delivery.PackageDeliveryService;
 import com.company.logistics.core.services.engine.CommandProcessor;
 import com.company.logistics.core.services.routing.RouteScheduleService;
 import com.company.logistics.core.services.speeds.SpeedService;
@@ -45,8 +46,11 @@ public final class EngineFactory {
                 initialScheduler
         );
 
+        // 4) delivery service
+        PackageDeliveryService deliveryService = new PackageDeliveryService(repo);
+
         // 4) context bundles repo, speed model and route scheduler
-        return new EngineContext(repo, initialSpeedModel, initialScheduler);
+        return new EngineContext(repo, initialSpeedModel, initialScheduler, deliveryService);
     }
 
     private static CommandProcessor createCommandProcessor(EngineContext engineContext) {

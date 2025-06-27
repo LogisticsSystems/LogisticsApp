@@ -32,7 +32,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         ValidationHelper.validateNotNull(startLocation, "StartLocation");
         ValidationHelper.validateNotNull(endLocation,   "EndLocation");
         ValidationHelper.validateDoubleNonNegative(weightKg, "Weight(kg)");
-        ValidationHelper.valideStringLenght(contactInfo, CONTACT_INFO_MIN_LENGTH, CONTACT_INFO_MAX_LENGTH, "ContactInfo");
+        ValidationHelper.validateStringLength(contactInfo, CONTACT_INFO_MIN_LENGTH, CONTACT_INFO_MAX_LENGTH, "ContactInfo");
 
         this.id            = id;
         this.startLocation = startLocation;
@@ -42,74 +42,41 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         this.status        = PackageStatus.UNASSIGNED;
     }
 
-    @Override public int    getId()              { return id; }
+    @Override public int    getId()             { return id; }
     @Override public City   getStartLocation()  { return startLocation; }
     @Override public City   getEndLocation()    { return endLocation; }
     @Override public double getWeightKg()       { return weightKg; }
     @Override public String getContactInfo()    { return contactInfo; }
-    @Override public PackageStatus getStatus()    { return status; }
 
-    @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
-    @Override public void setExpectedArrival(LocalDateTime eta) {
-        this.expectedArrival = eta;
-    }
+    @Override public PackageStatus getStatus()  { return status; }
 
-
-    //TODO ordinal
     @Override
     public void advancePackageStatus() {
-        PackageStatus nextStatus;
-        PackageStatus currentStatus = getStatus();
+        int idx = status.ordinal();
+        PackageStatus[] vals = PackageStatus.values();
 
-        PackageStatus[] statuses = PackageStatus.values();
-
-
-        switch (this.status) {
-            case PackageStatus.UNASSIGNED:
-                nextStatus = PackageStatus.PENDING;
-                break;
-            case PackageStatus.PENDING:
-                nextStatus = PackageStatus.IN_TRANSIT;
-                break;
-            case PackageStatus.IN_TRANSIT:
-                nextStatus = PackageStatus.DELIVERED;
-                break;
-            default:
-                throw new IllegalArgumentException(String.format(PrintConstants.PACKAGE_ALREADY_DELIVERED,
-                        this.id,
-                        this.status));
+        if (idx >= vals.length-1) {
+            throw new IllegalStateException(String.format(PrintConstants.PACKAGE_ALREADY_AT, id, status));
         }
 
-        this.status = nextStatus;
-        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE,
-                this.id,
-                this.status);
+        status = vals[idx+1];
+        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
     @Override
     public void revertPackageStatus() {
-        PackageStatus nextStatus;
-
-        switch (this.status) {
-            case PackageStatus.PENDING:
-                nextStatus = PackageStatus.UNASSIGNED;
-                break;
-            case PackageStatus.IN_TRANSIT:
-                nextStatus = PackageStatus.PENDING;
-                break;
-            case PackageStatus.DELIVERED:
-                nextStatus = PackageStatus.IN_TRANSIT;
-                break;
-            default:
-                throw new IllegalArgumentException(String.format(PrintConstants.PACKAGE_ALREADY_DELIVERED,
-                        this.id,
-                        this.status));
+        int idx = status.ordinal();
+        if (idx <= 0) {
+            throw new IllegalStateException(String.format(PrintConstants.PACKAGE_ALREADY_AT, id, status));
         }
 
-        this.status = nextStatus;
-        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE,
-                this.id,
-                this.status);
+        status = PackageStatus.values()[idx-1];
+        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
+    }
+
+    @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
+    @Override public void setExpectedArrival(LocalDateTime eta) {
+        this.expectedArrival = eta;
     }
 
     @Override
@@ -145,4 +112,5 @@ public class DeliveryPackageImpl implements DeliveryPackage {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

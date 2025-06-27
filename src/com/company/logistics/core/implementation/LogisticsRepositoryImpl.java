@@ -13,12 +13,10 @@ import com.company.logistics.models.delivery.RouteImpl;
 import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
-import java.awt.event.MouseWheelListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -70,31 +68,6 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
     }
 
     @Override
-    public DeliveryPackage deliverPackage(int packageId) {
-        DeliveryPackage pack = findPackageById(packageId);
-        Route route = routes.stream()
-                .dropWhile(r -> !r.getAssignedPackages().contains(pack))
-                .findFirst()
-                .orElseThrow();
-
-        ValidationHelper.validatePackageStatus(pack, PackageStatus.IN_TRANSIT);
-
-        pack.advancePackageStatus();
-        route.removePackage(packageId);
-
-        if (route.getAssignedPackages().isEmpty()) {
-            for (int i = 0; i < route.getAssignedTrucks().size(); i++) {
-                route.getAssignedTrucks().get(i).unassignFromToRoute();
-            }
-            route.removeTrucks();
-        }
-
-        //TODO simplify? separate?
-
-        return pack;
-    }
-
-    @Override
     public Route createRoute(List<City> locations, LocalDateTime departureTime) {
         Route route = new RouteImpl(nextId.get(), locations, departureTime);
         nextId.getAndIncrement();
@@ -111,16 +84,30 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         DeliveryPackage pack = findPackageById(packageId);
         Route route = findRouteById(routeId);
 
-        if(pack.getStatus() != PackageStatus.UNASSIGNED) { throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED, "Package", "route")); }
+        // only unassigned packaged may be added
+        ValidationHelper.validatePackageStatus(pack, PackageStatus.UNASSIGNED);
 
+        // location-compatibility
         ValidationHelper.validatePackageRouteCompatibility(
                 pack.getStartLocation(),
                 pack.getEndLocation(),
                 route.getLocations()
         );
 
+        //TODO: validate package weight does not exceed max truck capacity
+
+        // attach it...
         route.assignPackage(pack);
+
+        // UNASSIGNED → PENDING
         pack.advancePackageStatus();
+
+        boolean truckAlreadyAssigned = route.getAssignedTruck().isPresent();
+
+        // …and if there was already a truck, go PENDING → IN_TRANSIT immediately
+        if (truckAlreadyAssigned) {
+            pack.advancePackageStatus();
+        }
 
         LocalDateTime eta = routeScheduleService.getEtaForCity(pack.getEndLocation(), route.getLocations(), route.getSchedule());
         pack.setExpectedArrival(eta);
@@ -128,20 +115,33 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
 
     @Override
     public void assignTruckToRoute(int truckId, int routeId) {
-        // TODO: validate truck range
         Truck truck = findTruckById(truckId);
         Route route = findRouteById(routeId);
 
-        for (int i = 0; i < route.getAssignedPackages().size(); i++) {
-             DeliveryPackage pack  = route.getAssignedPackages().get(i);
-             pack.advancePackageStatus();
-        }
+        // 1) validate weight
+        ValidationHelper.validateTotalLoadWithinCapacity(
+                route.getAssignedPackages(),
+                truck.getCapacityKg(),
+                truckId,
+                routeId
+        );
 
-        if(truck.isAssignedToRoute()){ throw new IllegalArgumentException(String.format(ErrorMessages.ALREADY_ASSIGNED, "Truck", "route")); }
+        // 2) validate range
+        ValidationHelper.validateRouteRangeWithin(
+                route.getLocations(),
+                truck.getMaxRangeKm(),
+                truckId,
+                routeId
+        );
 
+        // 3) do the assignment
         route.assignTruck(truck);
         truck.assignToRoute();
 
+        // 4) flip PENDING → IN_TRANSIT
+        route.getAssignedPackages().stream()
+                .filter(p -> p.getStatus() == PackageStatus.PENDING)
+                .forEach(DeliveryPackage::advancePackageStatus);
     }
 
     @Override
@@ -158,7 +158,8 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
                 .collect(Collectors.toList());
     }
 
-    private DeliveryPackage findPackageById(int id) {
+    @Override
+    public DeliveryPackage findPackageById(int id) {
         return packages.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
@@ -177,5 +178,15 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
                 .filter(t -> t.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException( String.format(ErrorMessages.NO_TRUCK_WITH_ID, id)));
+    }
+
+    @Override
+    public Route findRouteByPackageId(int packageId) {
+        DeliveryPackage pkg = findPackageById(packageId);
+        return getRoutes().stream()
+                .filter(r -> r.getAssignedPackages().contains(pkg))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("No route carries package %d", packageId)));
     }
 }

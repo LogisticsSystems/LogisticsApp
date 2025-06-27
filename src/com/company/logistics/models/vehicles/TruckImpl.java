@@ -16,7 +16,7 @@ public class TruckImpl implements Truck {
     private boolean isAssignedToRoute;
 
     public TruckImpl(int id, String name, double capacityKg, double maxRangeKm) {
-        ValidationHelper.valideStringLenght(name, NAME_MIN_LENGTH, NAME_MAX_LENGTH, "Truck name");
+        ValidationHelper.validateStringLength(name, NAME_MIN_LENGTH, NAME_MAX_LENGTH, "Truck name");
         ValidationHelper.validateDoubleNonNegative(capacityKg,  "Truck capacity");
         ValidationHelper.validateDoubleNonNegative(maxRangeKm, "Truck max range");
 
@@ -34,14 +34,12 @@ public class TruckImpl implements Truck {
     @Override public boolean isAssignedToRoute() { return isAssignedToRoute; }
 
     @Override
-    public void unassignFromToRoute() { isAssignedToRoute = false; }
+    public void unassignFromRoute() { isAssignedToRoute = false; }
 
     @Override
     public void assignToRoute() {
         isAssignedToRoute = true;
     }
-
-
 
     @Override
     public String print() {

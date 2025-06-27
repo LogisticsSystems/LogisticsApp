@@ -25,5 +25,8 @@ public interface LogisticsRepository {
 
     List<Route> findRoutes(City startLocation, City endLocation);
 
-    DeliveryPackage deliverPackage(int packageId);
+    DeliveryPackage findPackageById(int id);
+
+    Route findRouteByPackageId(int packageId);
+
 }

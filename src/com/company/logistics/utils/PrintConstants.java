@@ -6,7 +6,7 @@ public final class PrintConstants {
     // Route printing
     public static final String ROUTE_HEADER        = "Route %d:%n";
     public static final String ROUTE_STOP_TEMPLATE = " %s (%s)";
-    public static final String ROUTE_TRUCK_LINE    = " Assigned Truck IDs: %s%n";
+    public static final String ROUTE_TRUCK_LINE    = " Assigned Truck ID: %s%n";
     public static final String ROUTE_PACKAGES_LINE = " Assigned Package IDs: %s%n";
 
     // Package printing
@@ -14,7 +14,7 @@ public final class PrintConstants {
     public static final String PACKAGE_ROUTE_LINE      = "  Assigned to Route: %s%n";
     public static final String PACKAGE_ETA_LINE        = "  Expected Arrival: %s%n";
     public static final String PACKAGE_BASIC_TEMPLATE  = "  From %s → %s, %,.2fkg, Contact: %s%n  Package status: %s%n";
-    public static final String PACKAGE_ALREADY_DELIVERED  = "Package %d is already %s.";
+    public static final String PACKAGE_ALREADY_AT      = "Package %d is already %s.";
     public static final String PACKAGE_STATUS_UPDATE   = "Package %d is now in status %s.%n";
 
     // Truck printing

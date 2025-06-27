@@ -10,11 +10,12 @@ public interface DeliveryPackage extends Identifyable, Printable {
     City getEndLocation();
     double getWeightKg();
     String getContactInfo();
+
     PackageStatus getStatus();
+    void advancePackageStatus();
+    void revertPackageStatus();
 
     LocalDateTime getExpectedArrival();
     void setExpectedArrival(LocalDateTime eta);
 
-    void advancePackageStatus();
-    void revertPackageStatus();
 }
