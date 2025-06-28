@@ -14,27 +14,33 @@ import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.core.services.assignment.AssignmentService;
 import com.company.logistics.core.services.delivery.PackageDeliveryService;
+import com.company.logistics.core.services.routing.management.RouteCreationService;
+import com.company.logistics.core.services.speeds.SpeedModelService;
 import com.company.logistics.enums.CommandType;
 import com.company.logistics.utils.ValidationHelper;
 
 public class CommandFactoryImpl implements CommandFactory {
     private static final String INVALID_COMMAND = "Invalid command name: %s";
-    private final EngineContext engineContext;
+
+    private final LogisticsRepository     repository;
+    private final AssignmentService       assignmentService;
+    private final PackageDeliveryService  deliveryService;
+    private final RouteCreationService    routeCreationService;
+    private final SpeedModelService       speedModelService;
 
     public CommandFactoryImpl(EngineContext engineContext) {
-        this.engineContext = engineContext;
+        this.repository               = engineContext.getRepository();
+        this.assignmentService        = engineContext.getAssignmentService();
+        this.deliveryService          = engineContext.getDeliveryService();
+        this.routeCreationService     = engineContext.getRouteCreationService();
+        this.speedModelService        = engineContext.getSpeedModelService();
     }
 
     @Override
     public Command createCommandFromCommandName(String commandTypeAsString) {
         ValidationHelper.validateNotNull(commandTypeAsString, "commandName");
-
-        LogisticsRepository repository = engineContext.getRepository();
-        PackageDeliveryService deliveryService = engineContext.getDeliveryService();
-
-        ValidationHelper.validateNotNull(repository, "repository");
-        ValidationHelper.validateNotNull(deliveryService, "delivery service");
 
         CommandType type;
         try {
@@ -44,17 +50,26 @@ public class CommandFactoryImpl implements CommandFactory {
         }
 
         return switch (type) {
-            case CREATEPACKAGE       -> new CreatePackageCommand(repository);
-            case CREATEROUTE         -> new CreateRouteCommand(engineContext.getRouteCreationService());
-            case FINDROUTE           -> new FindRoute(repository);
-            case LISTPACKAGEINFO     -> new ListPackagesCommand(repository);
-            case LISTROUTEINFO       -> new ListRoutesCommand(repository);
-            case LISTTRUCKINFO       -> new ListTrucksCommand(repository);
+            // ——— CRUD / creation ———
+            case CREATEPACKAGE    -> new CreatePackageCommand(repository);
+            case CREATEROUTE      -> new CreateRouteCommand(routeCreationService);
 
-            case ASSIGNPACKAGETOROUTE-> new AssignPackageToRouteCommand(engineContext);
-            case ASSIGNTRUCKTOROUTE  -> new AssignTruckToRouteCommand(engineContext);
-            case DELIVERPACKAGE      -> new DeliverPackageCommand(deliveryService);
-            case CHANGESPEEDMODEL    -> new ChangeSpeedModelCommand(engineContext);
+            // ——— Queries & listings ———
+            case FINDROUTE        -> new FindRoute(repository);
+            case LISTPACKAGEINFO  -> new ListPackagesCommand(repository);
+            case LISTROUTEINFO    -> new ListRoutesCommand(repository);
+            case LISTTRUCKINFO    -> new ListTrucksCommand(repository);
+
+            // ——— Assignment ———
+            case ASSIGNPACKAGETOROUTE -> new AssignPackageToRouteCommand(assignmentService);
+            case ASSIGNTRUCKTOROUTE   -> new AssignTruckToRouteCommand(assignmentService);
+
+            // ——— Delivery ———
+            case DELIVERPACKAGE   -> new DeliverPackageCommand(deliveryService);
+
+            // ——— Speed model swap ———
+            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(speedModelService);
+
         };
     }
 }

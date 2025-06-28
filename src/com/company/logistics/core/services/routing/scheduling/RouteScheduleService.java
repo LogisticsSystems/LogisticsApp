@@ -1,6 +1,6 @@
-package com.company.logistics.core.services.routing;
+package com.company.logistics.core.services.routing.scheduling;
 
-import com.company.logistics.core.services.speeds.SpeedService;
+import com.company.logistics.core.services.speeds.contract.SpeedModel;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.utils.ErrorMessages;
@@ -12,9 +12,9 @@ import java.util.List;
 public class RouteScheduleService {
     private static final int MINUTES_IN_HOUR = 60;
 
-    private final SpeedService speedService;
+    private final SpeedModel speedService;
 
-    public RouteScheduleService(SpeedService speedService) {
+    public RouteScheduleService(SpeedModel speedService) {
         this.speedService = speedService;
     }
 

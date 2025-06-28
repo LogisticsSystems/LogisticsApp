@@ -2,8 +2,7 @@ package com.company.logistics.commands.creation;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.contracts.LogisticsRepository;
-import com.company.logistics.core.services.routing.RouteCreationService;
+import com.company.logistics.core.services.routing.management.RouteCreationService;
 import com.company.logistics.enums.City;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.utils.ParsingHelpers;

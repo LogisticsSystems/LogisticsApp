@@ -1,12 +1,12 @@
 package com.company.logistics.core.services.speeds.implementation;
 
-import com.company.logistics.core.services.speeds.SpeedService;
+import com.company.logistics.core.services.speeds.contract.SpeedModel;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.SpeedMap;
 
 import java.time.LocalDateTime;
 
-public class SinusoidalSpeedService implements SpeedService {
+public class SinusoidalSpeedModel implements SpeedModel {
     private static final int    CYCLE_DAYS       = 365;
     private static final double AMPLITUDE        = 10.0;
     private static final int    PEAK_DAY_OF_YEAR = 26;

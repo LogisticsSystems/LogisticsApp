@@ -1,9 +1,7 @@
 package com.company.logistics.core.implementation;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
-import com.company.logistics.core.services.routing.RouteScheduleService;
 import com.company.logistics.enums.City;
-import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.infrastructure.loading.vehicles.contracts.VehicleLoader;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;

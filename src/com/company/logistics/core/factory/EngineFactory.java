@@ -10,10 +10,9 @@ import com.company.logistics.core.implementation.LogisticsRepositoryImpl;
 import com.company.logistics.core.services.assignment.AssignmentService;
 import com.company.logistics.core.services.delivery.PackageDeliveryService;
 import com.company.logistics.core.services.engine.CommandProcessor;
-import com.company.logistics.core.services.routing.RouteCreationService;
-import com.company.logistics.core.services.routing.RouteScheduleService;
-import com.company.logistics.core.services.speeds.SpeedService;
-import com.company.logistics.core.services.speeds.implementation.ConstantSpeedService;
+import com.company.logistics.core.services.routing.management.RouteCreationService;
+import com.company.logistics.core.services.speeds.SpeedModelService;
+import com.company.logistics.core.services.speeds.implementation.ConstantSpeedModel;
 import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.infrastructure.SpeedMap;
 import com.company.logistics.infrastructure.loading.distances.implementation.DefaultDistanceLoader;
@@ -25,31 +24,42 @@ public final class EngineFactory {
 
     public static Engine create() {
         // 1) initialize shared infrastructure
-        DistanceMap.initialize(new DefaultDistanceLoader());
-        SpeedMap.initialize(new DefaultSpeedLoader());
+        initInfrastructure();
 
-        // 2) build the four “core” collaborators
-        SpeedService           initialSpeed          = new ConstantSpeedService();
-        RouteScheduleService   initialScheduler      = new RouteScheduleService(initialSpeed);
-        LogisticsRepository    repo                  = new LogisticsRepositoryImpl(new DefaultVehicleLoader());
-        PackageDeliveryService deliveryService       = new PackageDeliveryService(repo);
-        AssignmentService      assignmentService     = new AssignmentService(repo, initialScheduler);
+        // 2) build everything and bundle into EngineContext
+        EngineContext engineContext = createEngineContext();
 
-        // 3) bundle into EngineContext
-        EngineContext engineContext = new EngineContext(
-                repo,
-                initialSpeed,
-                initialScheduler,
-                deliveryService,
-                assignmentService
-        );
-
-        // 4) now build & attach the creation service with the context
-        engineContext.setRouteCreationService(new RouteCreationService(engineContext));
-
-        // 5) build command processor + engine
-        CommandFactory   commandFactory = new CommandFactoryImpl(engineContext);
+        // 3) wire up command processor & engine
+        CommandFactory   commandFactory   = new CommandFactoryImpl(engineContext);
         CommandProcessor commandProcessor = new CommandProcessor(commandFactory);
         return new EngineImpl(commandProcessor);
+    }
+
+    private static void initInfrastructure() {
+        DistanceMap.initialize(new DefaultDistanceLoader());
+        SpeedMap.initialize(new DefaultSpeedLoader());
+    }
+
+    private static EngineContext createEngineContext() {
+        // 2.1) core repository
+        LogisticsRepository  repository        = new LogisticsRepositoryImpl(new DefaultVehicleLoader());
+
+        // 2.2) core speed model
+        SpeedModelService speedModelService    = new SpeedModelService(repository, new ConstantSpeedModel());
+
+
+        // 2.3) domain services
+        PackageDeliveryService deliveryService     = new PackageDeliveryService(repository);
+        AssignmentService assignmentService        = new AssignmentService(repository, speedModelService.getRouteScheduleService());
+        RouteCreationService routeCreationService  = new RouteCreationService(repository, speedModelService);
+
+        // 2.4) assemble context (everything non-null, no setters needed)
+        return new EngineContext(
+                repository,
+                speedModelService,
+                deliveryService,
+                assignmentService,
+                routeCreationService
+        );
     }
 }

@@ -2,8 +2,7 @@ package com.company.logistics.commands.assigning;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.context.EngineContext;
-import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.core.services.assignment.AssignmentService;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -12,13 +11,14 @@ import java.util.List;
 public class AssignTruckToRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
-    private final EngineContext engineContext;
+    private final AssignmentService assignmentService;
 
     private int truckId;
     private int routeId;
 
-    public AssignTruckToRouteCommand(EngineContext engineContext) {
-        this.engineContext = engineContext;
+    public AssignTruckToRouteCommand(AssignmentService assignmentService) {
+
+        this.assignmentService = assignmentService;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class AssignTruckToRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        engineContext.getAssignmentService().assignTruckToRoute(this.truckId, this.routeId);
+        assignmentService.assignTruckToRoute(this.truckId, this.routeId);
 
         return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Truck", this.truckId, this.routeId);
     }

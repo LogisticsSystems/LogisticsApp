@@ -1,6 +1,6 @@
 package com.company.logistics.core.services.speeds.implementation;
 
-import com.company.logistics.core.services.speeds.SpeedService;
+import com.company.logistics.core.services.speeds.contract.SpeedModel;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.SpeedMap;
 
@@ -9,7 +9,7 @@ import java.time.Month;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class SeasonalSpeedService implements SpeedService {
+public class SeasonalSpeedModel implements SpeedModel {
     private static final double DEFAULT_FACTOR = 1.00;
     private static final double SUMMER_FACTOR  = 1.10;
     private static final double WINTER_FACTOR  = 0.85;
