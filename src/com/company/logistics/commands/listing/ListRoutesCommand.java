@@ -11,13 +11,14 @@ import java.util.List;
 
 public class ListRoutesCommand implements Command {
 
-    private final List<Route> routes;
+    private final LogisticsRepository repository;
 
     public ListRoutesCommand(LogisticsRepository repository) {
-        routes = repository.getRoutes();
+        this.repository = repository;
     }
 
     public String execute(List<String> parameters) {
+        List<Route> routes = repository.getRoutes();
         if (routes.isEmpty()) {
             return String.format(CommandsConstants.NONE_FOUND_MESSAGE, "routes");
         }

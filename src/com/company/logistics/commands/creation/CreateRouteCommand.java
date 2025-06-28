@@ -3,6 +3,7 @@ package com.company.logistics.commands.creation;
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.core.services.routing.RouteCreationService;
 import com.company.logistics.enums.City;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.utils.ParsingHelpers;
@@ -16,13 +17,13 @@ public class CreateRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
     public static final String ROUTE_CREATED_MESSAGE = "Route was created with ID %d.";
 
-    private final LogisticsRepository repository;
+    private final RouteCreationService creationService;
 
     private List<City> locations;
     private LocalDateTime departureTime;
 
-    public CreateRouteCommand(LogisticsRepository repository) {
-        this.repository = repository;
+    public CreateRouteCommand(RouteCreationService creationService) {
+        this.creationService = creationService;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class CreateRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        Route createdRoute = repository.createRoute(this.locations, this.departureTime);
+        Route createdRoute = creationService.createRoute(locations, departureTime);
 
         return String.format(ROUTE_CREATED_MESSAGE, createdRoute.getId());
     }

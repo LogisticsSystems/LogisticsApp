@@ -19,13 +19,13 @@ public interface LogisticsRepository {
 
     Route createRoute(List<City> locations, LocalDateTime departureTime);
 
-    void assignPackageToRoute(int packageId, int routeId);
-
-    void assignTruckToRoute(int truckId, int routeId);
-
     List<Route> findRoutes(City startLocation, City endLocation);
 
     DeliveryPackage findPackageById(int id);
+
+    Route findRouteById(int id);
+
+    Truck findTruckById(int id);
 
     Route findRouteByPackageId(int packageId);
 

@@ -30,57 +30,25 @@ public class ChangeSpeedModelCommand implements Command {
 
     @Override
     public String execute(List<String> parameters) {
-        SpeedModelType speedModelType = parseAndValidate(parameters);
+        ValidationHelper.validateArgumentsCount(parameters, EXPECTED_NUMBER_OF_ARGUMENTS);
+        SpeedModelType speedModelType = ParsingHelpers.tryParseEnum(
+                parameters.get(0).toUpperCase(),
+                SpeedModelType.class,
+                ErrorMessages.UNKNOWN_SPEED_MODEL
+        );
 
-        ValidationHelper.validateListSizeAtMost(engineContext.getRepository().getRoutes(),
+        ValidationHelper.validateListSizeAtMost(
+                engineContext.getRepository().getRoutes(),
                 "routes",
                 MAX_ROUTES,
                 ErrorMessages.SPEED_MODEL_MAX_ROUTES_EXCEED);
 
-        updateSpeedService(speedModelType);
-        rebuildRouteScheduler();
-        recomputeAllRoutesAndPackages();
+        switch (speedModelType) {
+            case CONSTANT   -> engineContext.changeSpeedModel(new ConstantSpeedService());
+            case SEASONAL   -> engineContext.changeSpeedModel(new SeasonalSpeedService());
+            case SINUSOIDAL -> engineContext.changeSpeedModel(new SinusoidalSpeedService());
+        }
 
         return String.format(CommandsConstants.SPEED_MODEL_SWITCH, speedModelType);
-    }
-
-    private SpeedModelType parseAndValidate(List<String> params) {
-        ValidationHelper.validateArgumentsCount(params, EXPECTED_NUMBER_OF_ARGUMENTS);
-        return ParsingHelpers.tryParseEnum(
-                params.get(0).toUpperCase(),
-                SpeedModelType.class,
-                ErrorMessages.UNKNOWN_SPEED_MODEL
-        );
-    }
-
-    private void updateSpeedService(SpeedModelType type) {
-        switch (type) {
-            case CONSTANT -> engineContext.setSpeedService(new ConstantSpeedService());
-            case SEASONAL -> engineContext.setSpeedService(new SeasonalSpeedService());
-            case SINUSOIDAL -> engineContext.setSpeedService(new SinusoidalSpeedService());
-        }
-    }
-
-    private void rebuildRouteScheduler() {
-        RouteScheduleService scheduler = new RouteScheduleService(engineContext.getSpeedService());
-        engineContext.setRouteScheduler(scheduler);
-    }
-
-    private void recomputeAllRoutesAndPackages() {
-        RouteScheduleService scheduler = engineContext.getRouteScheduler();
-
-        List<Route> routes = engineContext.getRepository().getRoutes();
-        for (Route route : routes) {
-            List<City> stops = route.getLocations();
-            LocalDateTime departureTime = route.getDepartureTime();
-
-            List<LocalDateTime> newRouteSchedule = scheduler.computeSchedule(stops, departureTime);
-            route.setSchedule(newRouteSchedule);
-
-            for (DeliveryPackage pkg : route.getAssignedPackages()) {
-                LocalDateTime eta = scheduler.getEtaForCity(pkg.getEndLocation(), stops, newRouteSchedule);
-                pkg.setExpectedArrival(eta);
-            }
-        }
     }
 }

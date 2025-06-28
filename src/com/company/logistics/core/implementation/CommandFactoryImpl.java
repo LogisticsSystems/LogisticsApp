@@ -45,16 +45,15 @@ public class CommandFactoryImpl implements CommandFactory {
 
         return switch (type) {
             case CREATEPACKAGE       -> new CreatePackageCommand(repository);
-            case CREATEROUTE         -> new CreateRouteCommand(repository);
-            case ASSIGNPACKAGETOROUTE-> new AssignPackageToRouteCommand(repository);
-            case ASSIGNTRUCKTOROUTE  -> new AssignTruckToRouteCommand(repository);
+            case CREATEROUTE         -> new CreateRouteCommand(engineContext.getRouteCreationService());
             case FINDROUTE           -> new FindRoute(repository);
             case LISTPACKAGEINFO     -> new ListPackagesCommand(repository);
             case LISTROUTEINFO       -> new ListRoutesCommand(repository);
             case LISTTRUCKINFO       -> new ListTrucksCommand(repository);
 
+            case ASSIGNPACKAGETOROUTE-> new AssignPackageToRouteCommand(engineContext);
+            case ASSIGNTRUCKTOROUTE  -> new AssignTruckToRouteCommand(engineContext);
             case DELIVERPACKAGE      -> new DeliverPackageCommand(deliveryService);
-
             case CHANGESPEEDMODEL    -> new ChangeSpeedModelCommand(engineContext);
         };
     }

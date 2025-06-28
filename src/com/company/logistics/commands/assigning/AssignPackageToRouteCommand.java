@@ -2,7 +2,7 @@ package com.company.logistics.commands.assigning;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -11,13 +11,13 @@ import java.util.List;
 public class AssignPackageToRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
-    private final LogisticsRepository repository;
+    private final EngineContext engineContext;
 
     private int packageId;
     private int routeId;
 
-    public AssignPackageToRouteCommand(LogisticsRepository repository) {
-        this.repository = repository;
+    public AssignPackageToRouteCommand(EngineContext engineContext) {
+        this.engineContext = engineContext;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AssignPackageToRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        repository.assignPackageToRoute(this.packageId, this.routeId);
+        engineContext.getAssignmentService().assignPackageToRoute(this.packageId, this.routeId);
 
         return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Package", this.packageId, this.routeId);
     }
