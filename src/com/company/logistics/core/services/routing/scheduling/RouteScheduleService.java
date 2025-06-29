@@ -12,10 +12,10 @@ import java.util.List;
 public class RouteScheduleService {
     private static final int MINUTES_IN_HOUR = 60;
 
-    private final SpeedModel speedService;
+    private final SpeedModel speedModel;
 
-    public RouteScheduleService(SpeedModel speedService) {
-        this.speedService = speedService;
+    public RouteScheduleService(SpeedModel speedModel) {
+        this.speedModel = speedModel;
     }
 
     public List<LocalDateTime> computeSchedule(List<City> stops, LocalDateTime departure) {
@@ -28,7 +28,7 @@ public class RouteScheduleService {
             City to   = stops.get(i + 1);
 
             int   distanceKm = DistanceMap.getInstance().getDistance(from, to);
-            double avgSpeed  = speedService.getSpeed(from, to, current);
+            double avgSpeed  = speedModel.getSpeed(from, to, current);
             long  minutes    = Math.round((distanceKm / avgSpeed) * MINUTES_IN_HOUR);
 
             current = current.plusMinutes(minutes);

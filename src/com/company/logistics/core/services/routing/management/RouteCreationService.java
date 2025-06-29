@@ -23,7 +23,7 @@ public class RouteCreationService {
         Route route = repo.createRoute(stops, departure);
 
         // 2) business logic
-        RouteScheduleService routeScheduleService = speedModelService.getRouteScheduleService();
+        RouteScheduleService routeScheduleService = speedModelService.getRouteScheduler();
         route.setSchedule(routeScheduleService.computeSchedule(stops, departure));
 
         return route;

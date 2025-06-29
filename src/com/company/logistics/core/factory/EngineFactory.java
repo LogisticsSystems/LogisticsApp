@@ -10,6 +10,7 @@ import com.company.logistics.core.implementation.LogisticsRepositoryImpl;
 import com.company.logistics.core.services.assignment.AssignmentService;
 import com.company.logistics.core.services.delivery.PackageDeliveryService;
 import com.company.logistics.core.services.engine.CommandProcessor;
+import com.company.logistics.core.services.routing.computing.RouteRecalculatorService;
 import com.company.logistics.core.services.routing.management.RouteCreationService;
 import com.company.logistics.core.services.speeds.SpeedModelService;
 import com.company.logistics.core.services.speeds.implementation.ConstantSpeedModel;
@@ -45,13 +46,15 @@ public final class EngineFactory {
         LogisticsRepository  repository        = new LogisticsRepositoryImpl(new DefaultVehicleLoader());
 
         // 2.2) core speed model
-        SpeedModelService speedModelService    = new SpeedModelService(repository, new ConstantSpeedModel());
-
+        SpeedModelService speedModelService    = new SpeedModelService(new ConstantSpeedModel());
 
         // 2.3) domain services
         PackageDeliveryService deliveryService     = new PackageDeliveryService(repository);
-        AssignmentService assignmentService        = new AssignmentService(repository, speedModelService.getRouteScheduleService());
+        AssignmentService assignmentService        = new AssignmentService(repository, speedModelService);
         RouteCreationService routeCreationService  = new RouteCreationService(repository, speedModelService);
+
+        // 2.4) recomputation logic service
+        RouteRecalculatorService routeRecalculatorService = new RouteRecalculatorService(repository, speedModelService);
 
         // 2.4) assemble context (everything non-null, no setters needed)
         return new EngineContext(
@@ -59,7 +62,8 @@ public final class EngineFactory {
                 speedModelService,
                 deliveryService,
                 assignmentService,
-                routeCreationService
+                routeCreationService,
+                routeRecalculatorService
         );
     }
 }

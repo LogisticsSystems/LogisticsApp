@@ -16,6 +16,7 @@ import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.core.services.assignment.AssignmentService;
 import com.company.logistics.core.services.delivery.PackageDeliveryService;
+import com.company.logistics.core.services.routing.computing.RouteRecalculatorService;
 import com.company.logistics.core.services.routing.management.RouteCreationService;
 import com.company.logistics.core.services.speeds.SpeedModelService;
 import com.company.logistics.enums.CommandType;
@@ -29,6 +30,7 @@ public class CommandFactoryImpl implements CommandFactory {
     private final PackageDeliveryService  deliveryService;
     private final RouteCreationService    routeCreationService;
     private final SpeedModelService       speedModelService;
+    private final RouteRecalculatorService routeRecalculatorService;
 
     public CommandFactoryImpl(EngineContext engineContext) {
         this.repository               = engineContext.getRepository();
@@ -36,6 +38,7 @@ public class CommandFactoryImpl implements CommandFactory {
         this.deliveryService          = engineContext.getDeliveryService();
         this.routeCreationService     = engineContext.getRouteCreationService();
         this.speedModelService        = engineContext.getSpeedModelService();
+        this.routeRecalculatorService = engineContext.getRouteRecalculatorService();
     }
 
     @Override
@@ -68,7 +71,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case DELIVERPACKAGE   -> new DeliverPackageCommand(deliveryService);
 
             // ——— Speed model swap ———
-            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(speedModelService);
+            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(repository, speedModelService, routeRecalculatorService);
 
         };
     }
