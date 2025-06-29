@@ -8,6 +8,8 @@ import com.company.logistics.core.implementation.CommandFactoryImpl;
 import com.company.logistics.core.implementation.EngineImpl;
 import com.company.logistics.core.implementation.LogisticsRepositoryImpl;
 import com.company.logistics.core.services.assignment.AssignmentService;
+import com.company.logistics.core.services.assignment.strategy.implementation.DefaultPackageAssignmentStrategy;
+import com.company.logistics.core.services.assignment.strategy.implementation.DefaultTruckAssignmentStrategy;
 import com.company.logistics.core.services.delivery.PackageDeliveryService;
 import com.company.logistics.core.services.engine.CommandProcessor;
 import com.company.logistics.core.services.routing.computing.RouteRecalculatorService;
@@ -48,9 +50,13 @@ public final class EngineFactory {
         // 2.2) core speed model
         SpeedModelService speedModelService    = new SpeedModelService(new ConstantSpeedModel());
 
+        // build the two small assignment strategies
+        DefaultPackageAssignmentStrategy packageAssignmentStrategy = new DefaultPackageAssignmentStrategy(repository, speedModelService);
+        DefaultTruckAssignmentStrategy truckAssignmentStrategy = new DefaultTruckAssignmentStrategy(repository);
+
         // 2.3) domain services
         PackageDeliveryService deliveryService     = new PackageDeliveryService(repository);
-        AssignmentService assignmentService        = new AssignmentService(repository, speedModelService);
+        AssignmentService assignmentService        = new AssignmentService(packageAssignmentStrategy, truckAssignmentStrategy);
         RouteCreationService routeCreationService  = new RouteCreationService(repository, speedModelService);
 
         // 2.4) recomputation logic service
