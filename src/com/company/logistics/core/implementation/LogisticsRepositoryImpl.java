@@ -9,6 +9,7 @@ import com.company.logistics.models.contracts.Truck;
 import com.company.logistics.models.delivery.DeliveryPackageImpl;
 import com.company.logistics.models.delivery.RouteImpl;
 import com.company.logistics.utils.ErrorMessages;
+import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.time.LocalDateTime;
@@ -116,6 +117,6 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
                 .filter(r -> r.getAssignedPackages().contains(pkg))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(
-                        String.format("No route carries package %d", packageId)));
+                        String.format(PrintConstants.NO_ROUTE_CARRIES_PACKAGES_LINE, packageId)));
     }
 }

@@ -2,18 +2,28 @@ package com.company.logistics.core.services.assignment.strategy.implementation;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.core.services.assignment.strategy.PackageAssignmentStrategy;
+import com.company.logistics.core.services.assignment.strategy.TruckAssignmentStrategy;
 import com.company.logistics.core.services.routing.scheduling.RouteScheduleService;
 import com.company.logistics.core.services.speeds.SpeedModelService;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
+import com.company.logistics.models.contracts.Truck;
+import com.company.logistics.utils.Calculations;
+import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrategy {
     private final LogisticsRepository repository;
     private final SpeedModelService speedModelService;
+
+    private DeliveryPackage pack;
+    private Route           route;
+    private Truck           truck;
 
     public DefaultPackageAssignmentStrategy(
             LogisticsRepository repository,
@@ -25,9 +35,36 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
 
     @Override
     public void assignPackage(int packageId, int routeId) {
-        DeliveryPackage pack  = repository.findPackageById(packageId);
-        Route           route = repository.findRouteById(routeId);
+        pack  = repository.findPackageById(packageId);
+        route = repository.findRouteById(routeId);
+        if (route.getAssignedTruck().isPresent()) {
+            truck = route.getAssignedTruck().get();
+        }
 
+        // perform package validations
+        validatePackage();
+
+        // attach it...
+        route.assignPackage(pack);
+
+        // update package status
+        updatePackageStatus();
+
+        // compute and set ETA
+        setEtaToPackage();
+    }
+
+    private void updatePackageStatus() {
+        // UNASSIGNED → PENDING
+        pack.advancePackageStatus();
+
+        // if there was already a truck, go PENDING → IN_TRANSIT immediately
+        if (route.getAssignedTruck().isPresent()) {
+            pack.advancePackageStatus();
+        }
+    }
+
+    private void validatePackage() {
         // only unassigned packages may be added
         ValidationHelper.validatePackageStatus(pack, PackageStatus.UNASSIGNED);
 
@@ -38,18 +75,26 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
                 route.getLocations()
         );
 
-        // attach it...
-        route.assignPackage(pack);
-
-        // UNASSIGNED → PENDING
-        pack.advancePackageStatus();
-
-        // if there was already a truck, go PENDING → IN_TRANSIT immediately
         if (route.getAssignedTruck().isPresent()) {
-            pack.advancePackageStatus();
-        }
+            List<DeliveryPackage> packs = new ArrayList<>(route.getAssignedPackages());
+            packs.add(pack);
 
-        // compute and set ETA
+            ValidationHelper.validateTotalLoadWithinCapacity(
+                    packs,
+                    truck.getCapacityKg(),
+                    truck.getId(),
+                    route.getId()         ,
+                    String.format(ErrorMessages.ROUTE_LOAD_EXCEEDS_CAPACITY,
+                            pack.getId(),
+                            route.getId(),
+                            Calculations.calculateTotalLoad(packs),
+                            truck.getCapacityKg(),
+                            truck.getName())
+            );
+        }
+    }
+
+    private void setEtaToPackage() {
         LocalDateTime eta = speedModelService.getRouteScheduler().getEtaForCity(
                 pack.getEndLocation(),
                 route.getLocations(),

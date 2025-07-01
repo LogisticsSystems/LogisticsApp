@@ -66,7 +66,14 @@ public class ValidationHelper {
     private static void validateIntRange(int actual, int min, int max, String name) {
         if (actual < min || actual > max) {
             throw new IllegalArgumentException(String.format(
-                    ErrorMessages.STRING_NOT_IN_RANGE, name, min, max));
+                    ErrorMessages.NUMBER_NOT_IN_RANGE, name, min, max));
+        }
+    }
+
+    public static void validateDoubleRange(double actual, int min, int max, String name) {
+        if (actual < min || actual > max) {
+            throw new IllegalArgumentException(String.format(
+                    ErrorMessages.NUMBER_NOT_IN_RANGE, name, min, max));
         }
     }
 
@@ -156,16 +163,13 @@ public class ValidationHelper {
     /** Total weight of packages must not exceed truck capacity. */
     public static void validateTotalLoadWithinCapacity(
             List<DeliveryPackage> packages,
-            double capacityKg, int truckId, int routeId
+            double capacityKg, int truckId, int routeId, String error
     ) {
-        double load = packages.stream()
-                .mapToDouble(DeliveryPackage::getWeightKg)
-                .sum();
+        double load = Calculations.calculateTotalLoad(packages);
 
         if (load > capacityKg) {
             throw new IllegalArgumentException(String.format(
-                    ErrorMessages.TRUCK_LOAD_EXCEEDS_CAPACITY,
-                    truckId, routeId, load, capacityKg));
+                    error));
         }
     }
 
@@ -173,11 +177,8 @@ public class ValidationHelper {
     public static void validateRouteRangeWithin(
             List<City> stops, double maxRangeKm, int truckId, int routeId
     ) {
-        double dist = 0;
-        for (int i = 0; i < stops.size() - 1; i++) {
-            dist += DistanceMap.getInstance()
-                    .getDistance(stops.get(i), stops.get(i + 1));
-        }
+        double dist = Calculations.calculateTotalDistance(stops);
+
         if (dist > maxRangeKm) {
             throw new IllegalArgumentException(String.format(
                     ErrorMessages.ROUTE_DISTANCE_EXCEEDS_RANGE,

@@ -14,6 +14,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
 
     private static final int CONTACT_INFO_MIN_LENGTH = 5;
     private static final int CONTACT_INFO_MAX_LENGTH = 57;
+    private static final int MAX_WEIGHT = 42000;
 
     private final int id;
     private final City startLocation;
@@ -31,7 +32,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         ValidationHelper.validateIntPositive(id, "Package ID");
         ValidationHelper.validateNotNull(startLocation, "StartLocation");
         ValidationHelper.validateNotNull(endLocation,   "EndLocation");
-        ValidationHelper.validateDoubleNonNegative(weightKg, "Weight(kg)");
+        ValidationHelper.validateDoubleRange(weightKg, 0, MAX_WEIGHT, "Weight(kg)");
         ValidationHelper.validateStringLength(contactInfo, CONTACT_INFO_MIN_LENGTH, CONTACT_INFO_MAX_LENGTH, "ContactInfo");
 
         this.id            = id;
@@ -47,7 +48,6 @@ public class DeliveryPackageImpl implements DeliveryPackage {
     @Override public City   getEndLocation()    { return endLocation; }
     @Override public double getWeightKg()       { return weightKg; }
     @Override public String getContactInfo()    { return contactInfo; }
-
     @Override public PackageStatus getStatus()  { return status; }
 
     @Override

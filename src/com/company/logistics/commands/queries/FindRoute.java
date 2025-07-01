@@ -16,8 +16,8 @@ public class FindRoute implements Command {
 
     private final LogisticsRepository repository;
 
-    City startLocation;
-    City endLocation;
+    private City startLocation;
+    private City endLocation;
 
     public FindRoute(LogisticsRepository repository) {
         this.repository = repository;

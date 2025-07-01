@@ -12,6 +12,7 @@ public final class ErrorMessages {
     public static final String NEGATIVE_DOUBLE           = "%s must be non negative";
     public static final String NON_POSITIVE_INT          = "%s must be positive";
     public static final String STRING_NOT_IN_RANGE       = "%s must be between %d and %d characters";
+    public static final String NUMBER_NOT_IN_RANGE       = "%s must be between %d and %d.";
     public static final String MIN_LIST_SIZE             = "%s must contain at least %d elements";
     public static final String EXACT_LIST_SIZE           = "%s must contain exactly %d elements";
 
@@ -42,6 +43,7 @@ public final class ErrorMessages {
     public static final String SPEED_MODEL_MAX_ROUTES_EXCEED = "Cannot change speed model with %d routes; please limit to %d or fewer.";
 
     // --- Truck/Route capacity/range guards ----------------------------
-    public static final String TRUCK_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Truck %d to Route %d: load %.0fkg exceeds capacity %.0fkg";
-    public static final String ROUTE_DISTANCE_EXCEEDS_RANGE = "Cannot assign Truck %d to Route %d: route distance %.0fkm exceeds range %.0fkm";
+    public static final String TRUCK_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Truck %d to Route %d: load %.0fkg exceeds capacity %.0fkg. %nPlease assign a bigger truck if available, or create a new route.";
+    public static final String ROUTE_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Package %d to Route %d: load %.0fkg exceeds capacity %.0fkg of the currently assigned %s truck. %nPlease assign a bigger truck if available, or create a new route.";
+    public static final String ROUTE_DISTANCE_EXCEEDS_RANGE = "Cannot assign Truck %d to Route %d: route distance %.0fkm exceeds range %.0fkm.";
 }
