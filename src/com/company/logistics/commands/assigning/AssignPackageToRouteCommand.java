@@ -2,7 +2,7 @@ package com.company.logistics.commands.assigning;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.services.assignment.AssignmentService;
+import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 

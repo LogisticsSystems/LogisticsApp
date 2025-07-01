@@ -1,7 +1,7 @@
 package com.company.logistics.commands.delivery;
 
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.services.delivery.PackageDeliveryService;
+import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;

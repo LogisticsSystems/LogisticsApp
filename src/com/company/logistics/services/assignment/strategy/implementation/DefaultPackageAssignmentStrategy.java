@@ -1,10 +1,8 @@
-package com.company.logistics.core.services.assignment.strategy.implementation;
+package com.company.logistics.services.assignment.strategy.implementation;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
-import com.company.logistics.core.services.assignment.strategy.PackageAssignmentStrategy;
-import com.company.logistics.core.services.assignment.strategy.TruckAssignmentStrategy;
-import com.company.logistics.core.services.routing.scheduling.RouteScheduleService;
-import com.company.logistics.core.services.speeds.SpeedModelService;
+import com.company.logistics.services.assignment.strategy.PackageAssignmentStrategy;
+import com.company.logistics.services.speeds.SpeedModelService;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;

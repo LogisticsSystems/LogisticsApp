@@ -14,11 +14,11 @@ import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
-import com.company.logistics.core.services.assignment.AssignmentService;
-import com.company.logistics.core.services.delivery.PackageDeliveryService;
-import com.company.logistics.core.services.routing.computing.RouteRecalculatorService;
-import com.company.logistics.core.services.routing.management.RouteCreationService;
-import com.company.logistics.core.services.speeds.SpeedModelService;
+import com.company.logistics.services.assignment.AssignmentService;
+import com.company.logistics.services.delivery.PackageDeliveryService;
+import com.company.logistics.services.routing.computing.RouteRecalculatorService;
+import com.company.logistics.services.routing.management.RouteCreationService;
+import com.company.logistics.services.speeds.SpeedModelService;
 import com.company.logistics.enums.CommandType;
 import com.company.logistics.utils.ValidationHelper;
 

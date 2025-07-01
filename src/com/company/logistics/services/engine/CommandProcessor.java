@@ -1,4 +1,4 @@
-package com.company.logistics.core.services.engine;
+package com.company.logistics.services.engine;
 
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.core.contracts.CommandFactory;

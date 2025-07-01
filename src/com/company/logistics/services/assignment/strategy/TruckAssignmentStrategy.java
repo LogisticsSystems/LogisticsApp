@@ -1,4 +1,4 @@
-package com.company.logistics.core.services.assignment.strategy;
+package com.company.logistics.services.assignment.strategy;
 
 public interface TruckAssignmentStrategy {
 

@@ -1,8 +1,8 @@
-package com.company.logistics.core.services.routing.computing;
+package com.company.logistics.services.routing.computing;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
-import com.company.logistics.core.services.routing.scheduling.RouteScheduleService;
-import com.company.logistics.core.services.speeds.SpeedModelService;
+import com.company.logistics.services.routing.scheduling.RouteScheduleService;
+import com.company.logistics.services.speeds.SpeedModelService;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 

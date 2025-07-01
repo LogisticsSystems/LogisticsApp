@@ -1,7 +1,7 @@
-package com.company.logistics.core.services.assignment;
+package com.company.logistics.services.assignment;
 
-import com.company.logistics.core.services.assignment.strategy.PackageAssignmentStrategy;
-import com.company.logistics.core.services.assignment.strategy.TruckAssignmentStrategy;
+import com.company.logistics.services.assignment.strategy.PackageAssignmentStrategy;
+import com.company.logistics.services.assignment.strategy.TruckAssignmentStrategy;
 
 public class AssignmentService {
     private final PackageAssignmentStrategy packageAssignmentStrategy;

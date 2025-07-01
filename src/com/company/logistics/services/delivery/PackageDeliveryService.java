@@ -1,4 +1,4 @@
-package com.company.logistics.core.services.delivery;
+package com.company.logistics.services.delivery;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.PackageStatus;

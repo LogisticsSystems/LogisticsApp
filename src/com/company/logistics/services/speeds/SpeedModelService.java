@@ -1,10 +1,10 @@
-package com.company.logistics.core.services.speeds;
+package com.company.logistics.services.speeds;
 
-import com.company.logistics.core.services.routing.scheduling.RouteScheduleService;
-import com.company.logistics.core.services.speeds.contract.SpeedModel;
-import com.company.logistics.core.services.speeds.implementation.ConstantSpeedModel;
-import com.company.logistics.core.services.speeds.implementation.SeasonalSpeedModel;
-import com.company.logistics.core.services.speeds.implementation.SinusoidalSpeedModel;
+import com.company.logistics.services.routing.scheduling.RouteScheduleService;
+import com.company.logistics.services.speeds.contract.SpeedModel;
+import com.company.logistics.services.speeds.implementation.ConstantSpeedModel;
+import com.company.logistics.services.speeds.implementation.SeasonalSpeedModel;
+import com.company.logistics.services.speeds.implementation.SinusoidalSpeedModel;
 import com.company.logistics.enums.SpeedModelType;
 
 public class SpeedModelService {

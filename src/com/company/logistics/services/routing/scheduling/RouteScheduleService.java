@@ -1,6 +1,6 @@
-package com.company.logistics.core.services.routing.scheduling;
+package com.company.logistics.services.routing.scheduling;
 
-import com.company.logistics.core.services.speeds.contract.SpeedModel;
+import com.company.logistics.services.speeds.contract.SpeedModel;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.utils.ErrorMessages;

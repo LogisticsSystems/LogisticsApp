@@ -1,4 +1,4 @@
-package com.company.logistics.core.services.speeds.contract;
+package com.company.logistics.services.speeds.contract;
 
 import com.company.logistics.enums.City;
 

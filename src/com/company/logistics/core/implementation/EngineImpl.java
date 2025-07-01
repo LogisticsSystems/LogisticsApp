@@ -1,7 +1,7 @@
 package com.company.logistics.core.implementation;
 
 import com.company.logistics.core.contracts.Engine;
-import com.company.logistics.core.services.engine.CommandProcessor;
+import com.company.logistics.services.engine.CommandProcessor;
 
 import java.util.Scanner;
 

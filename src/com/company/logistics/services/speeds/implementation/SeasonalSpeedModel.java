@@ -1,6 +1,6 @@
-package com.company.logistics.core.services.speeds.implementation;
+package com.company.logistics.services.speeds.implementation;
 
-import com.company.logistics.core.services.speeds.contract.SpeedModel;
+import com.company.logistics.services.speeds.contract.SpeedModel;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.SpeedMap;
 
