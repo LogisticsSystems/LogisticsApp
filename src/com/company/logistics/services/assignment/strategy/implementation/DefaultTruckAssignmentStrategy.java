@@ -48,8 +48,6 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
             ValidationHelper.validateTotalLoadWithinCapacity(
                     route.getAssignedPackages(),
                     truck.getCapacityKg(),
-                    truck.getId(),
-                    route.getId(),
                     String.format(ErrorMessages.TRUCK_LOAD_EXCEEDS_CAPACITY,
                             truck.getId(),
                             route.getId(),

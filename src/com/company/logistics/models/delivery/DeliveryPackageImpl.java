@@ -2,6 +2,7 @@ package com.company.logistics.models.delivery;
 
 import com.company.logistics.enums.City;
 import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
@@ -56,7 +57,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         PackageStatus[] vals = PackageStatus.values();
 
         if (idx >= vals.length-1) {
-            throw new IllegalStateException(String.format(PrintConstants.PACKAGE_ALREADY_AT, id, status));
+            throw new InvalidUserInputException(String.format(PrintConstants.PACKAGE_ALREADY_AT, id, status));
         }
 
         status = vals[idx+1];
@@ -72,7 +73,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
     public void revertPackageStatus() {
         int idx = status.ordinal();
         if (idx <= 0) {
-            throw new IllegalStateException(String.format(PrintConstants.PACKAGE_ALREADY_AT, id, status));
+            throw new InvalidUserInputException(String.format(PrintConstants.PACKAGE_ALREADY_AT, id, status));
         }
 
         status = PackageStatus.values()[idx-1];
@@ -107,8 +108,6 @@ public class DeliveryPackageImpl implements DeliveryPackage {
             sb.append(String.format(PrintConstants.PACKAGE_ETA_LINE,
                     DateTimeFormatter.ofPattern(PrintConstants.DATE_TIME_FORMAT).format(expectedArrival)));
         }
-
-
 
         return sb.toString();
     }

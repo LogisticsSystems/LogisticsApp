@@ -11,6 +11,7 @@ import com.company.logistics.commands.queries.FindRoute;
 import com.company.logistics.commands.queries.ViewPackageWithIDCommand;
 import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
 import com.company.logistics.commands.removals.RemoveTruckFromRouteCommand;
+import com.company.logistics.commands.queries.HelpCommand;
 import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.commands.speed.ViewSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
@@ -51,7 +52,7 @@ public class CommandFactoryImpl implements CommandFactory {
         try {
             type = CommandType.valueOf(commandTypeAsString.toUpperCase());
         } catch (IllegalArgumentException ex) {
-            throw new IllegalArgumentException(String.format(INVALID_COMMAND, commandTypeAsString));
+            throw new InvalidUserInputException(String.format(INVALID_COMMAND, commandTypeAsString));
         }
 
         return switch (type) {
@@ -67,6 +68,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case LISTTRUCKINFO                  -> new ListTrucksCommand(repository);
             case LISTROUTESWITHNOTRUCKASSIGNED  -> new ListRoutesWithNoAssignedTrucksCommand(repository);
             case LISTPACKAGESWITHSTATUS         -> new ListPackagesWithStatusCommand(repository);
+            case HELP                           -> new HelpCommand();
 
             // ——— Assignment ———
             case ASSIGNPACKAGETOROUTE -> new AssignPackageToRouteCommand(assignmentService);

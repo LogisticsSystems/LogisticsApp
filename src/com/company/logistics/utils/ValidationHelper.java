@@ -1,6 +1,8 @@
 package com.company.logistics.utils;
 import com.company.logistics.enums.City;
 import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.exceptions.InvalidUserInputException;
+import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
@@ -16,13 +18,15 @@ public class ValidationHelper {
 
     public static void validateNotAlreadyInitialized(Object instance, String name) {
         if (instance != null) {
-            throw new IllegalStateException(String.format(ErrorMessages.ALREADY_INITIALIZED, name));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.ALREADY_INITIALIZED, name));
         }
     }
 
     public static void validateInitialized(Object instance, String name) {
         if (instance == null) {
-            throw new IllegalStateException(String.format(ErrorMessages.NOT_INITIALIZED, name));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.NOT_INITIALIZED, name));
         }
     }
 
@@ -30,13 +34,15 @@ public class ValidationHelper {
 
     public static void validateNotNull(Object obj, String paramName) {
         if (obj == null) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.NOT_NULL, paramName));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.NOT_NULL, paramName));
         }
     }
 
     public static void validateArgumentsCount(List<String> params, int expected) {
         if (params.size() < expected) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.INVALID_ARGUMENTS_COUNT, expected, params.size()));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.INVALID_ARGUMENTS_COUNT, expected, params.size()));
         }
     }
 
@@ -44,13 +50,15 @@ public class ValidationHelper {
 
     public static void validateIntPositive(int value, String name) {
         if (value <= 0) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.NON_POSITIVE_INT, name));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.NON_POSITIVE_INT, name));
         }
     }
 
     public static void validateDoubleNonNegative(double value, String name) {
         if (value < 0) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.NEGATIVE_DOUBLE, name));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.NEGATIVE_DOUBLE, name));
         }
     }
 
@@ -60,13 +68,15 @@ public class ValidationHelper {
 
     private static void validateIntRange(int actual, int min, int max, String name) {
         if (actual < min || actual > max) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.NUMBER_NOT_IN_RANGE, name, min, max));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.NUMBER_NOT_IN_RANGE, name, min, max));
         }
     }
 
     public static void validateDoubleRange(double actual, int min, int max, String name) {
         if (actual < min || actual > max) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.NUMBER_NOT_IN_RANGE, name, min, max));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.NUMBER_NOT_IN_RANGE, name, min, max));
         }
     }
 
@@ -75,21 +85,25 @@ public class ValidationHelper {
     public static <T> void validateListSizeAtLeast(List<T> list, String name, int min) {
         validateNotNull(list, name);
         if (list.size() < min) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.MIN_LIST_SIZE, name, min));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.MIN_LIST_SIZE, name, min));
         }
     }
 
     public static <T> void validateListSizeEquals(List<T> list, String name, int expected) {
         validateNotNull(list, name);
         if (list.size() != expected) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.EXACT_LIST_SIZE, name, expected));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.EXACT_LIST_SIZE, name, expected));
         }
     }
 
-    public static <T> void validateListSizeAtMost(List<T> list, String name, int max, String errorMsgFmt) {
+    public static <T> void validateListSizeAtMost(
+            List<T> list, String name, int max, String errorMsgFmt) {
         validateNotNull(list, name);
         if (list.size() > max) {
-            throw new IllegalStateException(String.format(errorMsgFmt, list.size(), max));
+            throw new InvalidUserInputException(String.format(errorMsgFmt,
+                    list.size(), max));
         }
     }
 
@@ -102,12 +116,14 @@ public class ValidationHelper {
         validateNotNull(from, "from");
         validateNotNull(to,   "to");
         if (!map.containsKey(from)) {
-            throw new IllegalArgumentException(String.format(unknownFromMsg, from));
+            throw new InvalidUserInputException(String.format(
+                    unknownFromMsg, from));
         }
 
         Map<K, V> inner = map.get(from);
         if (!inner.containsKey(to)) {
-            throw new IllegalArgumentException(String.format(noValueMsg, from, to));
+            throw new InvalidUserInputException(String.format(
+                    noValueMsg, from, to));
         }
     }
 
@@ -138,16 +154,19 @@ public class ValidationHelper {
 
         int idxFrom = stops.indexOf(start);
         if (idxFrom < 0) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, start));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.CITY_NOT_ON_ROUTE, start));
         }
 
         int idxTo = stops.indexOf(end);
         if (idxTo < 0) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, end));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.CITY_NOT_ON_ROUTE, end));
         }
 
         if (idxTo <= idxFrom) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
         }
     }
 
@@ -155,18 +174,19 @@ public class ValidationHelper {
             DeliveryPackage pkg, PackageStatus expected
     ) {
         if (pkg.getStatus() != expected) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_STATUS_ERROR, expected));
+            throw new InvalidUserInputException(String.format(
+                    ErrorMessages.PACKAGE_STATUS_ERROR, expected));
         }
     }
 
     public static void validateTotalLoadWithinCapacity(
             List<DeliveryPackage> packages,
-            double capacityKg, int truckId, int routeId, String error
+            double capacityKg, String error
     ) {
         double load = Calculations.calculateTotalLoad(packages);
 
         if (load > capacityKg) {
-            throw new IllegalArgumentException(String.format(error));
+            throw new InvalidUserInputException(error);
         }
     }
 
@@ -176,7 +196,7 @@ public class ValidationHelper {
         double dist = Calculations.calculateTotalDistance(stops);
 
         if (dist > maxRangeKm) {
-            throw new IllegalArgumentException(String.format(
+            throw new InvalidUserInputException(String.format(
                     ErrorMessages.ROUTE_DISTANCE_EXCEEDS_RANGE,
                     truckId, routeId, dist, maxRangeKm));
         }
