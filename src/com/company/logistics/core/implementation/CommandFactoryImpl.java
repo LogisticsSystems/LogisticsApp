@@ -6,10 +6,7 @@ import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.commands.creation.CreatePackageCommand;
 import com.company.logistics.commands.creation.CreateRouteCommand;
 import com.company.logistics.commands.delivery.DeliverPackageCommand;
-import com.company.logistics.commands.listing.ListPackagesCommand;
-import com.company.logistics.commands.listing.ListRoutesCommand;
-import com.company.logistics.commands.listing.ListRoutesWithNoAssignedTrucksCommand;
-import com.company.logistics.commands.listing.ListTrucksCommand;
+import com.company.logistics.commands.listing.*;
 import com.company.logistics.commands.queries.FindRoute;
 import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
 import com.company.logistics.commands.removals.RemoveTruckFromRouteCommand;
@@ -66,13 +63,13 @@ public class CommandFactoryImpl implements CommandFactory {
             case LISTROUTEINFO                  -> new ListRoutesCommand(repository);
             case LISTTRUCKINFO                  -> new ListTrucksCommand(repository);
             case LISTROUTESWITHNOTRUCKASSIGNED  -> new ListRoutesWithNoAssignedTrucksCommand(repository);
+            case LISTPACKAGESWITHSTATUS         -> new ListPackagesWithStatusCommand(repository);
 
             // ——— Assignment ———
             case ASSIGNPACKAGETOROUTE -> new AssignPackageToRouteCommand(assignmentService);
             case ASSIGNTRUCKTOROUTE   -> new AssignTruckToRouteCommand(assignmentService);
 
             // ——— Removals ———
-
             case REMOVETRUCKFROMROUTE -> new RemoveTruckFromRouteCommand(assignmentService);
             case REMOVEPACKAGEFROMROUTE -> new RemovePackageFromRouteCommand(assignmentService);
 

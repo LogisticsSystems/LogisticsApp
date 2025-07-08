@@ -8,4 +8,5 @@ public class CommandsConstants {
     public static final String NONE_FOUND_MESSAGE = "No %s found.";
     public static final String SPEED_MODEL_SWITCH  = "Speed model switched to %s";
     public static final String REMOVED_FROM_ROUTE = "%s %d was removed from route %d.";
+    public static final String INVALID_STATUS_MESSEGE = "Status %s does not exist.";
 }
