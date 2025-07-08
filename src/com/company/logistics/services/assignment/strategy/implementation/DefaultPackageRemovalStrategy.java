@@ -29,7 +29,7 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
     }
 
     private void updatePackageStatus(DeliveryPackage deliveryPackage) {
-        while(deliveryPackage.getStatus() == PackageStatus.UNASSIGNED){
+        while(deliveryPackage.getStatus() != PackageStatus.UNASSIGNED){
             deliveryPackage.revertPackageStatus();
         }
     }
