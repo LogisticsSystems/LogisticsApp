@@ -10,10 +10,12 @@ import com.company.logistics.commands.listing.ListPackagesCommand;
 import com.company.logistics.commands.listing.ListRoutesCommand;
 import com.company.logistics.commands.listing.ListTrucksCommand;
 import com.company.logistics.commands.queries.FindRoute;
+import com.company.logistics.commands.queries.HelpCommand;
 import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
@@ -49,7 +51,7 @@ public class CommandFactoryImpl implements CommandFactory {
         try {
             type = CommandType.valueOf(commandTypeAsString.toUpperCase());
         } catch (IllegalArgumentException ex) {
-            throw new IllegalArgumentException(String.format(INVALID_COMMAND, commandTypeAsString));
+            throw new InvalidUserInputException(String.format(INVALID_COMMAND, commandTypeAsString));
         }
 
         return switch (type) {
@@ -62,6 +64,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case LISTPACKAGEINFO  -> new ListPackagesCommand(repository);
             case LISTROUTEINFO    -> new ListRoutesCommand(repository);
             case LISTTRUCKINFO    -> new ListTrucksCommand(repository);
+            case HELP             -> new HelpCommand();
 
             // ——— Assignment ———
             case ASSIGNPACKAGETOROUTE -> new AssignPackageToRouteCommand(assignmentService);

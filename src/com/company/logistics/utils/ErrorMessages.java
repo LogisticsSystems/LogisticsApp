@@ -45,5 +45,6 @@ public final class ErrorMessages {
     // --- Truck/Route capacity/range guards ----------------------------
     public static final String TRUCK_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Truck %d to Route %d: load %.0fkg exceeds capacity %.0fkg. %nPlease assign a bigger truck if available, or create a new route.";
     public static final String ROUTE_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Package %d to Route %d: load %.0fkg exceeds capacity %.0fkg of the currently assigned %s truck. %nPlease assign a bigger truck if available, or create a new route.";
+    public static final String ROUTE_MAX_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Package %d to Route %d: load %.0fkg exceeds maximum capacity of %.0fkg.%nPlease create a new route.";
     public static final String ROUTE_DISTANCE_EXCEEDS_RANGE = "Cannot assign Truck %d to Route %d: route distance %.0fkm exceeds range %.0fkm.";
 }

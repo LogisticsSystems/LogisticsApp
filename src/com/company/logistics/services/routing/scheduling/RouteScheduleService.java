@@ -1,5 +1,6 @@
 package com.company.logistics.services.routing.scheduling;
 
+import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.services.speeds.contract.SpeedModel;
 import com.company.logistics.enums.City;
 import com.company.logistics.infrastructure.DistanceMap;
@@ -43,6 +44,6 @@ public class RouteScheduleService {
                 return schedule.get(i);
             }
         }
-        throw new IllegalArgumentException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, city));
+        throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, city));
     }
 }

@@ -16,12 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrategy {
+    private static final double MAX_TRUCK_CAPACITY = 42000;
+
     private final LogisticsRepository repository;
     private final SpeedModelService speedModelService;
 
     private DeliveryPackage pack;
-    private Route           route;
-    private Truck           truck;
+    private Route route;
+    private Truck truck;
 
     public DefaultPackageAssignmentStrategy(
             LogisticsRepository repository,
@@ -33,61 +35,66 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
 
     @Override
     public void assignPackage(int packageId, int routeId) {
-        pack  = repository.findPackageById(packageId);
+        pack = repository.findPackageById(packageId);
         route = repository.findRouteById(routeId);
         if (route.getAssignedTruck().isPresent()) {
             truck = route.getAssignedTruck().get();
         }
 
-        // perform package validations
         validatePackage();
 
-        // attach it...
         route.assignPackage(pack);
 
-        // update package status
         updatePackageStatus();
 
-        // compute and set ETA
         setEtaToPackage();
     }
 
     private void updatePackageStatus() {
-        // UNASSIGNED → PENDING
         pack.advancePackageStatus();
 
-        // if there was already a truck, go PENDING → IN_TRANSIT immediately
         if (route.getAssignedTruck().isPresent()) {
             pack.advancePackageStatus();
         }
     }
 
     private void validatePackage() {
-        // only unassigned packages may be added
         ValidationHelper.validatePackageStatus(pack, PackageStatus.UNASSIGNED);
 
-        // location-compatibility
         ValidationHelper.validatePackageRouteCompatibility(
                 pack.getStartLocation(),
                 pack.getEndLocation(),
                 route.getLocations()
         );
 
-        if (route.getAssignedTruck().isPresent()) {
-            List<DeliveryPackage> packs = new ArrayList<>(route.getAssignedPackages());
-            packs.add(pack);
+        validateWeightWithNewPackage();
+    }
 
+    private void validateWeightWithNewPackage() {
+
+        List<DeliveryPackage> packs = new ArrayList<>(route.getAssignedPackages());
+        packs.add(pack);
+
+        if (route.getAssignedTruck().isPresent()) {
             ValidationHelper.validateTotalLoadWithinCapacity(
                     packs,
                     truck.getCapacityKg(),
-                    truck.getId(),
-                    route.getId()         ,
                     String.format(ErrorMessages.ROUTE_LOAD_EXCEEDS_CAPACITY,
                             pack.getId(),
                             route.getId(),
                             Calculations.calculateTotalLoad(packs),
                             truck.getCapacityKg(),
                             truck.getName())
+            );
+        } else {
+            ValidationHelper.validateTotalLoadWithinCapacity(
+                    packs,
+                    MAX_TRUCK_CAPACITY,
+                    String.format(ErrorMessages.ROUTE_MAX_LOAD_EXCEEDS_CAPACITY,
+                            pack.getId(),
+                            route.getId(),
+                            Calculations.calculateTotalLoad(packs),
+                            MAX_TRUCK_CAPACITY)
             );
         }
     }
@@ -100,5 +107,4 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
         );
         pack.setExpectedArrival(eta);
     }
-
 }

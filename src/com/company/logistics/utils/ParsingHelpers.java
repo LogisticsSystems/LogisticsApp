@@ -1,5 +1,7 @@
 package com.company.logistics.utils;
 
+import com.company.logistics.exceptions.InvalidUserInputException;
+
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -10,7 +12,7 @@ public class ParsingHelpers {
         try{
             return Integer.parseInt(valueToParse);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
+            throw new InvalidUserInputException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
                     ,parameterName,"number"));
         }
 
@@ -20,7 +22,7 @@ public class ParsingHelpers {
         try{
             return Double.parseDouble(valueToParse);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
+            throw new InvalidUserInputException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
                     ,parameterName,"fractional number"));
         }
     }
@@ -34,7 +36,7 @@ public class ParsingHelpers {
             String options= Arrays.stream(enumValues)
                     .map(Enum::name)
                     .collect(Collectors.joining(", "));
-            throw new IllegalArgumentException(String.format(ErrorMessages.INVALID_ENUM_VALUE
+            throw new InvalidUserInputException(String.format(ErrorMessages.INVALID_ENUM_VALUE
                     ,enumName
                     ,options));
         }
@@ -44,7 +46,7 @@ public class ParsingHelpers {
         try{
             return LocalDateTime.parse(valueToParse);
         }catch (Exception e){
-            throw new IllegalArgumentException(String.format(ErrorMessages.INCORRECT_DATE_TIME_INPUT));
+            throw new InvalidUserInputException(String.format(ErrorMessages.INCORRECT_DATE_TIME_INPUT));
         }
     }
 
