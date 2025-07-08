@@ -25,6 +25,7 @@ public class DefaultTruckRemovalStrategy implements TruckRemovalStrategy {
 
         truck.unassignFromRoute();
         route.unassignTruck();
+
         changePackagesStatus(route);
     }
 
