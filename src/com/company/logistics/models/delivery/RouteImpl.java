@@ -77,6 +77,7 @@ public class RouteImpl implements Route {
         appendStops(sb);
         appendTruckLine(sb);
         appendPackageLine(sb);
+        appendDeliveryWeight(sb);
 
         return sb.toString();
     }
@@ -115,6 +116,17 @@ public class RouteImpl implements Route {
                 .map(p -> String.valueOf(p.getId()))
                 .collect(Collectors.joining(", "));
         sb.append(String.format(PrintConstants.ROUTE_PACKAGES_LINE, pkgPart));
+    }
+
+    private void appendDeliveryWeight(StringBuilder sb){
+        double deliveryWeight = getAssignedPackages().stream()
+                .mapToDouble(DeliveryPackage::getWeightKg)
+                .sum();
+        String weightPart = deliveryWeight == 0
+                ? " No delivery weight.\n"
+                : String.format(PrintConstants.ROUTE_DELIVERY_WEIGHT,deliveryWeight);
+        sb.append(weightPart);
+
     }
 
     @Override public boolean equals(Object o) {

@@ -9,6 +9,7 @@ public final class PrintConstants {
     public static final String ROUTE_TRUCK_LINE    = " Assigned Truck ID: %s%n";
     public static final String ROUTE_PACKAGES_LINE = " Assigned Package IDs: %s%n";
     public static final String NO_ROUTE_CARRIES_PACKAGES_LINE = "No route carries package %d";
+    public static final String ROUTE_DELIVERY_WEIGHT = " Delivery weight: %.2fkg%n";
 
     // Package printing
     public static final String PACKAGE_HEADER          = "Package %d:%n";
