@@ -8,6 +8,7 @@ import com.company.logistics.commands.creation.CreateRouteCommand;
 import com.company.logistics.commands.delivery.DeliverPackageCommand;
 import com.company.logistics.commands.listing.*;
 import com.company.logistics.commands.queries.FindRoute;
+import com.company.logistics.commands.queries.ViewPackageWithIDCommand;
 import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
 import com.company.logistics.commands.removals.RemoveTruckFromRouteCommand;
 import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
@@ -59,6 +60,7 @@ public class CommandFactoryImpl implements CommandFactory {
 
             // ——— Queries & listings ———
             case FINDROUTE                      -> new FindRoute(repository);
+            case VIEWPACKAGEWITHID              -> new ViewPackageWithIDCommand(repository);
             case LISTPACKAGEINFO                -> new ListPackagesCommand(repository);
             case LISTROUTEINFO                  -> new ListRoutesCommand(repository);
             case LISTTRUCKINFO                  -> new ListTrucksCommand(repository);
