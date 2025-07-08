@@ -8,6 +8,7 @@ import com.company.logistics.commands.creation.CreateRouteCommand;
 import com.company.logistics.commands.delivery.DeliverPackageCommand;
 import com.company.logistics.commands.listing.ListPackagesCommand;
 import com.company.logistics.commands.listing.ListRoutesCommand;
+import com.company.logistics.commands.listing.ListRoutesWithNoAssignedTrucksCommand;
 import com.company.logistics.commands.listing.ListTrucksCommand;
 import com.company.logistics.commands.queries.FindRoute;
 import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
@@ -60,10 +61,11 @@ public class CommandFactoryImpl implements CommandFactory {
             case CREATEROUTE      -> new CreateRouteCommand(routeCreationService);
 
             // ——— Queries & listings ———
-            case FINDROUTE        -> new FindRoute(repository);
-            case LISTPACKAGEINFO  -> new ListPackagesCommand(repository);
-            case LISTROUTEINFO    -> new ListRoutesCommand(repository);
-            case LISTTRUCKINFO    -> new ListTrucksCommand(repository);
+            case FINDROUTE                      -> new FindRoute(repository);
+            case LISTPACKAGEINFO                -> new ListPackagesCommand(repository);
+            case LISTROUTEINFO                  -> new ListRoutesCommand(repository);
+            case LISTTRUCKINFO                  -> new ListTrucksCommand(repository);
+            case LISTROUTESWITHNOTRUCKASSIGNED  -> new ListRoutesWithNoAssignedTrucksCommand(repository);
 
             // ——— Assignment ———
             case ASSIGNPACKAGETOROUTE -> new AssignPackageToRouteCommand(assignmentService);
