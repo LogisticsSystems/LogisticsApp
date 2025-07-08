@@ -33,6 +33,6 @@ public class DeliverPackageCommand implements Command {
     }
 
     private void parseParameters(List<String> parameters) {
-        this.packageId = ParsingHelpers.tryParseInt(parameters.get(0), "package ID");
+        this.packageId = ParsingHelpers.tryParseInt(parameters.get(0), "Package ID");
     }
 }

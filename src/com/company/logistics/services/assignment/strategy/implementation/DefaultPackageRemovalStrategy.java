@@ -5,14 +5,11 @@ import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.services.assignment.strategy.PackageRemovalStrategy;
+import com.company.logistics.utils.ValidationHelper;
 
 public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
 
     private final LogisticsRepository repository;
-
-
-    private DeliveryPackage deliveryPackage;
-    private Route route;
 
     public DefaultPackageRemovalStrategy(LogisticsRepository repository) {
         this.repository = repository;
@@ -21,8 +18,10 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
 
     @Override
     public void removePackage(int packageId, int routeId) {
-        deliveryPackage=repository.findPackageById(packageId);
-        route= repository.findRouteById(routeId);
+
+        DeliveryPackage deliveryPackage=repository.findPackageById(packageId);
+        Route route= repository.findRouteById(routeId);
+        ValidationHelper.validatePackageInRoute(deliveryPackage,route);
 
         route.removePackage(packageId);
         updatePackageStatus(deliveryPackage);

@@ -31,7 +31,7 @@ public class ViewPackageWithIDCommand implements Command {
     }
 
     private void parseParameters(List<String> parameters) {
-        packageId= ParsingHelpers.tryParseInt(parameters.get(0),"package id");
+        packageId= ParsingHelpers.tryParseInt(parameters.get(0),"Package ID");
     }
 
 

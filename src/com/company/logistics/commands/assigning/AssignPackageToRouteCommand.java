@@ -32,7 +32,7 @@ public class AssignPackageToRouteCommand implements Command {
     }
 
     private void parseParameters(List<String> parameters) {
-        this.packageId = ParsingHelpers.tryParseInt(parameters.get(0), "package id");
-        this.routeId = ParsingHelpers.tryParseInt(parameters.get(1), "route id");
+        this.packageId = ParsingHelpers.tryParseInt(parameters.get(0), "Package ID");
+        this.routeId = ParsingHelpers.tryParseInt(parameters.get(1), "Route ID");
     }
 }

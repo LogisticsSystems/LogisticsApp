@@ -1,8 +1,9 @@
 package com.company.logistics.utils;
 import com.company.logistics.enums.City;
 import com.company.logistics.enums.PackageStatus;
-import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.models.contracts.DeliveryPackage;
+import com.company.logistics.models.contracts.Route;
+import com.company.logistics.models.contracts.Truck;
 
 import java.util.List;
 import java.util.Map;
@@ -124,6 +125,27 @@ public class ValidationHelper {
     }
 
     // --- Domain‐specific validations -------------------------------------------------
+
+
+    /** Ensure that the package is assigned to the desired route. */
+    public static void validatePackageInRoute(DeliveryPackage deliveryPackage, Route route){
+        if(route.getAssignedPackages().stream()
+                .noneMatch(pkg->pkg.equals(deliveryPackage))){
+            throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_NOT_OT_ROUTE,
+                    deliveryPackage.getId(),
+                    route.getId()));
+        }
+    }
+
+    /**Ensure that the truck is assigned to the desired route. */
+    public static void validateTruckAssignedToRoute(Truck truck, Route route){
+        //isEmpty() b
+        if(route.getAssignedTruck().isEmpty() || !route.getAssignedTruck().get().equals(truck)){
+            throw new IllegalArgumentException(String.format(ErrorMessages.TRUCK_NOT_ON_ROUTE,
+                    truck.getId(),
+                    route.getId()));
+        }
+    }
 
     /** Ensure start/end both appear in the route, in the correct order. */
     public static void validatePackageRouteCompatibility(

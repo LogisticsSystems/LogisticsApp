@@ -74,6 +74,8 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
+
+
     @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
     @Override public void setExpectedArrival(LocalDateTime eta) {
         this.expectedArrival = eta;

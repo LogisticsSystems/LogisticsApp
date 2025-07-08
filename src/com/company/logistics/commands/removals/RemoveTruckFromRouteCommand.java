@@ -32,7 +32,7 @@ public class RemoveTruckFromRouteCommand implements Command {
     }
 
     private void parseParameters(List<String> parameters) {
-        this.truckId= ParsingHelpers.tryParseInt(parameters.get(0),"truck id");
-        this.routeId= ParsingHelpers.tryParseInt(parameters.get(1),"route id");
+        this.truckId= ParsingHelpers.tryParseInt(parameters.get(0),"Truck ID");
+        this.routeId= ParsingHelpers.tryParseInt(parameters.get(1),"Route ID");
     }
 }

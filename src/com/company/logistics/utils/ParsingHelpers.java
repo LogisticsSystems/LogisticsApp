@@ -34,9 +34,7 @@ public class ParsingHelpers {
             String options= Arrays.stream(enumValues)
                     .map(Enum::name)
                     .collect(Collectors.joining(", "));
-            throw new IllegalArgumentException(String.format(ErrorMessages.INVALID_ENUM_VALUE
-                    ,enumName
-                    ,options));
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 

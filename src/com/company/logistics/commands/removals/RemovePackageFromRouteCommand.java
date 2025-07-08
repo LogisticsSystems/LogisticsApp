@@ -29,11 +29,11 @@ public class RemovePackageFromRouteCommand implements Command {
 
         assignmentService.removePackageFromRoute(this.packageId , this.routeId);
 
-        return String.format(CommandsConstants.REMOVED_FROM_ROUTE,"Package", this.packageId, this.routeId);
+        return String.format(CommandsConstants.REMOVED_FROM_ROUTE, "Package", this.packageId, this.routeId);
     }
 
     private void parseParameters(List<String> parameters) {
-        packageId= ParsingHelpers.tryParseInt(parameters.get(0),"package id");
-        routeId= ParsingHelpers.tryParseInt(parameters.get(1),"route id");
+        packageId= ParsingHelpers.tryParseInt(parameters.get(0),"Package ID");
+        routeId= ParsingHelpers.tryParseInt(parameters.get(1),"Route ID");
     }
 }

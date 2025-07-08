@@ -11,8 +11,6 @@ import java.util.List;
 
 public class ListRoutesWithNoAssignedTrucksCommand implements Command {
 
-    private static final String NONE_FOUND_SENTENCE_TYPIFICATION ="routes without trucks";
-
     private final List<Route> routes;
 
     public ListRoutesWithNoAssignedTrucksCommand(LogisticsRepository repository) {
@@ -25,7 +23,7 @@ public class ListRoutesWithNoAssignedTrucksCommand implements Command {
 
         List<Route> routesWithoutTruck = getRoutesWithNoAssignedTrucks(routes);
         if(routesWithoutTruck.isEmpty()){
-            return String.format(CommandsConstants.NONE_FOUND_MESSAGE, NONE_FOUND_SENTENCE_TYPIFICATION);
+            return String.format(CommandsConstants.NO_ROUTES_WITHOUT_TRUCKS);
         }
         return PrintConstants.LINE_BREAK + "\n" + ListingHelpers.elementsToString(routesWithoutTruck);
 

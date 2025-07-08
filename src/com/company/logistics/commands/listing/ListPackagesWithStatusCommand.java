@@ -14,8 +14,6 @@ import java.util.List;
 
 public class ListPackagesWithStatusCommand implements Command {
 
-    private static final String NONE_FOUND_SENTENCE_TYPIFICATION ="packages with status %s";
-
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
 
     private PackageStatus status;
@@ -34,9 +32,8 @@ public class ListPackagesWithStatusCommand implements Command {
 
         if(packagesWithDesiredStatus.isEmpty()){
 
-            return String.format(CommandsConstants.NONE_FOUND_MESSAGE, stringTypificationBuilder());
+            return String.format(CommandsConstants.NO_PACKAGES_WITH_STATUS, this.status);
         }
-
 
         return PrintConstants.LINE_BREAK + "\n" + ListingHelpers.elementsToString(packagesWithDesiredStatus);
 
@@ -56,7 +53,4 @@ public class ListPackagesWithStatusCommand implements Command {
                 .toList();
     }
 
-    private String stringTypificationBuilder() {
-        return String.format(NONE_FOUND_SENTENCE_TYPIFICATION,this.status);
-    }
 }
