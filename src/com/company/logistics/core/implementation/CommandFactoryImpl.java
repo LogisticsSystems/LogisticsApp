@@ -10,6 +10,8 @@ import com.company.logistics.commands.listing.ListPackagesCommand;
 import com.company.logistics.commands.listing.ListRoutesCommand;
 import com.company.logistics.commands.listing.ListTrucksCommand;
 import com.company.logistics.commands.queries.FindRoute;
+import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
+import com.company.logistics.commands.removals.RemoveTruckFromRouteCommand;
 import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
@@ -66,6 +68,11 @@ public class CommandFactoryImpl implements CommandFactory {
             // ——— Assignment ———
             case ASSIGNPACKAGETOROUTE -> new AssignPackageToRouteCommand(assignmentService);
             case ASSIGNTRUCKTOROUTE   -> new AssignTruckToRouteCommand(assignmentService);
+
+            // ——— Removals ———
+
+            case REMOVETRUCKFROMROUTE -> new RemoveTruckFromRouteCommand(assignmentService);
+            case REMOVEPACKAGEFROMROUTE -> new RemovePackageFromRouteCommand(assignmentService);
 
             // ——— Delivery ———
             case DELIVERPACKAGE   -> new DeliverPackageCommand(deliveryService);

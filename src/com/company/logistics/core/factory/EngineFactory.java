@@ -9,7 +9,9 @@ import com.company.logistics.core.implementation.EngineImpl;
 import com.company.logistics.core.implementation.LogisticsRepositoryImpl;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageAssignmentStrategy;
+import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageRemovalStrategy;
 import com.company.logistics.services.assignment.strategy.implementation.DefaultTruckAssignmentStrategy;
+import com.company.logistics.services.assignment.strategy.implementation.DefaultTruckRemovalStrategy;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.engine.CommandProcessor;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
@@ -53,10 +55,16 @@ public final class EngineFactory {
         // build the two small assignment strategies
         DefaultPackageAssignmentStrategy packageAssignmentStrategy = new DefaultPackageAssignmentStrategy(repository, speedModelService);
         DefaultTruckAssignmentStrategy truckAssignmentStrategy = new DefaultTruckAssignmentStrategy(repository);
+        DefaultPackageRemovalStrategy packageRemovalStrategy = new DefaultPackageRemovalStrategy(repository);
+        DefaultTruckRemovalStrategy truckRemovalStrategy = new DefaultTruckRemovalStrategy(repository);
 
         // 2.3) domain services
         PackageDeliveryService deliveryService     = new PackageDeliveryService(repository);
-        AssignmentService assignmentService        = new AssignmentService(packageAssignmentStrategy, truckAssignmentStrategy);
+        AssignmentService assignmentService        = new AssignmentService(packageAssignmentStrategy,
+                truckAssignmentStrategy,
+                truckRemovalStrategy,
+                packageRemovalStrategy);
+
         RouteCreationService routeCreationService  = new RouteCreationService(repository, speedModelService);
 
         // 2.4) recomputation logic service

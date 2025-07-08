@@ -1,0 +1,38 @@
+package com.company.logistics.commands.removals;
+
+import com.company.logistics.commands.CommandsConstants;
+import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.services.assignment.AssignmentService;
+import com.company.logistics.utils.ParsingHelpers;
+import com.company.logistics.utils.ValidationHelper;
+
+import java.util.List;
+
+public class RemoveTruckFromRouteCommand implements Command {
+
+    public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
+
+    private final AssignmentService assignmentService;
+
+    private int truckId;
+    private int routeId;
+
+    public RemoveTruckFromRouteCommand(AssignmentService assignmentService) {
+        this.assignmentService = assignmentService;
+    }
+    @Override
+    public String execute(List<String> parameters) {
+        ValidationHelper.validateArgumentsCount(parameters,EXPECTED_NUMBER_OF_ARGUMENTS);
+        
+        parseParameters(parameters);
+
+        assignmentService.removeTruckFromRoute(this.truckId , this.routeId);
+
+        return String.format(CommandsConstants.REMOVED_FROM_ROUTE,"Truck" , this.truckId , this.routeId);
+    }
+
+    private void parseParameters(List<String> parameters) {
+        this.truckId= ParsingHelpers.tryParseInt(parameters.get(0),"truck id");
+        this.routeId= ParsingHelpers.tryParseInt(parameters.get(1),"route id");
+    }
+}
