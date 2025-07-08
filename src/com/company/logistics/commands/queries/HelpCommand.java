@@ -45,5 +45,4 @@ public class HelpCommand implements Command {
             throw new RuntimeException(e);
         }
     }
-
 }

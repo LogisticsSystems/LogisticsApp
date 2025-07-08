@@ -1,28 +1,28 @@
-Command: CreatePackage <contactInfo> <weight in kg> <start city> <end city> -> Creates a package
+Command: CreatePackage <contactInfo> <weight in kg> <start city> <end city>                             -> Creates a package
 Example: CREATEPACKAGE customerName 15 MEL ADL
-Command: CreateRoute <cities separated by single comma> <departure time in format YYYY:MM:DDtHH:MM:SS> -> Creates a route
+Command: CreateRoute <cities separated by single comma> <departure time in format YYYY:MM:DDtHH:MM:SS>  -> Creates a route
 Example: CREATEROUTE MEL,ADL,DAR 2025-04-21t16:00:00
-Command: FindRoute <start city> <end city> -> Searches for routes between the two locations
+Command: FindRoute <start city> <end city>                                                              -> Searches for routes between the two locations
 Example: FINDROUTE MEL ADL
-Command: AssignPackageToRoute <package Id> <route Id> -> Assigns a package to a route
+Command: AssignPackageToRoute <package Id> <route Id>                                                   -> Assigns a package to a route
 Example: ASSIGNPACKAGETOROUTE 1 2
-Command: RemovePackageFromRoute <package Id> <route Id> - Removes a package from a route
+Command: RemovePackageFromRoute <package Id> <route Id>                                                 -> Removes a package from a route
 Example: REMOVEPACKAGEFROMROUTE 1 2
-Command: AssignTruckToRoute <truck Id> <route Id> -> Assigns a truck to a route
+Command: AssignTruckToRoute <truck Id> <route Id>                                                       -> Assigns a truck to a route
 Example: ASSIGNTRUCKTOROUTE 1001 2
-Command: RemoveTruckFromRoute <truck Id> <route Id> -> Removes a truck from a route
+Command: RemoveTruckFromRoute <truck Id> <route Id>                                                     -> Removes a truck from a route
 Example: REMOVETRUCKFROMROUTE 1001 2
-Command: DeliverPackage<package Id> -> Marks package as delivered
+Command: DeliverPackage<package Id>                                                                     -> Marks package as delivered
 Example: DELIVERPACKAGE 1
-Command: ViewPackage <package Id> -> Lists details for a package
+Command: ViewPackage <package Id>                                                                       -> Lists details for a package
 Example: ViewPackage 1
-Command: ListPackageInfo -> Lists all packages
+Command: ListPackageInfo                                                                                -> Lists all packages
 Example: LISTPACKAGEINFO
-Command: ListRouteInfo -> Lists all routes
+Command: ListRouteInfo                                                                                  -> Lists all routes
 Example: LISTROUTEINFO
-Command: ListTruckInfo -> Lists all trucks
+Command: ListTruckInfo                                                                                  -> Lists all trucks
 Example: LISTTRUCKINFO
-Command: ListRoutesWithNoTrucksAssigned -> Lists all routes that don't have assigned trucks
+Command: ListRoutesWithNoTrucksAssigned                                                                 -> Lists all routes that don't have assigned trucks
 Example: LISTROUTESWITHNOTRUCKSASSIGNED
-Command: ListPackagesWithStatus <status>  -> Lists all packages with the selectes status
+Command: ListPackagesWithStatus <status>                                                                -> Lists all packages with the selected status
 Example: LISTPACKAGESIWTHSTATUS DELIVERED

@@ -2,6 +2,7 @@ package com.company.logistics.core.implementation;
 
 import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.City;
+import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.infrastructure.loading.vehicles.contracts.VehicleLoader;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
@@ -91,7 +92,7 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         return packages.stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.NO_PACKAGE_WITH_ID, id)));
+                .orElseThrow(() -> new InvalidUserInputException(String.format(ErrorMessages.NO_PACKAGE_WITH_ID, id)));
     }
 
     @Override
@@ -99,7 +100,7 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         return routes.stream()
                 .filter(r -> r.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(String.format(ErrorMessages.NO_ROUTE_WITH_ID, id)));
+                .orElseThrow(() -> new InvalidUserInputException(String.format(ErrorMessages.NO_ROUTE_WITH_ID, id)));
     }
 
     @Override
@@ -107,7 +108,7 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         return trucks.stream()
                 .filter(t -> t.getId() == id)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException( String.format(ErrorMessages.NO_TRUCK_WITH_ID, id)));
+                .orElseThrow(() -> new InvalidUserInputException( String.format(ErrorMessages.NO_TRUCK_WITH_ID, id)));
     }
 
     @Override
@@ -116,7 +117,7 @@ public class LogisticsRepositoryImpl implements LogisticsRepository {
         return getRoutes().stream()
                 .filter(r -> r.getAssignedPackages().contains(pkg))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new InvalidUserInputException(
                         String.format(PrintConstants.NO_ROUTE_CARRIES_PACKAGES_LINE, packageId)));
     }
 }

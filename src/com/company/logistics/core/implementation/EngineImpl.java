@@ -17,7 +17,6 @@ public class EngineImpl implements Engine {
     private static final String BOLD = "\u001B[1m";
     private static final String ITALICS_BOLD_RESET = "\033[0m";
 
-
     private static final String COMMAND_HEADER = "*** For a list of commands with examples, please type HELP. ***";
     private static final String ENTER_COMMAND = "  Enter command: ";
 
