@@ -50,4 +50,5 @@ public final class ErrorMessages {
     public static final String ROUTE_LOAD_EXCEEDS_CAPACITY      = "Cannot assign Package %d to Route %d: load %.0fkg exceeds capacity %.0fkg of the currently assigned %s truck. %nPlease assign a bigger truck if available, or create a new route.";
     public static final String ROUTE_MAX_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Package %d to Route %d: load %.0fkg exceeds maximum capacity of %.0fkg.%nPlease create a new route.";
     public static final String ROUTE_DISTANCE_EXCEEDS_RANGE     = "Cannot assign Truck %d to Route %d: route distance %.0fkm exceeds range %.0fkm.";
+    public static final String NON_UNIQUE_INTERMEDIATE_STOPS    = "Route may not visit the same intermediate city twice: %s";
 }

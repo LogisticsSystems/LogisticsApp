@@ -7,8 +7,10 @@ import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public class ValidationHelper {
@@ -154,19 +156,16 @@ public class ValidationHelper {
 
         int idxFrom = stops.indexOf(start);
         if (idxFrom < 0) {
-            throw new InvalidUserInputException(String.format(
-                    ErrorMessages.CITY_NOT_ON_ROUTE, start));
+            throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, start));
         }
 
-        int idxTo = stops.indexOf(end);
+        int idxTo = stops.lastIndexOf(end);
         if (idxTo < 0) {
-            throw new InvalidUserInputException(String.format(
-                    ErrorMessages.CITY_NOT_ON_ROUTE, end));
+            throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, end));
         }
 
         if (idxTo <= idxFrom) {
-            throw new InvalidUserInputException(String.format(
-                    ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
+            throw new InvalidUserInputException(String.format(ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
         }
     }
 
@@ -199,6 +198,30 @@ public class ValidationHelper {
             throw new InvalidUserInputException(String.format(
                     ErrorMessages.ROUTE_DISTANCE_EXCEEDS_RANGE,
                     truckId, routeId, dist, maxRangeKm));
+        }
+    }
+
+    public static void validateNotSameCities(City startLocation, City endLocation) {
+        if (startLocation == endLocation) {
+            throw new InvalidUserInputException("Start/End cities cannot be the same");
+        }
+    }
+
+    public static void validateUniqueIntermediateStops(List<City> locations) {
+        Set<City> seen = new HashSet<>();
+        City first = locations.get(0);
+        int lastIdx = locations.size() - 1;
+
+        for (int i = 0; i < locations.size(); i++) {
+            City city = locations.get(i);
+
+            // first and last stops can be the same
+            if (i == lastIdx && city.equals(first)) { continue; }
+
+            // every other city must be unique
+            if (!seen.add(city)) {
+                throw new InvalidUserInputException(String.format(ErrorMessages.NON_UNIQUE_INTERMEDIATE_STOPS, city));
+            }
         }
     }
 

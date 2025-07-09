@@ -39,7 +39,7 @@ public class RouteRepositoryImpl implements RouteRepository {
                 .filter(r -> {
                     List<City> locs = r.getLocations();
                     int from = locs.indexOf(startLocation);
-                    int to   = locs.indexOf(endLocation);
+                    int to   = locs.lastIndexOf(endLocation);
                     return from >= 0 && to > from;
                 })
                 .collect(Collectors.toList());

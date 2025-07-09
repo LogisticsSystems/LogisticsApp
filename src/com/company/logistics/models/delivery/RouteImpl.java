@@ -28,6 +28,7 @@ public class RouteImpl implements Route {
         ValidationHelper.validateIntPositive(id, "Route ID");
         ValidationHelper.validateListSizeAtLeast(locations, "Locations", MIN_LOCATIONS);
         ValidationHelper.validateNotNull(departureTime, "departureTime");
+        ValidationHelper.validateUniqueIntermediateStops(locations);
 
         this.id            = id;
         this.locations     = List.copyOf(locations);

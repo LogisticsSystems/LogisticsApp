@@ -39,11 +39,10 @@ public class RouteScheduleService {
     }
 
     public LocalDateTime getEtaForCity(City city, List<City> stops, List<LocalDateTime> schedule) {
-        for (int i = 0; i < stops.size(); i++) {
-            if (stops.get(i) == city) {
-                return schedule.get(i);
-            }
+        int idx = stops.lastIndexOf(city);
+        if (idx < 0) {
+            throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, city));
         }
-        throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, city));
+        return schedule.get(idx);
     }
 }

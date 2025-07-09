@@ -33,6 +33,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         ValidationHelper.validateIntPositive(id, "Package ID");
         ValidationHelper.validateNotNull(startLocation, "StartLocation");
         ValidationHelper.validateNotNull(endLocation,   "EndLocation");
+        ValidationHelper.validateNotSameCities(startLocation, endLocation);
         ValidationHelper.validateDoubleRange(weightKg, 0, MAX_WEIGHT, "Weight(kg)");
         ValidationHelper.validateStringLength(contactInfo, CONTACT_INFO_MIN_LENGTH, CONTACT_INFO_MAX_LENGTH, "ContactInfo");
 
