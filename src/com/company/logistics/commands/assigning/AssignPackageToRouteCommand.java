@@ -2,6 +2,7 @@ package com.company.logistics.commands.assigning;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
@@ -26,9 +27,9 @@ public class AssignPackageToRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        assignmentService.assignPackageToRoute(this.packageId, this.routeId);
+        DeliveryPackage updated = assignmentService.assignPackageToRoute(this.packageId, this.routeId);
 
-        return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Package", this.packageId, this.routeId);
+        return String.format(CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE, "Package", this.packageId, this.routeId, updated.getStatus());
     }
 
     private void parseParameters(List<String> parameters) {

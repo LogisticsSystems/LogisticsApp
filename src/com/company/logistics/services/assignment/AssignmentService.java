@@ -1,5 +1,6 @@
 package com.company.logistics.services.assignment;
 
+import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.services.assignment.strategy.PackageAssignmentStrategy;
 import com.company.logistics.services.assignment.strategy.PackageRemovalStrategy;
 import com.company.logistics.services.assignment.strategy.TruckAssignmentStrategy;
@@ -22,8 +23,8 @@ public class AssignmentService {
 
     }
 
-    public void assignPackageToRoute(int pkgId, int routeId) {
-        packageAssignmentStrategy.assignPackage(pkgId, routeId);
+    public DeliveryPackage assignPackageToRoute(int pkgId, int routeId) {
+        return packageAssignmentStrategy.assignPackage(pkgId, routeId);
     }
 
 
@@ -37,7 +38,7 @@ public class AssignmentService {
     }
 
 
-    public void removePackageFromRoute(int packageId, int routeId){
-        packageRemovalStrategy.removePackage(packageId,routeId);
+    public DeliveryPackage removePackageFromRoute(int packageId, int routeId){
+        return packageRemovalStrategy.removePackage(packageId,routeId);
     }
 }

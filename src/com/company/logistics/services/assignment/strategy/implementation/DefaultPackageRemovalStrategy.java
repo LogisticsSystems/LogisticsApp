@@ -21,7 +21,7 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
 
 
     @Override
-    public void removePackage(int packageId, int routeId) {
+    public DeliveryPackage removePackage(int packageId, int routeId) {
         DeliveryPackage deliveryPackage = packageRepository.findPackageById(packageId);
         Route route = routeRepository.findRouteById(routeId);
 
@@ -29,6 +29,8 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
 
         route.removePackage(packageId);
         updatePackageStatus(deliveryPackage);
+
+        return deliveryPackage;
     }
 
     private void updatePackageStatus(DeliveryPackage deliveryPackage) {

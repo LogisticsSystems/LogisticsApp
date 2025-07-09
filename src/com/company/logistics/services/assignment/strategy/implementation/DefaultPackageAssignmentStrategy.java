@@ -38,7 +38,7 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
     }
 
     @Override
-    public void assignPackage(int packageId, int routeId) {
+    public DeliveryPackage assignPackage(int packageId, int routeId) {
         pack  = packageRepository.findPackageById(packageId);
         route = routeRepository.findRouteById(routeId);
         if (route.getAssignedTruck().isPresent()) {
@@ -50,6 +50,8 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
         route.assignPackage(pack);
         updatePackageStatus();
         setEtaToPackage();
+
+        return pack;
     }
 
     private void updatePackageStatus() {

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DeliverPackageCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
-    public static final String PACKAGE_DELIVERED_MESSAGE = "Package %d has been delivered.";
+    public static final String PACKAGE_DELIVERED_MESSAGE = "Package %d has been delivered. Status: %s";
 
     private final PackageDeliveryService deliveryService;
 
@@ -28,7 +28,7 @@ public class DeliverPackageCommand implements Command {
 
         DeliveryPackage pkg = deliveryService.deliverPackage(this.packageId);
 
-        return String.format(PACKAGE_DELIVERED_MESSAGE, this.packageId);
+        return String.format(PACKAGE_DELIVERED_MESSAGE, this.packageId, pkg.getStatus());
     }
 
     private void parseParameters(List<String> parameters) {

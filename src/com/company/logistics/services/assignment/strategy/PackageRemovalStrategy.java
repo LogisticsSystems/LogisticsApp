@@ -1,6 +1,8 @@
 package com.company.logistics.services.assignment.strategy;
 
+import com.company.logistics.models.contracts.DeliveryPackage;
+
 public interface PackageRemovalStrategy{
 
-    void removePackage(int packageId, int routeId);
+    DeliveryPackage removePackage(int packageId, int routeId);
 }

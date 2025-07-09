@@ -67,7 +67,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
             expectedArrival = null;
         }
 
-        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
+        // System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class DeliveryPackageImpl implements DeliveryPackage {
             expectedArrival = null;
         }
 
-        System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
+        // System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
 

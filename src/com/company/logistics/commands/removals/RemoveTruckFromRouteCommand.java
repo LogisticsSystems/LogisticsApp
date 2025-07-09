@@ -28,7 +28,7 @@ public class RemoveTruckFromRouteCommand implements Command {
 
         assignmentService.removeTruckFromRoute(this.truckId , this.routeId);
 
-        return String.format(CommandsConstants.REMOVED_FROM_ROUTE,"Truck" , this.truckId , this.routeId);
+        return String.format(CommandsConstants.REMOVED_TRUCK_FROM_ROUTE,"Truck" , this.truckId , this.routeId);
     }
 
     private void parseParameters(List<String> parameters) {

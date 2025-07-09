@@ -29,7 +29,7 @@ public class AssignTruckToRouteCommand implements Command {
 
         assignmentService.assignTruckToRoute(this.truckId, this.routeId);
 
-        return String.format(CommandsConstants.ASSIGNED_TO_ROUTE_MESSAGE, "Truck", this.truckId, this.routeId);
+        return String.format(CommandsConstants.ASSIGNED_TRUCK_ROUTE, "Truck", this.truckId, this.routeId);
     }
 
     private void parseParameters(List<String> parameters) {
