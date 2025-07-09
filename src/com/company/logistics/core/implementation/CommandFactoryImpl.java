@@ -17,6 +17,7 @@ import com.company.logistics.commands.speed.ViewSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;

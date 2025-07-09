@@ -31,29 +31,22 @@ public class EngineContext {
         this.routeRecalculatorService = routeRecalculatorService;
     }
 
-    /** Raw data access */
+
     public LogisticsRepository getRepository() {
         return repository;
     }
-
-    /** The one place to change speed models and rebuild the scheduler */
     public SpeedModelService getSpeedModelService() {
         return speedModelService;
     }
-
-    /** Business services */
     public PackageDeliveryService getDeliveryService() {
         return deliveryService;
     }
-
     public AssignmentService getAssignmentService() {
         return assignmentService;
     }
-
     public RouteCreationService getRouteCreationService() {
         return routeCreationService;
     }
-
     public RouteRecalculatorService getRouteRecalculatorService() {
         return routeRecalculatorService;
     }
