@@ -2,7 +2,7 @@ package com.company.logistics.commands.speed;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
 import com.company.logistics.services.speeds.SpeedModelService;
 import com.company.logistics.enums.SpeedModelType;
@@ -16,16 +16,16 @@ public class ChangeSpeedModelCommand implements Command {
     private static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
     private static final int MAX_ROUTES = 10;
 
-    private final LogisticsRepository      repository;
+    private final RouteRepository          routeRepository;
     private final SpeedModelService        speedModelService;
     private final RouteRecalculatorService routeRecalculatorService;
 
 
-    public ChangeSpeedModelCommand(LogisticsRepository repository,
+    public ChangeSpeedModelCommand(RouteRepository routeRepository,
                                    SpeedModelService speedModelService,
                                    RouteRecalculatorService routeRecalculatorService) {
-        this.repository = repository;
-        this.speedModelService = speedModelService;
+        this.routeRepository          = routeRepository;
+        this.speedModelService        = speedModelService;
         this.routeRecalculatorService = routeRecalculatorService;
     }
 
@@ -34,7 +34,7 @@ public class ChangeSpeedModelCommand implements Command {
         ValidationHelper.validateArgumentsCount(parameters, EXPECTED_NUMBER_OF_ARGUMENTS);
 
         ValidationHelper.validateListSizeAtMost(
-                repository.getRoutes(),
+                routeRepository.getRoutes(),
                 "routes",
                 MAX_ROUTES,
                 ErrorMessages.SPEED_MODEL_MAX_ROUTES_EXCEED

@@ -2,9 +2,9 @@ package com.company.logistics.commands.creation;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.*;
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.City;
 import com.company.logistics.models.contracts.DeliveryPackage;
+import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -14,15 +14,15 @@ import java.util.List;
 public class CreatePackageCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 4;
 
-    private final LogisticsRepository repository;
+    private final PackageRepository packageRepository;
 
     private String contactInfo;
     private double weight;
     private City startLocation;
     private City endLocation;
 
-    public CreatePackageCommand (LogisticsRepository repository) {
-        this.repository = repository;
+    public CreatePackageCommand (PackageRepository packageRepository) {
+        this.packageRepository = packageRepository;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class CreatePackageCommand implements Command {
 
         parseParameters(parameters);
 
-        DeliveryPackage createdPackage = repository.createPackage(this.contactInfo, this.weight, this.startLocation, this.endLocation);
+        DeliveryPackage createdPackage = packageRepository.createPackage(this.contactInfo, this.weight, this.startLocation, this.endLocation);
 
         return String.format(CommandsConstants.PACKAGE_CREATED_MESSAGE, createdPackage.getId());
     }

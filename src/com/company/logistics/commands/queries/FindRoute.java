@@ -2,9 +2,9 @@ package com.company.logistics.commands.queries;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.City;
 import com.company.logistics.models.contracts.Route;
+import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.utils.ListingHelpers;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
@@ -14,13 +14,13 @@ import java.util.List;
 public class FindRoute implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
-    private final LogisticsRepository repository;
+    private final RouteRepository routeRepository;
 
     private City startLocation;
     private City endLocation;
 
-    public FindRoute(LogisticsRepository repository) {
-        this.repository = repository;
+    public FindRoute(RouteRepository routeRepository) {
+        this.routeRepository = routeRepository;
     }
 
 
@@ -30,7 +30,7 @@ public class FindRoute implements Command {
 
         parseParameters(parameters);
 
-        List<Route> routes = repository.findRoutes(this.startLocation, this.endLocation);
+        List<Route> routes = routeRepository.findRoutes(this.startLocation, this.endLocation);
 
         if (routes.isEmpty()) {
             return String.format(CommandsConstants.NO_MATCHING_ROUTES_MESSAGE, this.startLocation, this.endLocation);

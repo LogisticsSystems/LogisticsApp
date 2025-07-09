@@ -1,25 +1,29 @@
 package com.company.logistics.services.assignment.strategy.implementation;
 
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
+import com.company.logistics.repositories.contracts.RouteRepository;
+import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.services.assignment.strategy.TruckRemovalStrategy;
 import com.company.logistics.utils.ValidationHelper;
 
 public class DefaultTruckRemovalStrategy implements TruckRemovalStrategy {
 
-    private final LogisticsRepository repository;
+    private final RouteRepository routeRepository;
+    private final TruckRepository truckRepository;
 
-    public DefaultTruckRemovalStrategy(LogisticsRepository repository) {
-        this.repository = repository;
+    public DefaultTruckRemovalStrategy(RouteRepository routeRepository,
+                                       TruckRepository truckRepository) {
+        this.routeRepository = routeRepository;
+        this.truckRepository = truckRepository;
     }
 
     @Override
     public void removeTruck(int truckId, int routeId) {
-        Truck truck= repository.findTruckById(truckId);
-        Route route= repository.findRouteById(routeId);
+        Truck truck = truckRepository.findTruckById(truckId);
+        Route route = routeRepository.findRouteById(routeId);
 
         ValidationHelper.validateTruckAssignedToRoute(truck,route);
 

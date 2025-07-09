@@ -1,6 +1,7 @@
 package com.company.logistics.services.assignment.strategy.implementation;
 
-import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.repositories.contracts.PackageRepository;
+import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.services.assignment.strategy.PackageAssignmentStrategy;
 import com.company.logistics.services.speeds.SpeedModelService;
 import com.company.logistics.enums.PackageStatus;
@@ -18,7 +19,8 @@ import java.util.List;
 public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrategy {
     private static final double MAX_TRUCK_CAPACITY = 42000;
 
-    private final LogisticsRepository repository;
+    private final PackageRepository packageRepository;
+    private final RouteRepository routeRepository;
     private final SpeedModelService speedModelService;
 
     private DeliveryPackage pack;
@@ -26,17 +28,19 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
     private Truck truck;
 
     public DefaultPackageAssignmentStrategy(
-            LogisticsRepository repository,
+            PackageRepository packageRepository,
+            RouteRepository routeRepository,
             SpeedModelService speedModelService
     ) {
-        this.repository = repository;
+        this.packageRepository = packageRepository;
+        this.routeRepository   = routeRepository;
         this.speedModelService = speedModelService;
     }
 
     @Override
     public void assignPackage(int packageId, int routeId) {
-        pack = repository.findPackageById(packageId);
-        route = repository.findRouteById(routeId);
+        pack  = packageRepository.findPackageById(packageId);
+        route = routeRepository.findRouteById(routeId);
         if (route.getAssignedTruck().isPresent()) {
             truck = route.getAssignedTruck().get();
         }

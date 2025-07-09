@@ -16,8 +16,10 @@ import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.commands.speed.ViewSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.exceptions.InvalidUserInputException;
+import com.company.logistics.repositories.contracts.PackageRepository;
+import com.company.logistics.repositories.contracts.RouteRepository;
+import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
@@ -29,7 +31,9 @@ import com.company.logistics.utils.ValidationHelper;
 public class CommandFactoryImpl implements CommandFactory {
     private static final String INVALID_COMMAND = "Invalid command name: %s";
 
-    private final LogisticsRepository     repository;
+    private final PackageRepository       packageRepository;
+    private final RouteRepository         routeRepository;
+    private final TruckRepository         truckRepository;
     private final AssignmentService       assignmentService;
     private final PackageDeliveryService  deliveryService;
     private final RouteCreationService    routeCreationService;
@@ -37,7 +41,9 @@ public class CommandFactoryImpl implements CommandFactory {
     private final RouteRecalculatorService routeRecalculatorService;
 
     public CommandFactoryImpl(EngineContext engineContext) {
-        this.repository               = engineContext.getRepository();
+        this.packageRepository        = engineContext.getPackageRepository();
+        this.routeRepository          = engineContext.getRouteRepository();
+        this.truckRepository          = engineContext.getTruckRepository();
         this.assignmentService        = engineContext.getAssignmentService();
         this.deliveryService          = engineContext.getDeliveryService();
         this.routeCreationService     = engineContext.getRouteCreationService();
@@ -58,17 +64,17 @@ public class CommandFactoryImpl implements CommandFactory {
 
         return switch (type) {
             // ——— CRUD / creation ———
-            case CREATEPACKAGE    -> new CreatePackageCommand(repository);
+            case CREATEPACKAGE    -> new CreatePackageCommand(packageRepository);
             case CREATEROUTE      -> new CreateRouteCommand(routeCreationService);
 
             // ——— Queries & listings ———
-            case FINDROUTE                      -> new FindRoute(repository);
-            case VIEWPACKAGEWITHID              -> new ViewPackageWithIDCommand(repository);
-            case LISTPACKAGEINFO                -> new ListPackagesCommand(repository);
-            case LISTROUTEINFO                  -> new ListRoutesCommand(repository);
-            case LISTTRUCKINFO                  -> new ListTrucksCommand(repository);
-            case LISTROUTESWITHNOTRUCKASSIGNED  -> new ListRoutesWithNoAssignedTrucksCommand(repository);
-            case LISTPACKAGESWITHSTATUS         -> new ListPackagesWithStatusCommand(repository);
+            case FINDROUTE                      -> new FindRoute(routeRepository);
+            case VIEWPACKAGEWITHID              -> new ViewPackageWithIDCommand(packageRepository);
+            case LISTPACKAGEINFO                -> new ListPackagesCommand(packageRepository);
+            case LISTROUTEINFO                  -> new ListRoutesCommand(routeRepository);
+            case LISTTRUCKINFO                  -> new ListTrucksCommand(truckRepository);
+            case LISTROUTESWITHNOTRUCKASSIGNED  -> new ListRoutesWithNoAssignedTrucksCommand(routeRepository);
+            case LISTPACKAGESWITHSTATUS         -> new ListPackagesWithStatusCommand(packageRepository);
             case HELP                           -> new HelpCommand();
 
             // ——— Assignment ———
@@ -83,7 +89,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case DELIVERPACKAGE   -> new DeliverPackageCommand(deliveryService);
 
             // ——— Speed model swap ———
-            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(repository, speedModelService, routeRecalculatorService);
+            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(routeRepository, speedModelService, routeRecalculatorService);
             case VIEWSPEEDMODEL   -> new ViewSpeedModelCommand(speedModelService);
         };
     }

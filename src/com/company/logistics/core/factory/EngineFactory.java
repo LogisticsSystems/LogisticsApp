@@ -3,10 +3,14 @@ package com.company.logistics.core.factory;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.Engine;
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.core.implementation.CommandFactoryImpl;
 import com.company.logistics.core.implementation.EngineImpl;
-import com.company.logistics.core.implementation.LogisticsRepositoryImpl;
+import com.company.logistics.repositories.contracts.PackageRepository;
+import com.company.logistics.repositories.contracts.RouteRepository;
+import com.company.logistics.repositories.contracts.TruckRepository;
+import com.company.logistics.repositories.implementation.PackageRepositoryImpl;
+import com.company.logistics.repositories.implementation.RouteRepositoryImpl;
+import com.company.logistics.repositories.implementation.TruckRepositoryImpl;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageAssignmentStrategy;
 import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageRemovalStrategy;
@@ -43,16 +47,18 @@ public final class EngineFactory {
     }
 
     private static EngineContext createEngineContext() {
-        LogisticsRepository  repository = new LogisticsRepositoryImpl(new DefaultVehicleLoader());
+        PackageRepository packageRepository = new PackageRepositoryImpl();
+        RouteRepository routeRepository     = new RouteRepositoryImpl();
+        TruckRepository truckRepository     = new TruckRepositoryImpl(new DefaultVehicleLoader());
 
         SpeedModelService speedModelService               = new SpeedModelService(new ConstantSpeedModel());
-        RouteCreationService routeCreationService         = new RouteCreationService(repository, speedModelService);
-        RouteRecalculatorService routeRecalculatorService = new RouteRecalculatorService(repository, speedModelService);
+        RouteCreationService routeCreationService         = new RouteCreationService(routeRepository, speedModelService);
+        RouteRecalculatorService routeRecalculatorService = new RouteRecalculatorService(routeRepository, speedModelService);
 
-        DefaultPackageAssignmentStrategy packageAssignmentStrategy = new DefaultPackageAssignmentStrategy(repository, speedModelService);
-        DefaultTruckAssignmentStrategy truckAssignmentStrategy     = new DefaultTruckAssignmentStrategy(repository);
-        DefaultPackageRemovalStrategy packageRemovalStrategy       = new DefaultPackageRemovalStrategy(repository);
-        DefaultTruckRemovalStrategy truckRemovalStrategy           = new DefaultTruckRemovalStrategy(repository);
+        DefaultPackageAssignmentStrategy packageAssignmentStrategy = new DefaultPackageAssignmentStrategy(packageRepository, routeRepository, speedModelService);
+        DefaultTruckAssignmentStrategy truckAssignmentStrategy     = new DefaultTruckAssignmentStrategy(routeRepository, truckRepository);
+        DefaultPackageRemovalStrategy packageRemovalStrategy       = new DefaultPackageRemovalStrategy(packageRepository, routeRepository);
+        DefaultTruckRemovalStrategy truckRemovalStrategy           = new DefaultTruckRemovalStrategy(routeRepository, truckRepository);
         AssignmentService assignmentService = new AssignmentService(
                 packageAssignmentStrategy,
                 truckAssignmentStrategy,
@@ -60,10 +66,12 @@ public final class EngineFactory {
                 packageRemovalStrategy);
 
 
-        PackageDeliveryService deliveryService = new PackageDeliveryService(repository);
+        PackageDeliveryService deliveryService = new PackageDeliveryService(packageRepository, routeRepository);
 
         return new EngineContext(
-                repository,
+                packageRepository,
+                routeRepository,
+                truckRepository,
                 speedModelService,
                 deliveryService,
                 assignmentService,

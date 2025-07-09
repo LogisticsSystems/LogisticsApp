@@ -1,6 +1,8 @@
 package com.company.logistics.services.assignment.strategy.implementation;
 
-import com.company.logistics.core.contracts.LogisticsRepository;
+import com.company.logistics.exceptions.InvalidUserInputException;
+import com.company.logistics.repositories.contracts.RouteRepository;
+import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.services.assignment.strategy.TruckAssignmentStrategy;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
@@ -11,20 +13,23 @@ import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
 public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
-    private final LogisticsRepository repository;
+    private final RouteRepository routeRepository;
+    private final TruckRepository truckRepository;
 
     private Route route;
     private Truck truck;
 
-    public DefaultTruckAssignmentStrategy(LogisticsRepository repository) {
-        this.repository = repository;
+    public DefaultTruckAssignmentStrategy(RouteRepository routeRepository,
+                                          TruckRepository truckRepository) {
+        this.routeRepository = routeRepository;
+        this.truckRepository = truckRepository;
     }
 
 
     @Override
     public void assignTruck(int truckId, int routeId) {
-        truck = repository.findTruckById(truckId);
-        route = repository.findRouteById(routeId);
+        truck = truckRepository.findTruckById(truckId);
+        route = routeRepository.findRouteById(routeId);
 
         validateTruck();
 
@@ -37,6 +42,10 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
     }
 
     private void validateTruck() {
+        if (route.getAssignedTruck().isPresent()) {
+            throw new InvalidUserInputException(String.format(ErrorMessages.TRUCK_ALREADY_ASSIGNED, route.getAssignedTruck().get().getId()));
+        }
+
         ValidationHelper.validateRouteRangeWithin(
                 route.getLocations(),
                 truck.getMaxRangeKm(),

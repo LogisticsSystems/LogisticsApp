@@ -2,9 +2,9 @@ package com.company.logistics.commands.listing;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
+import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.utils.ListingHelpers;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.PrintConstants;
@@ -19,8 +19,7 @@ public class ListPackagesWithStatusCommand implements Command {
     private PackageStatus status;
     private final List<DeliveryPackage> packages;
 
-    public ListPackagesWithStatusCommand(LogisticsRepository repository) { this.packages = repository.getPackages(); }
-
+    public ListPackagesWithStatusCommand(PackageRepository packageRepository) { this.packages = packageRepository.getPackages(); }
 
     @Override
     public String execute(List<String> parameters) {
@@ -38,8 +37,6 @@ public class ListPackagesWithStatusCommand implements Command {
         return PrintConstants.LINE_BREAK + "\n" + ListingHelpers.elementsToString(packagesWithDesiredStatus);
 
     }
-
-
 
     private void parseParameters(List<String> parameters) {
         status = ParsingHelpers.tryParseEnum(parameters.get(0),

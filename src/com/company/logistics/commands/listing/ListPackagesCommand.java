@@ -2,8 +2,8 @@ package com.company.logistics.commands.listing;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.core.contracts.LogisticsRepository;
 import com.company.logistics.models.contracts.DeliveryPackage;
+import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.utils.ListingHelpers;
 import com.company.logistics.utils.PrintConstants;
 
@@ -13,8 +13,8 @@ public class ListPackagesCommand implements Command {
 
     private final List<DeliveryPackage> packages;
 
-    public ListPackagesCommand(LogisticsRepository repository) {
-        packages = repository.getPackages();
+    public ListPackagesCommand(PackageRepository packageRepository) {
+        packages = packageRepository.getPackages();
     }
 
     public String execute(List<String> parameters) {
