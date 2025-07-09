@@ -60,6 +60,11 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         }
 
         status = vals[idx+1];
+
+        if (status == PackageStatus.DELIVERED) {
+            expectedArrival = null;
+        }
+
         System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
@@ -71,6 +76,11 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         }
 
         status = PackageStatus.values()[idx-1];
+
+        if (status == PackageStatus.UNASSIGNED) {
+            expectedArrival = null;
+        }
+
         System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 

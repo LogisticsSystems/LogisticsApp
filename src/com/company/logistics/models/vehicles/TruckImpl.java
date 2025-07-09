@@ -53,4 +53,17 @@ public class TruckImpl implements Truck {
 
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != getClass()) return false;
+        TruckImpl otherTruck = (TruckImpl) obj;
+        return this.id == otherTruck.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 }

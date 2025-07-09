@@ -14,7 +14,6 @@ public class SpeedModelService {
         this.speedModel = speedModel;
     }
 
-    /** Swap to a new model */
     public void changeModel(SpeedModelType type) {
         switch(type) {
             case CONSTANT   ->   speedModel = new ConstantSpeedModel();
@@ -23,7 +22,6 @@ public class SpeedModelService {
         }
     }
 
-    /** Get a brand-new scheduler backed by whatever model is live now. */
     public RouteScheduleService getRouteScheduler() {
         return new RouteScheduleService(speedModel);
     }

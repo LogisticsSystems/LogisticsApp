@@ -12,6 +12,7 @@ import com.company.logistics.commands.queries.ViewPackageWithIDCommand;
 import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
 import com.company.logistics.commands.removals.RemoveTruckFromRouteCommand;
 import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
+import com.company.logistics.commands.speed.ViewSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.contracts.CommandFactory;
 import com.company.logistics.core.contracts.LogisticsRepository;
@@ -80,7 +81,7 @@ public class CommandFactoryImpl implements CommandFactory {
 
             // ——— Speed model swap ———
             case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(repository, speedModelService, routeRecalculatorService);
-
+            case VIEWSPEEDMODEL   -> new ViewSpeedModelCommand(speedModelService);
         };
     }
 }

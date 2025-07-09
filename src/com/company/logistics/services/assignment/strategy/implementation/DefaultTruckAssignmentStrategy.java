@@ -57,9 +57,6 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
                             truck.getCapacityKg())
             );
         }
-
-
-
     }
 
 }

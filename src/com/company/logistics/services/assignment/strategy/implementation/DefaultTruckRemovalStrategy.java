@@ -12,16 +12,12 @@ public class DefaultTruckRemovalStrategy implements TruckRemovalStrategy {
 
     private final LogisticsRepository repository;
 
-//    private Route route;
-//    private Truck truck;
-
     public DefaultTruckRemovalStrategy(LogisticsRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public void removeTruck(int truckId, int routeId) {
-
         Truck truck= repository.findTruckById(truckId);
         Route route= repository.findRouteById(routeId);
 

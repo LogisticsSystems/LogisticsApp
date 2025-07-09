@@ -31,10 +31,8 @@ public class ChangeSpeedModelCommand implements Command {
 
     @Override
     public String execute(List<String> parameters) {
-        // 1) validate arguments
         ValidationHelper.validateArgumentsCount(parameters, EXPECTED_NUMBER_OF_ARGUMENTS);
 
-        // 2) guard on number of routes
         ValidationHelper.validateListSizeAtMost(
                 repository.getRoutes(),
                 "routes",
@@ -42,18 +40,14 @@ public class ChangeSpeedModelCommand implements Command {
                 ErrorMessages.SPEED_MODEL_MAX_ROUTES_EXCEED
         );
 
-        // 3) try parse speed model
         SpeedModelType newSpeedModelType = ParsingHelpers.tryParseEnum(
                 parameters.get(0).toUpperCase(),
                 SpeedModelType.class,
-                ErrorMessages.UNKNOWN_SPEED_MODEL
+                String.format(ErrorMessages.UNKNOWN_SPEED_MODEL, parameters.get(0))
         );
 
 
-        // 4) swap model
         speedModelService.changeModel(newSpeedModelType);
-
-        // 5) recompute all schedules + ETAs
         routeRecalculatorService.recomputeAll();
 
         return String.format(CommandsConstants.SPEED_MODEL_SWITCH, newSpeedModelType);

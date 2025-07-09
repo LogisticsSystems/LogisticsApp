@@ -39,34 +39,24 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
             truck = route.getAssignedTruck().get();
         }
 
-        // perform package validations
         validatePackage();
 
-        // attach it...
         route.assignPackage(pack);
-
-        // update package status
         updatePackageStatus();
-
-        // compute and set ETA
         setEtaToPackage();
     }
 
     private void updatePackageStatus() {
-        // UNASSIGNED → PENDING
         pack.advancePackageStatus();
 
-        // if there was already a truck, go PENDING → IN_TRANSIT immediately
         if (route.getAssignedTruck().isPresent()) {
             pack.advancePackageStatus();
         }
     }
 
     private void validatePackage() {
-        // only unassigned packages may be added
         ValidationHelper.validatePackageStatus(pack, PackageStatus.UNASSIGNED);
 
-        // location-compatibility
         ValidationHelper.validatePackageRouteCompatibility(
                 pack.getStartLocation(),
                 pack.getEndLocation(),

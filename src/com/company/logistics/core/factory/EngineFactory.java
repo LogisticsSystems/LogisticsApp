@@ -28,13 +28,10 @@ public final class EngineFactory {
     private EngineFactory() { }
 
     public static Engine create() {
-        // 1) initialize shared infrastructure
         initInfrastructure();
 
-        // 2) build everything and bundle into EngineContext
         EngineContext engineContext = createEngineContext();
 
-        // 3) wire up command processor & engine
         CommandFactory   commandFactory   = new CommandFactoryImpl(engineContext);
         CommandProcessor commandProcessor = new CommandProcessor(commandFactory);
         return new EngineImpl(commandProcessor);
@@ -46,31 +43,25 @@ public final class EngineFactory {
     }
 
     private static EngineContext createEngineContext() {
-        // 2.1) core repository
-        LogisticsRepository  repository        = new LogisticsRepositoryImpl(new DefaultVehicleLoader());
+        LogisticsRepository  repository = new LogisticsRepositoryImpl(new DefaultVehicleLoader());
 
-        // 2.2) core speed model
-        SpeedModelService speedModelService    = new SpeedModelService(new ConstantSpeedModel());
+        SpeedModelService speedModelService               = new SpeedModelService(new ConstantSpeedModel());
+        RouteCreationService routeCreationService         = new RouteCreationService(repository, speedModelService);
+        RouteRecalculatorService routeRecalculatorService = new RouteRecalculatorService(repository, speedModelService);
 
-        // build the two small assignment strategies
         DefaultPackageAssignmentStrategy packageAssignmentStrategy = new DefaultPackageAssignmentStrategy(repository, speedModelService);
-        DefaultTruckAssignmentStrategy truckAssignmentStrategy = new DefaultTruckAssignmentStrategy(repository);
-        DefaultPackageRemovalStrategy packageRemovalStrategy = new DefaultPackageRemovalStrategy(repository);
-        DefaultTruckRemovalStrategy truckRemovalStrategy = new DefaultTruckRemovalStrategy(repository);
-
-        // 2.3) domain services
-        PackageDeliveryService deliveryService     = new PackageDeliveryService(repository);
-        AssignmentService assignmentService        = new AssignmentService(packageAssignmentStrategy,
+        DefaultTruckAssignmentStrategy truckAssignmentStrategy     = new DefaultTruckAssignmentStrategy(repository);
+        DefaultPackageRemovalStrategy packageRemovalStrategy       = new DefaultPackageRemovalStrategy(repository);
+        DefaultTruckRemovalStrategy truckRemovalStrategy           = new DefaultTruckRemovalStrategy(repository);
+        AssignmentService assignmentService = new AssignmentService(
+                packageAssignmentStrategy,
                 truckAssignmentStrategy,
                 truckRemovalStrategy,
                 packageRemovalStrategy);
 
-        RouteCreationService routeCreationService  = new RouteCreationService(repository, speedModelService);
 
-        // 2.4) recomputation logic service
-        RouteRecalculatorService routeRecalculatorService = new RouteRecalculatorService(repository, speedModelService);
+        PackageDeliveryService deliveryService = new PackageDeliveryService(repository);
 
-        // 2.4) assemble context (everything non-null, no setters needed)
         return new EngineContext(
                 repository,
                 speedModelService,

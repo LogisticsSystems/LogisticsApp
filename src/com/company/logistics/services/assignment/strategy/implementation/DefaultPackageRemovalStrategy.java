@@ -18,9 +18,9 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
 
     @Override
     public void removePackage(int packageId, int routeId) {
+        DeliveryPackage deliveryPackage = repository.findPackageById(packageId);
+        Route route = repository.findRouteById(routeId);
 
-        DeliveryPackage deliveryPackage=repository.findPackageById(packageId);
-        Route route= repository.findRouteById(routeId);
         ValidationHelper.validatePackageInRoute(deliveryPackage,route);
 
         route.removePackage(packageId);

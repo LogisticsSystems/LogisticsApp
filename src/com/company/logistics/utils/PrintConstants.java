@@ -27,6 +27,9 @@ public final class PrintConstants {
     public static final String TRUCK_STATUS_ASSIGNED      = "  Status: Assigned to a route%n";
     public static final String TRUCK_STATUS_UNASSIGNED    = "  Status: Unassigned%n";
 
+    // Speed model printing
+    public static final String CURRENT_SPEED_MODEL        = "Current speed model: %s";
+
     //Others
     public static final String LINE_BREAK                 = "==========";
     public static final String DATE_TIME_FORMAT           = "dd-MMM-yyyy h:mm a";

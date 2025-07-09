@@ -28,7 +28,6 @@ public class DeliverPackageCommand implements Command {
 
         DeliveryPackage pkg = deliveryService.deliverPackage(this.packageId);
 
-
         return String.format(PACKAGE_DELIVERED_MESSAGE, this.packageId);
     }
 

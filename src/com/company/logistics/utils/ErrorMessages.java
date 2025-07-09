@@ -33,7 +33,7 @@ public final class ErrorMessages {
     public static final String NO_PACKAGE_WITH_ID        = "No package with ID: %d";
     public static final String NO_ROUTE_WITH_ID          = "No route with ID: %d";
     public static final String NO_TRUCK_WITH_ID          = "No truck with ID: %d";
-    public static final String UNKNOWN_SPEED_MODEL       = "Unknown speed model: %s";
+    public static final String UNKNOWN_SPEED_MODEL       = "Unknown speed model: %s. Current available models are CONSTANT, SEASONAL, SINUSOIDAL";
 
     // --- Assignment -------------------------------------------------
     public static final String ALREADY_ASSIGNED          = "%s is already assigned to %s.";
