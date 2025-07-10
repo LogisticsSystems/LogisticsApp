@@ -9,6 +9,10 @@ import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.services.assignment.strategy.TruckRemovalStrategy;
 import com.company.logistics.utils.ValidationHelper;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class DefaultTruckRemovalStrategy implements TruckRemovalStrategy {
 
     private final RouteRepository routeRepository;
@@ -21,21 +25,22 @@ public class DefaultTruckRemovalStrategy implements TruckRemovalStrategy {
     }
 
     @Override
-    public void removeTruck(int truckId, int routeId) {
+    public List<Integer> removeTruck(int truckId, int routeId) {
         Truck truck = truckRepository.findTruckById(truckId);
         Route route = routeRepository.findRouteById(routeId);
 
-        ValidationHelper.validateTruckAssignedToRoute(truck,route);
+        ValidationHelper.validateTruckAssignedToRoute(truck, route);
 
         truck.unassignFromRoute();
         route.unassignTruck();
 
-        changePackagesStatus(route);
-    }
-
-    private void changePackagesStatus(Route route) {
-        route.getAssignedPackages().stream()
-                .filter(pkg->pkg.getStatus() == PackageStatus.IN_TRANSIT)
-                .forEach(DeliveryPackage::revertPackageStatus);
+        List<Integer> changedIds = new ArrayList<>();
+        for (DeliveryPackage pkg : route.getAssignedPackages()) {
+            if (pkg.getStatus() == PackageStatus.IN_TRANSIT) {
+                pkg.revertPackageStatus();
+                changedIds.add(pkg.getId());
+            }
+        }
+        return Collections.unmodifiableList(changedIds);
     }
 }

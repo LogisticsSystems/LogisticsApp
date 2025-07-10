@@ -2,11 +2,13 @@ package com.company.logistics.commands.removals;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RemoveTruckFromRouteCommand implements Command {
 
@@ -26,13 +28,27 @@ public class RemoveTruckFromRouteCommand implements Command {
         
         parseParameters(parameters);
 
-        assignmentService.removeTruckFromRoute(this.truckId , this.routeId);
+        List<Integer> statusChangedIDs = assignmentService.removeTruckFromRoute(this.truckId , this.routeId);
 
-        return String.format(CommandsConstants.REMOVED_TRUCK_FROM_ROUTE,"Truck" , this.truckId , this.routeId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(CommandsConstants.REMOVED_TRUCK_FROM_ROUTE, "Truck", truckId, routeId));
+
+        appendPackageIDsLine(sb, statusChangedIDs);
+        return sb.toString();
     }
 
     private void parseParameters(List<String> parameters) {
         this.truckId= ParsingHelpers.tryParseInt(parameters.get(0),"Truck ID");
         this.routeId= ParsingHelpers.tryParseInt(parameters.get(1),"Route ID");
+    }
+
+    private void appendPackageIDsLine(StringBuilder sb, List<Integer> ids) {
+        if (ids.isEmpty()) { return; }
+
+        sb.append(String.format("\nPackage's {IDs} now %s: ", PackageStatus.PENDING))
+                .append(ids.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", "))
+                );
     }
 }

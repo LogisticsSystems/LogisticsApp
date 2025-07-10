@@ -12,6 +12,10 @@ import com.company.logistics.utils.Calculations;
 import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
     private final RouteRepository routeRepository;
     private final TruckRepository truckRepository;
@@ -27,7 +31,7 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
 
 
     @Override
-    public void assignTruck(int truckId, int routeId) {
+    public List<Integer> assignTruck(int truckId, int routeId) {
         truck = truckRepository.findTruckById(truckId);
         route = routeRepository.findRouteById(routeId);
 
@@ -36,9 +40,15 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
         route.assignTruck(truck);
         truck.assignToRoute();
 
-        route.getAssignedPackages().stream()
-                .filter(pkg -> pkg.getStatus() == PackageStatus.PENDING)
-                .forEach(DeliveryPackage::advancePackageStatus);
+        List<Integer> changedIds = new ArrayList<>();
+        for (DeliveryPackage pkg : route.getAssignedPackages()) {
+            if (pkg.getStatus() == PackageStatus.PENDING) {
+                pkg.advancePackageStatus();
+                changedIds.add(pkg.getId());
+            }
+        }
+
+        return Collections.unmodifiableList(changedIds);
     }
 
     private void validateTruck() {

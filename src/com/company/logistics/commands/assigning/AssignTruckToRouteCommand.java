@@ -2,11 +2,13 @@ package com.company.logistics.commands.assigning;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AssignTruckToRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
@@ -27,13 +29,24 @@ public class AssignTruckToRouteCommand implements Command {
 
         parseParameters(parameters);
 
-        assignmentService.assignTruckToRoute(this.truckId, this.routeId);
+        List<Integer> changedStatusIds = assignmentService.assignTruckToRoute(this.truckId, this.routeId);
 
-        return String.format(CommandsConstants.ASSIGNED_TRUCK_ROUTE, "Truck", this.truckId, this.routeId);
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(CommandsConstants.ASSIGNED_TRUCK_ROUTE, "Truck", truckId, routeId));
+        appendPackageLine(sb, changedStatusIds);
+        return sb.toString();
     }
 
     private void parseParameters(List<String> parameters) {
         this.truckId = ParsingHelpers.tryParseInt(parameters.get(0), "Truck ID");
         this.routeId = ParsingHelpers.tryParseInt(parameters.get(1), "Route ID");
+    }
+
+    private void appendPackageLine(StringBuilder sb, List<Integer> ids) {
+        if (ids.isEmpty()) { return; }
+
+        sb.append(String.format("\nPackage's {IDs} now %s: ", PackageStatus.IN_TRANSIT)).append(ids.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(", ")));
     }
 }

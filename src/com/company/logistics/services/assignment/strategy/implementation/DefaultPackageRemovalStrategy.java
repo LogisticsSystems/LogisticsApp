@@ -1,5 +1,6 @@
 package com.company.logistics.services.assignment.strategy.implementation;
 
+import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
@@ -21,7 +22,7 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
 
 
     @Override
-    public DeliveryPackage removePackage(int packageId, int routeId) {
+    public PackageSnapshot removePackage(int packageId, int routeId) {
         DeliveryPackage deliveryPackage = packageRepository.findPackageById(packageId);
         Route route = routeRepository.findRouteById(routeId);
 
@@ -30,7 +31,11 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
         route.removePackage(packageId);
         updatePackageStatus(deliveryPackage);
 
-        return deliveryPackage;
+        return new PackageSnapshot(
+                deliveryPackage.getId(),
+                deliveryPackage.getStatus(),
+                deliveryPackage.getExpectedArrival()
+        );
     }
 
     private void updatePackageStatus(DeliveryPackage deliveryPackage) {

@@ -1,5 +1,6 @@
 package com.company.logistics.services.assignment.strategy.implementation;
 
+import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.services.assignment.strategy.PackageAssignmentStrategy;
@@ -38,7 +39,7 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
     }
 
     @Override
-    public DeliveryPackage assignPackage(int packageId, int routeId) {
+    public PackageSnapshot assignPackage(int packageId, int routeId) {
         pack  = packageRepository.findPackageById(packageId);
         route = routeRepository.findRouteById(routeId);
         if (route.getAssignedTruck().isPresent()) {
@@ -51,7 +52,11 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
         updatePackageStatus();
         setEtaToPackage();
 
-        return pack;
+        return new PackageSnapshot(
+                pack.getId(),
+                pack.getStatus(),
+                pack.getExpectedArrival()
+        );
     }
 
     private void updatePackageStatus() {

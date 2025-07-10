@@ -1,9 +1,9 @@
 package com.company.logistics.services.assignment.strategy;
 
-import com.company.logistics.models.contracts.DeliveryPackage;
+import com.company.logistics.dto.PackageSnapshot;
 
 public interface PackageAssignmentStrategy {
 
-    DeliveryPackage assignPackage(int pkgId, int routeId);
+    PackageSnapshot assignPackage(int pkgId, int routeId);
 
 }

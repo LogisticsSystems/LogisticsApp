@@ -1,9 +1,11 @@
 package com.company.logistics.services.assignment.strategy;
 
+import java.util.List;
+
 public interface TruckRemovalStrategy {
 
 
-    void removeTruck(int truckId, int routeId);
+    List<Integer> removeTruck(int truckId, int routeId);
 
 
 }
