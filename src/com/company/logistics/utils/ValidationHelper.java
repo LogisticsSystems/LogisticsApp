@@ -1,16 +1,18 @@
 package com.company.logistics.utils;
+import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.enums.City;
 import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
+import com.company.logistics.models.contracts.User;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class ValidationHelper {
@@ -66,6 +68,15 @@ public class ValidationHelper {
 
     public static void validateStringLength(String s, int min, int max, String name) {
         validateIntRange(s.length(), min, max, name);
+    }
+
+    public static void validatePattern(String value, String pattern, String name) {
+        Pattern patternToMatch = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = patternToMatch.matcher(value);
+        if (!matcher.matches()) {
+            throw new InvalidUserInputException(String.format(ErrorMessages.SYMBOLS_PATTERN_ERR,
+                    name));
+        }
     }
 
     private static void validateIntRange(int actual, int min, int max, String name) {
@@ -221,6 +232,16 @@ public class ValidationHelper {
             // every other city must be unique
             if (!seen.add(city)) {
                 throw new InvalidUserInputException(String.format(ErrorMessages.NON_UNIQUE_INTERMEDIATE_STOPS, city));
+            }
+        }
+    }
+
+    public static void validateUserHasRole(User user, UserRole ...roles) {
+        if (user == null) {
+            throw new InvalidUserInputException(CommandsConstants.COMMAND_UNAVAILABLE_FOR_NO_USER);
+        } else {
+            if (Arrays.stream(roles).noneMatch(userRole -> userRole == user.getRole())) {
+                throw new InvalidUserInputException(String.format(CommandsConstants.COMMAND_UNAVAILABLE_FOR_USER, user.getRole()));
             }
         }
     }

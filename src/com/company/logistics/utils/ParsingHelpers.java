@@ -29,7 +29,7 @@ public class ParsingHelpers {
 
     public static <E extends Enum<E>> E tryParseEnum(String valueToParse, Class<E> type, String errorMessage) {
         try{
-            return Enum.valueOf(type,valueToParse);
+            return Enum.valueOf(type,valueToParse.toUpperCase());
         } catch (Exception e) {
             String enumName=type.getSimpleName();
             E[] enumValues=type.getEnumConstants();

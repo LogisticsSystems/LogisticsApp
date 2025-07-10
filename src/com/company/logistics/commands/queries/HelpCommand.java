@@ -1,6 +1,8 @@
 package com.company.logistics.commands.queries;
 
 import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.exceptions.InvalidUserInputException;
+import com.company.logistics.utils.ErrorMessages;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,7 +44,7 @@ public class HelpCommand implements Command {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new InvalidUserInputException(ErrorMessages.INFORMATION_CURRENTLY_UNAVAILABLE);
         }
     }
 }

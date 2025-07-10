@@ -3,6 +3,7 @@ package com.company.logistics.core.context;
 import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.repositories.contracts.TruckRepository;
+import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.persistence.PersistenceService;
@@ -14,6 +15,7 @@ public class EngineContext {
     private final PackageRepository        packageRepository;
     private final RouteRepository          routeRepository;
     private final TruckRepository          truckRepository;
+    private final UserRepository           userRepository;
     private final SpeedModelService        speedModelService;
     private final PackageDeliveryService   deliveryService;
     private final AssignmentService        assignmentService;
@@ -25,6 +27,7 @@ public class EngineContext {
             PackageRepository        packageRepository,
             RouteRepository          routeRepository,
             TruckRepository          truckRepository,
+            UserRepository           userRepository,
             SpeedModelService        speedModelService,
             PackageDeliveryService   deliveryService,
             AssignmentService        assignmentService,
@@ -35,6 +38,7 @@ public class EngineContext {
         this.packageRepository        = packageRepository;
         this.routeRepository          = routeRepository;
         this.truckRepository          = truckRepository;
+        this.userRepository           = userRepository;
         this.speedModelService        = speedModelService;
         this.deliveryService          = deliveryService;
         this.assignmentService        = assignmentService;
@@ -47,6 +51,7 @@ public class EngineContext {
     public PackageRepository getPackageRepository() { return packageRepository; }
     public RouteRepository getRouteRepository()     { return routeRepository; }
     public TruckRepository getTruckRepository()     { return truckRepository; }
+    public UserRepository getUserRepository()     { return userRepository; }
 
     public SpeedModelService getSpeedModelService()               { return speedModelService; }
     public RouteCreationService getRouteCreationService()         { return routeCreationService; }

@@ -14,8 +14,8 @@ Command: RemoveTruckFromRoute <truck Id> <route Id>                             
 Example: REMOVETRUCKFROMROUTE 1001 2
 Command: DeliverPackage<package Id>                                                                     -> Marks package as delivered
 Example: DELIVERPACKAGE 1
-Command: ViewPackage <package Id>                                                                       -> Lists details for a package
-Example: ViewPackage 1
+Command: ViewPackageWithID <package Id>                                                                 -> Lists details for a package
+Example: VIEWPACKAGEWITHID 1
 Command: ListPackageInfo                                                                                -> Lists all packages
 Example: LISTPACKAGEINFO
 Command: ListRouteInfo                                                                                  -> Lists all routes
@@ -25,4 +25,4 @@ Example: LISTTRUCKINFO
 Command: ListRoutesWithNoTrucksAssigned                                                                 -> Lists all routes that don't have assigned trucks
 Example: LISTROUTESWITHNOTRUCKSASSIGNED
 Command: ListPackagesWithStatus <status>                                                                -> Lists all packages with the selected status
-Example: LISTPACKAGESIWTHSTATUS DELIVERED
+Example: LISTPACKAGESIWTHSTATUS DELIVERED                                                               Avaialble statuses: UNASSIGNED, PENDING, IN_TRANSIT, DELIVERED

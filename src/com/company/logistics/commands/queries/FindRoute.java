@@ -3,8 +3,11 @@ package com.company.logistics.commands.queries;
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.enums.City;
+import com.company.logistics.enums.UserRole;
 import com.company.logistics.models.contracts.Route;
+import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.RouteRepository;
+import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.utils.ListingHelpers;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
@@ -15,17 +18,21 @@ public class FindRoute implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
     private final RouteRepository routeRepository;
+    private final User loggedInUser;
 
     private City startLocation;
     private City endLocation;
 
-    public FindRoute(RouteRepository routeRepository) {
+    public FindRoute(RouteRepository routeRepository, UserRepository userRepository) {
         this.routeRepository = routeRepository;
+        this.loggedInUser = userRepository.getLoggedInUser();
     }
 
 
     @Override
     public String execute(List<String> parameters) {
+        validateLoggedInUser();
+
         ValidationHelper.validateArgumentsCount(parameters, EXPECTED_NUMBER_OF_ARGUMENTS);
 
         parseParameters(parameters);
@@ -37,6 +44,10 @@ public class FindRoute implements Command {
         }
 
         return ListingHelpers.elementsToString(routes);
+    }
+
+    private void validateLoggedInUser() {
+        ValidationHelper.validateUserHasRole(loggedInUser, UserRole.EMPLOYEE);
     }
 
     private void parseParameters(List<String> parameters) {

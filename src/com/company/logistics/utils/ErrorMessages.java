@@ -15,6 +15,7 @@ public final class ErrorMessages {
     public static final String NUMBER_NOT_IN_RANGE       = "%s must be between %d and %d.";
     public static final String MIN_LIST_SIZE             = "%s must contain at least %d elements";
     public static final String EXACT_LIST_SIZE           = "%s must contain exactly %d elements";
+    public static final String SYMBOLS_PATTERN_ERR       = "%s contains invalid symbols!";
 
     // --- Parsing / Argument errors -------------------------------------------------
     public static final String INVALID_ARGUMENTS_COUNT   = "Invalid arguments count. Expected: %d, Given: %d.";
@@ -50,5 +51,15 @@ public final class ErrorMessages {
     public static final String ROUTE_LOAD_EXCEEDS_CAPACITY      = "Cannot assign Package %d to Route %d: load %.0fkg exceeds capacity %.0fkg of the currently assigned %s truck. %nPlease assign a bigger truck if available, or create a new route.";
     public static final String ROUTE_MAX_LOAD_EXCEEDS_CAPACITY  = "Cannot assign Package %d to Route %d: load %.0fkg exceeds maximum capacity of %.0fkg.%nPlease create a new route.";
     public static final String ROUTE_DISTANCE_EXCEEDS_RANGE     = "Cannot assign Truck %d to Route %d: route distance %.0fkm exceeds range %.0fkm.";
-    public static final String NON_UNIQUE_INTERMEDIATE_STOPS    = "Route may not visit the same intermediate city twice: %s";
+    public static final String NON_UNIQUE_INTERMEDIATE_STOPS    = "Route may not visit a city twice, unless it is the start and end point: %s";
+
+    // --- User login/logout ----------------------------
+    public static final String NO_LOGGED_IN_USER = "There is no logged in user.";
+    public final static String NO_SUCH_USER = "There is no user with username %s!";
+    public final static String INCORRECT_PASSWORD = "The password was incorrect, please try again!";
+    public final static String USER_ALREADY_EXIST = "User %s already exist. Choose a different username!";
+
+    // --- File errors ----------------------------
+    public static final String INFORMATION_CURRENTLY_UNAVAILABLE = "Information currently unavailable.";
+
 }

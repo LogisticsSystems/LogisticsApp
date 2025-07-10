@@ -8,9 +8,11 @@ import com.company.logistics.core.implementation.EngineImpl;
 import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.repositories.contracts.TruckRepository;
+import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.repositories.implementation.PackageRepositoryImpl;
 import com.company.logistics.repositories.implementation.RouteRepositoryImpl;
 import com.company.logistics.repositories.implementation.TruckRepositoryImpl;
+import com.company.logistics.repositories.implementation.UserRepositoryImpl;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageAssignmentStrategy;
 import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageRemovalStrategy;
@@ -51,6 +53,7 @@ public final class EngineFactory {
         PackageRepository packageRepository = new PackageRepositoryImpl();
         RouteRepository routeRepository     = new RouteRepositoryImpl();
         TruckRepository truckRepository     = new TruckRepositoryImpl(new DefaultVehicleLoader());
+        UserRepository userRepository     = new UserRepositoryImpl();
 
         SpeedModelService speedModelService               = new SpeedModelService(new ConstantSpeedModel());
         RouteCreationService routeCreationService         = new RouteCreationService(routeRepository, speedModelService);
@@ -78,6 +81,7 @@ public final class EngineFactory {
                 packageRepository,
                 routeRepository,
                 truckRepository,
+                userRepository,
                 speedModelService,
                 deliveryService,
                 assignmentService,
