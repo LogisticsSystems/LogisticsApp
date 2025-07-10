@@ -18,6 +18,7 @@ import com.company.logistics.services.assignment.strategy.implementation.Default
 import com.company.logistics.services.assignment.strategy.implementation.DefaultTruckRemovalStrategy;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.engine.CommandProcessor;
+import com.company.logistics.services.persistence.PersistenceService;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
 import com.company.logistics.services.routing.management.RouteCreationService;
 import com.company.logistics.services.speeds.SpeedModelService;
@@ -67,6 +68,11 @@ public final class EngineFactory {
 
 
         PackageDeliveryService deliveryService = new PackageDeliveryService(packageRepository, routeRepository);
+        PersistenceService persistenceService  = new PersistenceService(
+                packageRepository,
+                routeRepository,
+                truckRepository,
+                speedModelService);
 
         return new EngineContext(
                 packageRepository,
@@ -76,7 +82,8 @@ public final class EngineFactory {
                 deliveryService,
                 assignmentService,
                 routeCreationService,
-                routeRecalculatorService
+                routeRecalculatorService,
+                persistenceService
         );
     }
 }

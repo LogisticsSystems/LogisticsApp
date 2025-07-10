@@ -7,11 +7,15 @@ import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class DeliveryPackageImpl implements DeliveryPackage {
+public class DeliveryPackageImpl implements DeliveryPackage, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private static final int CONTACT_INFO_MIN_LENGTH = 5;
     private static final int CONTACT_INFO_MAX_LENGTH = 57;

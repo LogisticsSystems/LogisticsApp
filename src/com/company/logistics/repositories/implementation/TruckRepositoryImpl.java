@@ -6,13 +6,18 @@ import com.company.logistics.models.contracts.Truck;
 import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.utils.ErrorMessages;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TruckRepositoryImpl implements TruckRepository {
+public class TruckRepositoryImpl implements TruckRepository, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final Map<Integer, Truck> trucks = new HashMap<>();
 
     public TruckRepositoryImpl(VehicleLoader vehicleLoader) {
@@ -34,4 +39,8 @@ public class TruckRepositoryImpl implements TruckRepository {
         }
         return truck;
     }
+
+    // persistence needed methods
+    public void clearAll() { trucks.clear(); }
+    public void addTruck(Truck truck) { trucks.put(truck.getId(), truck); }
 }

@@ -5,6 +5,7 @@ import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.delivery.PackageDeliveryService;
+import com.company.logistics.services.persistence.PersistenceService;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
 import com.company.logistics.services.routing.management.RouteCreationService;
 import com.company.logistics.services.speeds.SpeedModelService;
@@ -18,6 +19,7 @@ public class EngineContext {
     private final AssignmentService        assignmentService;
     private final RouteCreationService     routeCreationService;
     private final RouteRecalculatorService routeRecalculatorService;
+    private final PersistenceService       persistenceService;
 
     public EngineContext(
             PackageRepository        packageRepository,
@@ -27,7 +29,8 @@ public class EngineContext {
             PackageDeliveryService   deliveryService,
             AssignmentService        assignmentService,
             RouteCreationService     routeCreationService,
-            RouteRecalculatorService routeRecalculatorService
+            RouteRecalculatorService routeRecalculatorService,
+            PersistenceService       persistenceService
     ) {
         this.packageRepository        = packageRepository;
         this.routeRepository          = routeRepository;
@@ -37,6 +40,7 @@ public class EngineContext {
         this.assignmentService        = assignmentService;
         this.routeCreationService     = routeCreationService;
         this.routeRecalculatorService = routeRecalculatorService;
+        this.persistenceService       = persistenceService;
     }
 
 
@@ -49,4 +53,5 @@ public class EngineContext {
     public RouteRecalculatorService getRouteRecalculatorService() { return routeRecalculatorService; }
     public PackageDeliveryService getDeliveryService()            { return deliveryService; }
     public AssignmentService getAssignmentService()               { return assignmentService; }
+    public PersistenceService getPersistenceService()             { return persistenceService; }
 }

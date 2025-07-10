@@ -8,11 +8,16 @@ import com.company.logistics.models.delivery.DeliveryPackageImpl;
 import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.utils.ErrorMessages;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class PackageRepositoryImpl implements PackageRepository {
+public class PackageRepositoryImpl implements PackageRepository, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final AtomicInteger nextId = new AtomicInteger(1);
     private final Map<Integer, DeliveryPackage> packages = new HashMap<>();
 
@@ -45,4 +50,10 @@ public class PackageRepositoryImpl implements PackageRepository {
         }
         return pkg;
     }
+
+    // persistence needed methods
+    public void clearAll() { packages.clear(); }
+    public void addPackage(DeliveryPackage pkg) { packages.put(pkg.getId(), pkg); }
+    public int getNextId() { return nextId.get(); }
+    public void setNextId(int id) { nextId.set(id); }
 }

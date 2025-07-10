@@ -1,0 +1,276 @@
+=== PACKAGES ===
+Package 1:
+  From BRI → SYD, 150.00kg, Contact: JOHN_SNOW
+  Package status: In transit
+  Expected Arrival: 23-Oct-2025 1:32 PM
+
+
+Package 2:
+  From ADL → SYD, 250.00kg, Contact: SNOW_WHITE
+  Package status: Awaiting truck assignment
+
+
+Package 3:
+  From SYD → ADL, 450.00kg, Contact: JOHN_BLACK
+  Package status: Awaiting truck assignment
+
+
+=== ROUTES ===
+Route 1:
+ SYD (21-Jan-2025 12:00 AM) → MEL (21-Jan-2025 9:45 AM) → ADL (21-Jan-2025 5:59 PM) → SYD (22-Jan-2025 10:10 AM)
+ Assigned Truck ID: No truck assigned
+ Assigned Package IDs: 2, 3
+ Delivery weight: 700.00kg
+
+
+Route 2:
+ MEL (21-Oct-2025 12:00 AM) → BRI (21-Oct-2025 9:16 PM) → ADL (22-Oct-2025 9:21 PM) → SYD (23-Oct-2025 1:32 PM)
+ Assigned Truck ID: 1001
+ Assigned Package IDs: 1
+ Delivery weight: 150.00kg
+
+
+=== SPEED MODEL ===
+ConstantSpeedModel
+
+=== TRUCKS ===
+Truck 1001:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Assigned to a route
+
+Truck 1002:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1003:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1004:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1005:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1006:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1007:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1008:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1009:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1010:
+  Model: Scania
+  Capacity: 42000.00 kg
+  Max Range: 8000.00 km
+  Status: Unassigned
+
+Truck 1011:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1012:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1013:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1014:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1015:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1016:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1017:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1018:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1019:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1020:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1021:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1022:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1023:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1024:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1025:
+  Model: Man
+  Capacity: 37000.00 kg
+  Max Range: 10000.00 km
+  Status: Unassigned
+
+Truck 1026:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1027:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1028:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1029:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1030:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1031:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1032:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1033:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1034:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1035:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1036:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1037:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1038:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1039:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+
+Truck 1040:
+  Model: Actros
+  Capacity: 26000.00 kg
+  Max Range: 13000.00 km
+  Status: Unassigned
+

@@ -7,6 +7,8 @@ import com.company.logistics.commands.creation.CreatePackageCommand;
 import com.company.logistics.commands.creation.CreateRouteCommand;
 import com.company.logistics.commands.delivery.DeliverPackageCommand;
 import com.company.logistics.commands.listing.*;
+import com.company.logistics.commands.persistence.LoadCommand;
+import com.company.logistics.commands.persistence.SaveCommand;
 import com.company.logistics.commands.queries.FindRoute;
 import com.company.logistics.commands.queries.ViewPackageWithIDCommand;
 import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
@@ -22,6 +24,7 @@ import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.repositories.contracts.TruckRepository;
 import com.company.logistics.services.assignment.AssignmentService;
 import com.company.logistics.services.delivery.PackageDeliveryService;
+import com.company.logistics.services.persistence.PersistenceService;
 import com.company.logistics.services.routing.computing.RouteRecalculatorService;
 import com.company.logistics.services.routing.management.RouteCreationService;
 import com.company.logistics.services.speeds.SpeedModelService;
@@ -39,6 +42,7 @@ public class CommandFactoryImpl implements CommandFactory {
     private final RouteCreationService    routeCreationService;
     private final SpeedModelService       speedModelService;
     private final RouteRecalculatorService routeRecalculatorService;
+    private final PersistenceService       persistenceService;
 
     public CommandFactoryImpl(EngineContext engineContext) {
         this.packageRepository        = engineContext.getPackageRepository();
@@ -49,6 +53,7 @@ public class CommandFactoryImpl implements CommandFactory {
         this.routeCreationService     = engineContext.getRouteCreationService();
         this.speedModelService        = engineContext.getSpeedModelService();
         this.routeRecalculatorService = engineContext.getRouteRecalculatorService();
+        this.persistenceService       = engineContext.getPersistenceService();
     }
 
     @Override
@@ -91,6 +96,10 @@ public class CommandFactoryImpl implements CommandFactory {
             // ——— Speed model swap ———
             case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(routeRepository, speedModelService, routeRecalculatorService);
             case VIEWSPEEDMODEL   -> new ViewSpeedModelCommand(speedModelService);
+
+            // ——— Persistence ———
+            case SAVE -> new SaveCommand(persistenceService);
+            case LOAD -> new LoadCommand(persistenceService);
         };
     }
 }

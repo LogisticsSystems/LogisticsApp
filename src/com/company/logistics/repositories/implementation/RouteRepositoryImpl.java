@@ -9,12 +9,17 @@ import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.PrintConstants;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class RouteRepositoryImpl implements RouteRepository {
+public class RouteRepositoryImpl implements RouteRepository, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final AtomicInteger nextId = new AtomicInteger(1);
     private final Map<Integer, Route> routes = new HashMap<>();
 
@@ -67,4 +72,10 @@ public class RouteRepositoryImpl implements RouteRepository {
                 String.format(PrintConstants.NO_ROUTE_CARRIES_PACKAGES_LINE, packageId)
         );
     }
+
+    // persistence needed methods
+    public void clearAll() { routes.clear(); }
+    public void addRoute(Route route) { routes.put(route.getId(), route); }
+    public int getNextId() { return nextId.get(); }
+    public void setNextId(int id) { nextId.set(id); }
 }

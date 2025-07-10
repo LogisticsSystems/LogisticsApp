@@ -8,12 +8,17 @@ import com.company.logistics.utils.Calculations;
 import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RouteImpl implements Route {
+public class RouteImpl implements Route, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private static final int MIN_LOCATIONS = 2;
 
     private final int id;

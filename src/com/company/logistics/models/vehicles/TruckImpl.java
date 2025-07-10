@@ -4,7 +4,12 @@ import com.company.logistics.models.contracts.Truck;
 import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
-public class TruckImpl implements Truck {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class TruckImpl implements Truck, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private static final int NAME_MIN_LENGTH = 2;
     private static final int NAME_MAX_LENGTH = 10;
