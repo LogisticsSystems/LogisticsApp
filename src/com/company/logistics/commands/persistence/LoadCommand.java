@@ -1,15 +1,21 @@
 package com.company.logistics.commands.persistence;
 
 import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.services.persistence.PersistenceService;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 
 public class LoadCommand implements Command {
-    private static final int EXPECTED_NUMBER_OF_ARGUMENTS = 0;
+    private static final String LOAD_FROM             = "State loaded from %s";
+    private static final String LOAD_FAILED           = "Load failed: ";
+    private static final String NO_FILE               = "Nothing to load: no bin file at %s";
+    private static final String LOAD_COMMAND_USAGE    = "Usage: LOAD [<binaryFile>]";
+
     private final PersistenceService persistenceService;
 
     public LoadCommand(PersistenceService persistenceService) {
@@ -18,12 +24,19 @@ public class LoadCommand implements Command {
 
     @Override
     public String execute(List<String> parameters) {
-        ValidationHelper.validateArgumentsCount(parameters, EXPECTED_NUMBER_OF_ARGUMENTS);
+        if (parameters.size() > 1) {
+            throw new InvalidUserInputException(LOAD_COMMAND_USAGE);
+        }
+
+        Path binPath = parameters.isEmpty() ? Path.of("appState.bin") : Path.of(parameters.get(0));
+
         try {
-            persistenceService.load(Path.of("appState.bin"));
-            return "State loaded from appState.bin";
+            persistenceService.load(binPath);
+            return String.format(LOAD_FROM, binPath);
+        } catch (NoSuchFileException e) {
+            return String.format(NO_FILE, binPath);
         } catch (IOException | ClassNotFoundException e) {
-            return "Load failed: " + e.getMessage();
+            return LOAD_FAILED + e.getMessage();
         }
     }
 }

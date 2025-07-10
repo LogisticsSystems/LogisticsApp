@@ -17,6 +17,8 @@ public class EngineImpl implements Engine {
     private static final String BOLD = "\u001B[1m";
     private static final String ITALICS_BOLD_RESET = "\033[0m";
 
+    private static final String SAVE_ERROR_ON_EXIT = "Error saving state on exit: ";
+
     private static final String COMMAND_HEADER = "*** For a list of commands with examples, please type HELP. ***";
     private static final String ENTER_COMMAND = "  Enter command: ";
 
@@ -50,7 +52,12 @@ public class EngineImpl implements Engine {
                 }
 
                 if (inputLine.equalsIgnoreCase(TERMINATION_COMMAND)) {
-                    //TODO Save command logic
+                    try {
+                        String result = commandProcessor.processCommand("SAVE");
+                        System.out.println(result);
+                    } catch (Exception e) {
+                        System.err.println(SAVE_ERROR_ON_EXIT + e.getMessage());
+                    }
                     break;
                 }
 
