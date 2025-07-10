@@ -1,8 +1,8 @@
 package com.company.logistics.commands.delivery;
 
 import com.company.logistics.commands.contracts.Command;
+import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.services.delivery.PackageDeliveryService;
-import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -26,9 +26,9 @@ public class DeliverPackageCommand implements Command {
 
         parseParameters(parameters);
 
-        DeliveryPackage pkg = deliveryService.deliverPackage(this.packageId);
+        PackageSnapshot pkg = deliveryService.deliverPackage(this.packageId);
 
-        return String.format(PACKAGE_DELIVERED_MESSAGE, this.packageId, pkg.getStatus());
+        return String.format(PACKAGE_DELIVERED_MESSAGE, this.packageId, pkg.status());
     }
 
     private void parseParameters(List<String> parameters) {

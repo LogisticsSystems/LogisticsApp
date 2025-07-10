@@ -1,5 +1,6 @@
 package com.company.logistics.services.delivery;
 
+import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
@@ -17,7 +18,7 @@ public class PackageDeliveryService {
         this.routeRepository   = routeRepository;
     }
 
-    public DeliveryPackage deliverPackage(int packageId) {
+    public PackageSnapshot deliverPackage(int packageId) {
         DeliveryPackage pkg = packageRepository.findPackageById(packageId);
 
         ValidationHelper.validatePackageStatus(pkg, PackageStatus.IN_TRANSIT);
@@ -34,7 +35,11 @@ public class PackageDeliveryService {
             });
         }
 
-        return pkg;
+        return new PackageSnapshot(
+                pkg.getId(),
+                pkg.getStatus(),
+                pkg.getExpectedArrival()
+        );
     }
 
 }

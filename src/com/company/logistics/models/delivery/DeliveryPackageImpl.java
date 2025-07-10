@@ -66,8 +66,6 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         if (status == PackageStatus.DELIVERED) {
             expectedArrival = null;
         }
-
-        // System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
     @Override
@@ -82,8 +80,6 @@ public class DeliveryPackageImpl implements DeliveryPackage {
         if (status == PackageStatus.UNASSIGNED) {
             expectedArrival = null;
         }
-
-        // System.out.printf(PrintConstants.PACKAGE_STATUS_UPDATE, id, status);
     }
 
 
