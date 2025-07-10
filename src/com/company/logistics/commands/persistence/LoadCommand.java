@@ -3,7 +3,6 @@ package com.company.logistics.commands.persistence;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.services.persistence.PersistenceService;
-import com.company.logistics.utils.ValidationHelper;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
@@ -34,9 +33,9 @@ public class LoadCommand implements Command {
             persistenceService.load(binPath);
             return String.format(LOAD_FROM, binPath);
         } catch (NoSuchFileException e) {
-            return String.format(NO_FILE, binPath);
+            throw new InvalidUserInputException(String.format(NO_FILE, binPath));
         } catch (IOException | ClassNotFoundException e) {
-            return LOAD_FAILED + e.getMessage();
+            throw new InvalidUserInputException(LOAD_FAILED + e.getMessage());
         }
     }
 }

@@ -32,7 +32,7 @@ public class SaveCommand implements Command {
             persistenceService.save(binPath, txtPath);
             return String.format(SAVE_TO, binPath, txtPath);
         } catch (IOException e) {
-            return SAVE_FAILED + e.getMessage();
+            throw new InvalidUserInputException(SAVE_FAILED + e.getMessage());
         }
     }
 }
