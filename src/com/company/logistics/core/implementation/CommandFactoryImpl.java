@@ -91,7 +91,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case LISTROUTESWITHNOTRUCKASSIGNED  -> new ListRoutesWithNoAssignedTrucksCommand(routeRepository, userRepository);
             case LISTPACKAGESWITHSTATUS         -> new ListPackagesWithStatusCommand(packageRepository, userRepository);
             case LISTUSERWITHROLE               -> new ListUsersWithRoleCommand(userRepository);
-            case HELP                           -> new HelpCommand();
+            case HELP                           -> new HelpCommand(userRepository);
 
             // ——— Authentication ———
             case LOGIN      -> new LoginCommand(userRepository);

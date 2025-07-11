@@ -22,4 +22,7 @@ public interface UserRepository {
     void login(String username, String password);
 
     void logout();
+
+    public void addUser(User user);
+    public void clearAll();
 }

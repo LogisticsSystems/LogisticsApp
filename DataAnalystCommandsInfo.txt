@@ -1,0 +1,16 @@
+Command: ListPackageInfo                                                                                -> Lists all packages
+Example: LISTPACKAGEINFO
+Command: ListRouteInfo                                                                                  -> Lists all routes
+Example: LISTROUTEINFO
+Command: ListTruckInfo                                                                                  -> Lists all trucks
+Example: LISTTRUCKINFO
+Command: ListUserInfo		                                                                            -> Lists all users
+Example: LISTUSERINFO
+Command: ListRoutesWithNoTrucksAssigned                                                                 -> Lists all routes that don't have assigned trucks
+Example: LISTROUTESWITHNOTRUCKSASSIGNED
+Command: ListPackagesWithStatus <status>                                                                -> Lists all packages with the selected status
+Example: LISTPACKAGESIWTHSTATUS DELIVERED                                                               Avaialble statuses: UNASSIGNED, PENDING, IN_TRANSIT, DELIVERED
+Command: ListUsersWithRole								                                        		-> Lists all users witht he specified role
+Example: LISTUSERSWITHROLE MANAGER						                                    			Avaialble roles: EMPLOYEE, MANAGER, DATA_ANALYST
+Command: ViewPackageWithID <package Id>                                                                 -> Lists details for a package
+Example: VIEWPACKAGEWITHID 1

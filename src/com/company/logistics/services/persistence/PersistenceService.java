@@ -4,12 +4,15 @@ import com.company.logistics.enums.SpeedModelType;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
+import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.PackageRepository;
 import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.repositories.contracts.TruckRepository;
+import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.repositories.implementation.PackageRepositoryImpl;
 import com.company.logistics.repositories.implementation.RouteRepositoryImpl;
 import com.company.logistics.repositories.implementation.TruckRepositoryImpl;
+import com.company.logistics.repositories.implementation.UserRepositoryImpl;
 import com.company.logistics.services.speeds.SpeedModelService;
 import com.company.logistics.services.speeds.contract.SpeedModel;
 
@@ -24,17 +27,20 @@ public class PersistenceService {
     private final PackageRepository packageRepo;
     private final RouteRepository routeRepo;
     private final TruckRepository truckRepo;
+    private final UserRepository userRepo;
     private final SpeedModelService speedModelService;
 
     public PersistenceService(
             PackageRepository packageRepo,
             RouteRepository   routeRepo,
             TruckRepository   truckRepo,
+            UserRepository    userRepo,
             SpeedModelService speedModelService
     ) {
         this.packageRepo       = packageRepo;
         this.routeRepo         = routeRepo;
         this.truckRepo         = truckRepo;
+        this.userRepo          = userRepo;
         this.speedModelService = speedModelService;
     }
 
@@ -48,6 +54,7 @@ public class PersistenceService {
             outputStream.writeObject(packageRepo);
             outputStream.writeObject(routeRepo);
             outputStream.writeObject(truckRepo);
+            outputStream.writeObject(userRepo);
 
             SpeedModelType speedModelType = convertSpeedModelToItsType(speedModelService);
             outputStream.writeObject(speedModelType);
@@ -68,6 +75,12 @@ public class PersistenceService {
                 bufferedWriter.write("\n\n");
             }
 
+            bufferedWriter.write("=== USERS ===\n");
+            for (User u : userRepo.getUsers()) {
+                bufferedWriter.write(u.print());
+                bufferedWriter.write("\n");
+            }
+
             bufferedWriter.write("=== SPEED MODEL ===\n");
             bufferedWriter.write(speedModelService.getSpeedModel().getClass().getSimpleName());
             bufferedWriter.write("\n\n");
@@ -86,6 +99,7 @@ public class PersistenceService {
             PackageRepositoryImpl loadedPackageRepository = (PackageRepositoryImpl) inputStream.readObject();
             RouteRepositoryImpl loadedRouteRepository     = (RouteRepositoryImpl)   inputStream.readObject();
             TruckRepositoryImpl loadedTruckRepository     = (TruckRepositoryImpl)   inputStream.readObject();
+            UserRepository loadedUserRepository           = (UserRepositoryImpl)    inputStream.readObject();
             SpeedModelType loadedSpeedModelType           = (SpeedModelType)        inputStream.readObject();
 
             // clear & repopulate each of the repos
@@ -101,7 +115,11 @@ public class PersistenceService {
 
             TruckRepositoryImpl liveTruckRepository = (TruckRepositoryImpl) truckRepo;
             liveTruckRepository.clearAll();
-            loadedTruckRepository  .getTrucks().forEach(liveTruckRepository::addTruck);
+            loadedTruckRepository.getTrucks().forEach(liveTruckRepository::addTruck);
+
+            UserRepositoryImpl liveUserRepository = (UserRepositoryImpl) userRepo;
+            liveUserRepository.clearAll();
+            loadedUserRepository.getUsers().forEach(liveUserRepository::addUser);
 
             // restore speed model
             speedModelService.changeModel(loadedSpeedModelType);

@@ -1,0 +1,10 @@
+Command: Help 											                                            	-> Provides details for all commands
+Example: HELP
+Command: Save											                                               	-> Saves the current state
+Example: SAVE
+Command: Save <destination>							                                        			-> Saves the current state to a specific folder
+Example: SAVE ./state/appState.bin
+Command: Load									                                            			-> Loads the state from a saves file
+Example: LOAD
+Command: Load <file path>						                                        				-> Loads the state from a specified file
+Example: LOAD ./state/appState.bin

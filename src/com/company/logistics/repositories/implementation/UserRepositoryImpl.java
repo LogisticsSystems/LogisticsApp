@@ -2,15 +2,21 @@ package com.company.logistics.repositories.implementation;
 
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
+import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.models.users.UserImpl;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.utils.ErrorMessages;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl implements UserRepository, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private final Map<String, User> users = new HashMap<>();
     private User loggedUser;
 
@@ -89,5 +95,8 @@ public class UserRepositoryImpl implements UserRepository {
 
         return user;
     }
+
+    public void addUser(User user) { users.put(user.getUsername(), user); }
+    public void clearAll() { users.clear(); }
 
 }

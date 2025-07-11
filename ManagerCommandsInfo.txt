@@ -1,0 +1,8 @@
+Command: CreateUser <username> <names> <password> <user rolw>                             -> Creates a user
+Example: CREATEUSER sil myname sil123 EMPLOYEE				                    	 	  Available roles: EMPLOYEE, MANAGER, DATA_ANALYST
+Command: RemoveUser <username>				                                              -> Deletes a user
+Example: REMOVEUSER sil
+Command: ChangeSpeedModel <model type>				                                      -> Changes the speed model
+Example: CHANGESPEEDMODEL SEASONAL						                               	  Available models: CONSTANT, SEASONAL, SINUSOIDAL
+Command: ViewSpeedModel							                                		  -> Views the current speed model
+Example: VIEWSPEEDMODEL

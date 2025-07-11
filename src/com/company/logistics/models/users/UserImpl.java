@@ -3,9 +3,15 @@ package com.company.logistics.models.users;
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.utils.ValidationHelper;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class UserImpl implements User {
+public class UserImpl implements User, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     public static final int USERNAME_LEN_MIN = 2;
     public static final int USERNAME_LEN_MAX = 20;
     private static final String USERNAME_REGEX_PATTERN = "^[A-Za-z0-9]+$";

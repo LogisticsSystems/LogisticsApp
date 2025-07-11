@@ -43,7 +43,7 @@ public class LoginCommand implements Command {
 
     private void validateLoggedInUser() {
         if (userRepository.hasLoggedInUser()) {
-            throw new IllegalArgumentException(String.format(USER_LOGGED_IN_ALREADY,
+            throw new InvalidUserInputException(String.format(USER_LOGGED_IN_ALREADY,
                     userRepository.getLoggedInUser().getUsername())
             );
         }

@@ -75,6 +75,7 @@ public final class EngineFactory {
                 packageRepository,
                 routeRepository,
                 truckRepository,
+                userRepository,
                 speedModelService);
 
         return new EngineContext(
