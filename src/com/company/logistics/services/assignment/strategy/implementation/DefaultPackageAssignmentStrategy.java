@@ -55,7 +55,8 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
         return new PackageSnapshot(
                 pack.getId(),
                 pack.getStatus(),
-                pack.getExpectedArrival()
+                pack.getExpectedArrival(),
+                ""
         );
     }
 

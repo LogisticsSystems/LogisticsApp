@@ -12,10 +12,7 @@ import com.company.logistics.repositories.implementation.PackageRepositoryImpl;
 import com.company.logistics.repositories.implementation.RouteRepositoryImpl;
 import com.company.logistics.repositories.implementation.TruckRepositoryImpl;
 import com.company.logistics.services.assignment.AssignmentService;
-import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageAssignmentStrategy;
-import com.company.logistics.services.assignment.strategy.implementation.DefaultPackageRemovalStrategy;
-import com.company.logistics.services.assignment.strategy.implementation.DefaultTruckAssignmentStrategy;
-import com.company.logistics.services.assignment.strategy.implementation.DefaultTruckRemovalStrategy;
+import com.company.logistics.services.assignment.strategy.implementation.*;
 import com.company.logistics.services.delivery.PackageDeliveryService;
 import com.company.logistics.services.engine.CommandProcessor;
 import com.company.logistics.services.persistence.PersistenceService;
@@ -56,7 +53,7 @@ public final class EngineFactory {
         RouteCreationService routeCreationService         = new RouteCreationService(routeRepository, speedModelService);
         RouteRecalculatorService routeRecalculatorService = new RouteRecalculatorService(routeRepository, speedModelService);
 
-        DefaultPackageAssignmentStrategy packageAssignmentStrategy = new DefaultPackageAssignmentStrategy(packageRepository, routeRepository, speedModelService);
+        AutomatedPackageAssignmentStrategy packageAssignmentStrategy = new AutomatedPackageAssignmentStrategy(truckRepository, packageRepository, routeRepository, speedModelService, routeCreationService);
         DefaultTruckAssignmentStrategy truckAssignmentStrategy     = new DefaultTruckAssignmentStrategy(routeRepository, truckRepository);
         DefaultPackageRemovalStrategy packageRemovalStrategy       = new DefaultPackageRemovalStrategy(packageRepository, routeRepository);
         DefaultTruckRemovalStrategy truckRemovalStrategy           = new DefaultTruckRemovalStrategy(routeRepository, truckRepository);

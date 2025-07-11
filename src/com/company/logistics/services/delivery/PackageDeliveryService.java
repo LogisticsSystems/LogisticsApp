@@ -38,7 +38,8 @@ public class PackageDeliveryService {
         return new PackageSnapshot(
                 pkg.getId(),
                 pkg.getStatus(),
-                pkg.getExpectedArrival()
+                pkg.getExpectedArrival(),
+                ""
         );
     }
 

@@ -1,5 +1,6 @@
 package com.company.logistics.services.assignment.strategy.implementation;
 
+import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
@@ -34,7 +35,8 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
         return new PackageSnapshot(
                 deliveryPackage.getId(),
                 deliveryPackage.getStatus(),
-                deliveryPackage.getExpectedArrival()
+                deliveryPackage.getExpectedArrival(),
+                CommandsConstants.EMPTY_MESSAGE
         );
     }
 

@@ -154,19 +154,25 @@ public class ValidationHelper {
         validateNotNull(start, "startLocation");
         validateNotNull(end,   "endLocation");
 
+
+
         int idxFrom = stops.indexOf(start);
         if (idxFrom < 0) {
+
             throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, start));
         }
 
         int idxTo = stops.lastIndexOf(end);
         if (idxTo < 0) {
+
             throw new InvalidUserInputException(String.format(ErrorMessages.CITY_NOT_ON_ROUTE, end));
         }
 
         if (idxTo <= idxFrom) {
+
             throw new InvalidUserInputException(String.format(ErrorMessages.PACKAGE_ROUTE_MISMATCH, start, end));
         }
+
     }
 
     public static void validatePackageStatus(

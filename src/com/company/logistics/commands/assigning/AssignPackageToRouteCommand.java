@@ -28,8 +28,11 @@ public class AssignPackageToRouteCommand implements Command {
         parseParameters(parameters);
 
         PackageSnapshot updated = assignmentService.assignPackageToRoute(this.packageId, this.routeId);
-
-        return String.format(CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE, "Package", this.packageId, this.routeId, updated.status());
+        if(updated.message().isEmpty()) {
+            return String.format(CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE, "Package", this.packageId, this.routeId, updated.status());
+        }else{
+            return updated.message();
+        }
     }
 
     private void parseParameters(List<String> parameters) {
