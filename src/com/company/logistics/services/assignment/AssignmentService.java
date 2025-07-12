@@ -1,7 +1,6 @@
 package com.company.logistics.services.assignment;
 
 import com.company.logistics.dto.PackageSnapshot;
-import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.services.assignment.strategy.PackageAssignmentStrategy;
 import com.company.logistics.services.assignment.strategy.PackageRemovalStrategy;
 import com.company.logistics.services.assignment.strategy.TruckAssignmentStrategy;
