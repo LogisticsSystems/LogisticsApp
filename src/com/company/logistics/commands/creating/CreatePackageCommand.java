@@ -13,7 +13,6 @@ import com.company.logistics.utils.ValidationHelper;
 
 import java.util.List;
 
-
 public class CreatePackageCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 4;
 

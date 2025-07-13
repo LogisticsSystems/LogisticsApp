@@ -49,13 +49,14 @@ public class DeliveryPackageImpl implements DeliveryPackage, Serializable {
         this.status        = PackageStatus.UNASSIGNED;
     }
 
-    @Override public int    getId()             { return id; }
-    @Override public City   getStartLocation()  { return startLocation; }
-    @Override public City   getEndLocation()    { return endLocation; }
-    @Override public double getWeightKg()       { return weightKg; }
-    @Override public String getContactInfo()    { return contactInfo; }
-    @Override public PackageStatus getStatus()  { return status; }
-    @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
+    @Override public int    getId()                         { return id; }
+    @Override public City   getStartLocation()              { return startLocation; }
+    @Override public City   getEndLocation()                { return endLocation; }
+    @Override public double getWeightKg()                   { return weightKg; }
+    @Override public String getContactInfo()                { return contactInfo; }
+    @Override public PackageStatus getStatus()              { return status; }
+    @Override public LocalDateTime getExpectedArrival()     { return expectedArrival; }
+
     @Override public void setExpectedArrival(LocalDateTime eta) {
         this.expectedArrival = eta;
     }
@@ -121,5 +122,4 @@ public class DeliveryPackageImpl implements DeliveryPackage, Serializable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
-
 }

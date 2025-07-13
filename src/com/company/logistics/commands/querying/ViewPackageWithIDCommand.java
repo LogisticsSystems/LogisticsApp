@@ -34,7 +34,6 @@ public class ViewPackageWithIDCommand implements Command {
         parseParameters(parameters);
 
         return PrintConstants.LINE_BREAK + "\n" + packageRepository.findPackageById(packageId).print();
-
     }
 
     private void validateLoggedInUser() {

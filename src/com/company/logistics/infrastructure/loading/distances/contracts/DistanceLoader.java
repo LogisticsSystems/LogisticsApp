@@ -7,5 +7,4 @@ import java.util.Map;
 public interface DistanceLoader {
 
     Map<City, Map<City, Integer>> loadDistances();
-
 }

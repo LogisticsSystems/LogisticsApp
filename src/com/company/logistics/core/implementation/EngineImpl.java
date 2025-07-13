@@ -9,6 +9,9 @@ import java.util.Scanner;
 public class EngineImpl implements Engine {
     private static final String TERMINATION_COMMAND = "Exit";
     private static final String EMPTY_COMMAND_ERROR = "Command cannot be empty.";
+    private static final String SAVE_ERROR_ON_EXIT = "Error saving state on exit: ";
+    private static final String COMMAND_HEADER = "*** For a list of commands with examples, please type HELP. ***";
+    private static final String ENTER_COMMAND = "  Enter command: ";
 
     private static final String BLUE = "\u001B[34m";
     private static final String RED = "\u001B[31m";
@@ -16,12 +19,6 @@ public class EngineImpl implements Engine {
     private static final String ITALICS = "\033[3m";
     private static final String BOLD = "\u001B[1m";
     private static final String ITALICS_BOLD_RESET = "\033[0m";
-
-    private static final String SAVE_ERROR_ON_EXIT = "Error saving state on exit: ";
-
-    private static final String COMMAND_HEADER = "*** For a list of commands with examples, please type HELP. ***";
-    private static final String ENTER_COMMAND = "  Enter command: ";
-
 
     private final CommandProcessor commandProcessor;
 

@@ -22,23 +22,19 @@ public class AssignmentService {
         this.truckAssignmentStrategy = truckAssignmentStrategy;
         this.truckRemovalStrategy = truckRemovalStrategy;
         this.packageRemovalStrategy = packageRemovalStrategy;
-
     }
 
     public PackageSnapshot assignPackageToRoute(int pkgId, int routeId) {
         return packageAssignmentStrategy.assignPackage(pkgId, routeId);
     }
 
-
     public List<Integer> assignTruckToRoute(int truckId, int routeId) {
         return truckAssignmentStrategy.assignTruck(truckId, routeId);
     }
 
-
     public List<Integer> removeTruckFromRoute(int truckId, int routeId){
         return truckRemovalStrategy.removeTruck(truckId,routeId);
     }
-
 
     public PackageSnapshot removePackageFromRoute(int packageId, int routeId){
         return packageRemovalStrategy.removePackage(packageId,routeId);

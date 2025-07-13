@@ -7,5 +7,4 @@ import java.util.Map;
 public interface SpeedLoader {
 
     Map<City, Map<City, Double>> loadBaseSpeeds();
-
 }

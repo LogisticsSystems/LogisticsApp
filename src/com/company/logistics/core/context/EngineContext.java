@@ -47,7 +47,6 @@ public class EngineContext {
         this.persistenceService       = persistenceService;
     }
 
-
     public PackageRepository getPackageRepository() { return packageRepository; }
     public RouteRepository getRouteRepository()     { return routeRepository; }
     public TruckRepository getTruckRepository()     { return truckRepository; }

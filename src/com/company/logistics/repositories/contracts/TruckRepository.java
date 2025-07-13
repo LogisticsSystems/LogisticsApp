@@ -9,5 +9,4 @@ public interface TruckRepository {
     List<Truck> getTrucks();
 
     Truck findTruckById(int id);
-
 }

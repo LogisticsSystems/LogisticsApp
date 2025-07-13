@@ -12,5 +12,4 @@ public interface PackageRepository {
     DeliveryPackage createPackage(String contactInfo, double weight, City startLocation, City endLocation);
 
     DeliveryPackage findPackageById(int id);
-
 }

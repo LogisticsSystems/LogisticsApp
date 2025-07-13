@@ -4,7 +4,7 @@ import com.company.logistics.enums.City;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
-import com.company.logistics.utils.Calculations;
+import com.company.logistics.utils.CalculationHelpers;
 import com.company.logistics.utils.PrintConstants;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -126,7 +126,7 @@ public class RouteImpl implements Route, Serializable {
     }
 
     private void appendDeliveryWeight(StringBuilder sb){
-        double deliveryWeight = Calculations.calculateTotalLoad(getAssignedPackages());
+        double deliveryWeight = CalculationHelpers.calculateTotalLoad(getAssignedPackages());
         String weightPart = deliveryWeight == 0
                 ? " No delivery weight.\n"
                 : String.format(PrintConstants.ROUTE_DELIVERY_WEIGHT,deliveryWeight);

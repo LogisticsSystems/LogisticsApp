@@ -15,7 +15,6 @@ public class ParsingHelpers {
             throw new InvalidUserInputException(String.format(ErrorMessages.INCORRECT_DATA_INPUT
                     ,parameterName,"number"));
         }
-
     }
 
     public static double tryParseDouble(String valueToParse, String parameterName) {
@@ -54,5 +53,4 @@ public class ParsingHelpers {
             throw new InvalidUserInputException(String.format(ErrorMessages.INCORRECT_DATE_TIME_INPUT));
         }
     }
-
 }

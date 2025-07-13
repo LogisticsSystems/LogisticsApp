@@ -7,5 +7,4 @@ import java.time.LocalDateTime;
 public interface SpeedModel {
 
     double getSpeed(City from, City to, LocalDateTime departure);
-
 }

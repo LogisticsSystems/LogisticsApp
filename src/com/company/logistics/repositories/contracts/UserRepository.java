@@ -2,7 +2,6 @@ package com.company.logistics.repositories.contracts;
 
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.models.contracts.User;
-import com.company.logistics.models.users.UserImpl;
 
 import java.util.List;
 
@@ -23,6 +22,7 @@ public interface UserRepository {
 
     void logout();
 
-    public void addUser(User user);
-    public void clearAll();
+    void addUser(User user);
+
+    void clearAll();
 }

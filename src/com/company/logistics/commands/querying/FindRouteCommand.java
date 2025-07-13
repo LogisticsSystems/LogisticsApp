@@ -28,7 +28,6 @@ public class FindRouteCommand implements Command {
         this.loggedInUser = userRepository.getLoggedInUser();
     }
 
-
     @Override
     public String execute(List<String> parameters) {
         validateLoggedInUser();
@@ -56,7 +55,4 @@ public class FindRouteCommand implements Command {
         this.endLocation = ParsingHelpers.tryParseEnum(parameters.get(1),
                 City.class);
     }
-
-
-
 }

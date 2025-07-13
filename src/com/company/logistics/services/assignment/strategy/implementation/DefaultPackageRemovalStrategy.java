@@ -20,7 +20,6 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
         this.routeRepository   = routeRepository;
     }
 
-
     @Override
     public PackageSnapshot removePackage(int packageId, int routeId) {
         DeliveryPackage deliveryPackage = packageRepository.findPackageById(packageId);

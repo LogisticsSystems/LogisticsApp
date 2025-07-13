@@ -3,7 +3,6 @@ package com.company.logistics.commands.listing;
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.enums.UserRole;
-import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.utils.ListingHelpers;

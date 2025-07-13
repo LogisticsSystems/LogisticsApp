@@ -17,5 +17,4 @@ public interface RouteRepository {
     Route findRouteById(int id);
 
     Route findRouteByPackageId(int packageId);
-
 }

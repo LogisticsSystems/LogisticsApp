@@ -6,7 +6,7 @@ import com.company.logistics.models.contracts.DeliveryPackage;
 
 import java.util.List;
 
-public class Calculations {
+public class CalculationHelpers {
 
     public static double calculateTotalLoad(List<DeliveryPackage> packages) {
         return packages.stream()

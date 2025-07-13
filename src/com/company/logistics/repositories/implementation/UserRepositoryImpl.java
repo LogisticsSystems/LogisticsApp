@@ -2,7 +2,6 @@ package com.company.logistics.repositories.implementation;
 
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
-import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.models.users.UserImpl;
 import com.company.logistics.repositories.contracts.UserRepository;
@@ -98,5 +97,4 @@ public class UserRepositoryImpl implements UserRepository, Serializable {
 
     public void addUser(User user) { users.put(user.getUsername(), user); }
     public void clearAll() { users.clear(); }
-
 }

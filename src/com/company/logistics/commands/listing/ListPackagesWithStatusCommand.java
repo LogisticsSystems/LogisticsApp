@@ -61,5 +61,4 @@ public class ListPackagesWithStatusCommand implements Command {
                 .filter(pkg -> pkg.getStatus() == status)
                 .toList();
     }
-
 }

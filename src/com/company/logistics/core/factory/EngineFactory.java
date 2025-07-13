@@ -69,7 +69,6 @@ public final class EngineFactory {
                 truckRemovalStrategy,
                 packageRemovalStrategy);
 
-
         PackageDeliveryService deliveryService = new PackageDeliveryService(packageRepository, routeRepository);
         PersistenceService persistenceService  = new PersistenceService(
                 packageRepository,

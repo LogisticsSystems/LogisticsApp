@@ -61,5 +61,4 @@ public final class ErrorMessages {
 
     // --- File errors ----------------------------
     public static final String INFORMATION_CURRENTLY_UNAVAILABLE = "Information currently unavailable.";
-
 }

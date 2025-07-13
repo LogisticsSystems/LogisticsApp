@@ -15,5 +15,4 @@ public class ListingHelpers {
                 .map(Printable::print)
                 .collect(Collectors.joining(newLine)) + PrintConstants.LINE_BREAK;
     }
-
 }

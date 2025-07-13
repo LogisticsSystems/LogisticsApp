@@ -9,7 +9,7 @@ import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
-import com.company.logistics.utils.Calculations;
+import com.company.logistics.utils.CalculationHelpers;
 import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -91,7 +91,7 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
                     String.format(ErrorMessages.ROUTE_LOAD_EXCEEDS_CAPACITY,
                             pack.getId(),
                             route.getId(),
-                            Calculations.calculateTotalLoad(packs),
+                            CalculationHelpers.calculateTotalLoad(packs),
                             truck.getCapacityKg(),
                             truck.getName())
             );
@@ -102,7 +102,7 @@ public class DefaultPackageAssignmentStrategy implements PackageAssignmentStrate
                     String.format(ErrorMessages.ROUTE_MAX_LOAD_EXCEEDS_CAPACITY,
                             pack.getId(),
                             route.getId(),
-                            Calculations.calculateTotalLoad(packs),
+                            CalculationHelpers.calculateTotalLoad(packs),
                             MAX_TRUCK_CAPACITY)
             );
         }

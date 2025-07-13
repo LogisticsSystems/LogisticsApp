@@ -19,7 +19,6 @@ public class ListUsersWithRoleCommand implements Command {
     private final List<User> users;
     private final User loggedInUser;
 
-
     public ListUsersWithRoleCommand(UserRepository userRepository) {
         this.users = userRepository.getUsers();
         this.loggedInUser = userRepository.getLoggedInUser();

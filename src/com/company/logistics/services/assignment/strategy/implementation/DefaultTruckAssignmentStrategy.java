@@ -8,7 +8,7 @@ import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
-import com.company.logistics.utils.Calculations;
+import com.company.logistics.utils.CalculationHelpers;
 import com.company.logistics.utils.ErrorMessages;
 import com.company.logistics.utils.ValidationHelper;
 
@@ -28,7 +28,6 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
         this.routeRepository = routeRepository;
         this.truckRepository = truckRepository;
     }
-
 
     @Override
     public List<Integer> assignTruck(int truckId, int routeId) {
@@ -70,10 +69,9 @@ public class DefaultTruckAssignmentStrategy implements TruckAssignmentStrategy {
                     String.format(ErrorMessages.TRUCK_LOAD_EXCEEDS_CAPACITY,
                             truck.getId(),
                             route.getId(),
-                            Calculations.calculateTotalLoad(route.getAssignedPackages()),
+                            CalculationHelpers.calculateTotalLoad(route.getAssignedPackages()),
                             truck.getCapacityKg())
             );
         }
     }
-
 }

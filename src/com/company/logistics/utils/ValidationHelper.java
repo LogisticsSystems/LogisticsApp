@@ -4,7 +4,6 @@ import com.company.logistics.enums.City;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
-import com.company.logistics.infrastructure.DistanceMap;
 import com.company.logistics.models.contracts.DeliveryPackage;
 import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.Truck;
@@ -13,7 +12,6 @@ import com.company.logistics.models.contracts.User;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 public class ValidationHelper {
     private ValidationHelper() { }
@@ -35,7 +33,6 @@ public class ValidationHelper {
     }
 
     // --- Null / Basic checks -------------------------------------------------
-
     public static void validateNotNull(Object obj, String paramName) {
         if (obj == null) {
             throw new InvalidUserInputException(String.format(
@@ -51,7 +48,6 @@ public class ValidationHelper {
     }
 
     // --- Primitive validations -------------------------------------------------
-
     public static void validateIntPositive(int value, String name) {
         if (value <= 0) {
             throw new InvalidUserInputException(String.format(
@@ -94,7 +90,6 @@ public class ValidationHelper {
     }
 
     // --- Collection size validations -------------------------------------------------
-
     public static <T> void validateListSizeAtLeast(List<T> list, String name, int min) {
         validateNotNull(list, name);
         if (list.size() < min) {
@@ -121,7 +116,6 @@ public class ValidationHelper {
     }
 
     // --- Map / nested-map lookups -------------------------------------------------
-
     public static <K, V> void validateKeyPairInNestedMap(
             K from, K to, Map<K, Map<K, V>> map,
             String unknownFromMsg, String noValueMsg
@@ -141,7 +135,6 @@ public class ValidationHelper {
     }
 
     // --- Domain‐specific validations -------------------------------------------------
-
     public static void validatePackageInRoute(DeliveryPackage deliveryPackage, Route route){
         if(route.getAssignedPackages().stream()
                 .noneMatch(pkg->pkg.equals(deliveryPackage))) {
@@ -193,7 +186,7 @@ public class ValidationHelper {
             List<DeliveryPackage> packages,
             double capacityKg, String error
     ) {
-        double load = Calculations.calculateTotalLoad(packages);
+        double load = CalculationHelpers.calculateTotalLoad(packages);
 
         if (load > capacityKg) {
             throw new InvalidUserInputException(error);
@@ -203,7 +196,7 @@ public class ValidationHelper {
     public static void validateRouteRangeWithin(
             List<City> stops, double maxRangeKm, int truckId, int routeId
     ) {
-        double dist = Calculations.calculateTotalDistance(stops);
+        double dist = CalculationHelpers.calculateTotalDistance(stops);
 
         if (dist > maxRangeKm) {
             throw new InvalidUserInputException(String.format(
@@ -245,5 +238,4 @@ public class ValidationHelper {
             }
         }
     }
-
 }

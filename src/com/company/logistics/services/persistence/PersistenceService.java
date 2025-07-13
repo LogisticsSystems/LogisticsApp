@@ -14,7 +14,6 @@ import com.company.logistics.repositories.implementation.RouteRepositoryImpl;
 import com.company.logistics.repositories.implementation.TruckRepositoryImpl;
 import com.company.logistics.repositories.implementation.UserRepositoryImpl;
 import com.company.logistics.services.speeds.SpeedModelService;
-import com.company.logistics.services.speeds.contract.SpeedModel;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -135,5 +134,4 @@ public class PersistenceService {
                         .toUpperCase()
         );
     }
-
 }

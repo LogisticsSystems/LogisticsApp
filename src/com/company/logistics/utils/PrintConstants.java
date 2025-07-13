@@ -33,5 +33,4 @@ public final class PrintConstants {
     //Others
     public static final String LINE_BREAK                 = "==========";
     public static final String DATE_TIME_FORMAT           = "dd-MMM-yyyy h:mm a";
-
 }

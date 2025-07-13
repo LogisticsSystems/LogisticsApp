@@ -17,5 +17,4 @@ public interface DeliveryPackage extends Identifyable, Printable {
 
     LocalDateTime getExpectedArrival();
     void setExpectedArrival(LocalDateTime eta);
-
 }

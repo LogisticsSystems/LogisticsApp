@@ -4,7 +4,6 @@ import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.enums.UserRole;
-import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.services.assignment.AssignmentService;
