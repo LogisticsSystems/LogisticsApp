@@ -1,50 +1,71 @@
-package com.company.logistics.tests.commands.assigning;
+package com.company.logistics.tests.commands.querying;
 
 import com.company.logistics.commands.CommandsConstants;
-import com.company.logistics.commands.assigning.AssignPackageToRouteCommand;
-import com.company.logistics.dto.PackageSnapshot;
-import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.commands.querying.FindRouteCommand;
+import com.company.logistics.enums.City;
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
+import com.company.logistics.models.contracts.Route;
 import com.company.logistics.models.contracts.User;
+import com.company.logistics.models.delivery.RouteImpl;
+import com.company.logistics.repositories.contracts.RouteRepository;
 import com.company.logistics.repositories.contracts.UserRepository;
-import com.company.logistics.services.assignment.AssignmentService;
-
 import com.company.logistics.utils.ErrorMessages;
+import com.company.logistics.utils.ListingHelpers;
+import com.company.logistics.utils.ParsingHelpers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-public class AssignPackageToRouteCommandTest {
+public class FindRouteTests {
     private static final int EXPECTED_PARAMETER_COUNT = 2;
 
-    private AssignmentService mockAssignmentService;
+    private static final List<String> parameters = List.of("MEL", "ADL");
+    private static final List<Route> EMPTY_LIST = new ArrayList<>();
+
+
+    private RouteRepository mockRouteRepository;
+    private RouteRepository mockEmptyRouteRepository;
     private UserRepository mockUserRepository;
     private User mockUser;
 
-    private AssignPackageToRouteCommand command;
+    private static Route mockRoteViable = mock(RouteImpl.class);
+
+    private static final List<Route> VALID_LIST = List.of(mockRoteViable);
+
+    private FindRouteCommand command;
+    private FindRouteCommand commandEmpty;
 
     @BeforeEach
     public void setUp() {
-        mockAssignmentService = mock(AssignmentService.class);
+        mockRouteRepository = mock(RouteRepository.class);
+        mockEmptyRouteRepository = mock(RouteRepository.class);
         mockUserRepository = mock(UserRepository.class);
         mockUser = mock(User.class);
+
+        when(mockRoteViable.print()).thenReturn("print viable route");
 
         when(mockUserRepository.getLoggedInUser()).thenReturn(mockUser);
         when(mockUser.getRole()).thenReturn(UserRole.EMPLOYEE);
 
-        command = new AssignPackageToRouteCommand(mockAssignmentService, mockUserRepository);
+        when(mockRouteRepository.findRoutes(City.MEL, City.ADL)).thenReturn(VALID_LIST);
+        when(mockEmptyRouteRepository.findRoutes(City.MEL, City.ADL)).thenReturn(EMPTY_LIST);
+
+        command = new FindRouteCommand(mockRouteRepository, mockUserRepository);
+        commandEmpty = new FindRouteCommand(mockEmptyRouteRepository, mockUserRepository);
     }
 
     // Test parameter count
     @Test
     public void execute_Should_ThrowException_When_NotEnoughParameters() {
-        List<String> parameters = List.of("5");
+        List<String> parameters = List.of("MEL");
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -59,7 +80,7 @@ public class AssignPackageToRouteCommandTest {
 
     @Test
     public void execute_Should_ThrowException_When_TooManyParameters() {
-        List<String> parameters = List.of("5", "5", "5");
+        List<String> parameters = List.of("MEL", "ADL", "DAR");
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -76,8 +97,6 @@ public class AssignPackageToRouteCommandTest {
     @Test
     public void execute_Should_ThrowException_When_UserIsManager() {
         when(mockUser.getRole()).thenReturn(UserRole.MANAGER);
-
-        List<String> parameters = List.of("5", "10");
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -96,8 +115,6 @@ public class AssignPackageToRouteCommandTest {
     public void execute_Should_ThrowException_When_UserIsDataAnalyst() {
         when(mockUser.getRole()).thenReturn(UserRole.DATA_ANALYST);
 
-        List<String> parameters = List.of("5", "10");
-
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
                 () -> command.execute(parameters)
@@ -113,60 +130,55 @@ public class AssignPackageToRouteCommandTest {
 
     //Test that parameters parse correctly
     @Test
-    public void execute_Should_ThrowException_When_FirstParameterIsNotNumber() {
-        List<String> parameters = List.of("asd", "5");
+    public void execute_Should_ThrowException_When_FirstParameterIsNotCity() {
+        List<String> parameters = List.of("dsada", "ADL");
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
                 () -> command.execute(parameters)
         );
 
-        String expectedMessage = String.format(ErrorMessages.INCORRECT_DATA_INPUT
-                ,"Package ID","number");
+        String expectedMessage = ParsingHelpers.printEnum(City.class);
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
+
 
     @Test
-    public void execute_Should_ThrowException_When_SecondParameterIsNotNumber() {
-        List<String> parameters = List.of("3", "asd");
+    public void execute_Should_ThrowException_When_SecondParameterIsNotCity() {
+        List<String> parameters = List.of("MEL", "dsfdsaf");
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
                 () -> command.execute(parameters)
         );
 
-        String expectedMessage = String.format(ErrorMessages.INCORRECT_DATA_INPUT
-                ,"Route ID","number");
+        String expectedMessage = ParsingHelpers.printEnum(City.class);
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
+
 
     // Test that command works
     @Test
-    public void execute_Should_AssignPackageToRoute_When_UserIsEmployeeAndParametersAreValid() {
-        // Arrange
-        int packageId = 6;
-        int routeId = 11;
-        PackageStatus expectedStatus = PackageStatus.IN_TRANSIT;
-        List<String> parameters = List.of(String.valueOf(packageId), String.valueOf(routeId));
-
-        PackageSnapshot snapshot = new PackageSnapshot(
-                packageId,
-                expectedStatus,
-                LocalDateTime.now()
-        );
-
-        when(mockAssignmentService.assignPackageToRoute(packageId, routeId)).thenReturn(snapshot);
-
+    public void execute_Should_ReturnCorrectString_When_NoRoutesInList() {
         // Act
-        String result = command.execute(parameters);
+        String result = commandEmpty.execute(parameters);
 
         // Assert
         String expected = String.format(
-                CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE,
-                "Package", packageId, routeId, expectedStatus
+                CommandsConstants.NO_MATCHING_ROUTES_MESSAGE, parameters.get(0), parameters.get(1)
         );
 
         Assertions.assertEquals(expected, result);
-        verify(mockAssignmentService, times(1)).assignPackageToRoute(packageId, routeId);
+        verify(mockEmptyRouteRepository, times(1)).findRoutes(City.MEL, City.ADL);
+    }
+
+    @Test
+    public void execute_Should_ReturnCorrectString_When_ListingViableRoutes() {
+        String result = command.execute(parameters);
+
+        String expected = ListingHelpers.elementsToString(VALID_LIST);
+
+        Assertions.assertEquals(expected, result);
+        verify(mockRouteRepository, times(1)).findRoutes(City.MEL, City.ADL);
     }
 }

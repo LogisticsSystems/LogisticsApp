@@ -42,7 +42,7 @@ public class ListRoutesWithNoAssignedTrucksCommand implements Command {
 
     private List<Route> getRoutesWithNoAssignedTrucks(List<Route> routes) {
         return routes.stream()
-                .filter(r -> r.getAssignedTruck().isEmpty())
+                .filter(r -> r.getAssignedTruck() == null)
                 .toList();
     }
 }

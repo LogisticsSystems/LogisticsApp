@@ -1,8 +1,7 @@
-package com.company.logistics.commands.authentications;
+package com.company.logistics.commands.authenticating;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.utils.ValidationHelper;
@@ -10,8 +9,6 @@ import com.company.logistics.utils.ValidationHelper;
 import java.util.List;
 
 public class LoginCommand implements Command {
-    private final static String USER_LOGGED_IN = "User %s successfully logged in!";
-    public final static String USER_LOGGED_IN_ALREADY = "User %s is logged in! Please log out first!";
 
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
@@ -33,7 +30,7 @@ public class LoginCommand implements Command {
 
         userRepository.login(this.username, this.password);
 
-        return String.format(USER_LOGGED_IN, username);
+        return String.format(CommandsConstants.USER_LOGGED_IN, username);
     }
 
     private void parseParameters(List<String> parameters) {
@@ -43,7 +40,7 @@ public class LoginCommand implements Command {
 
     private void validateLoggedInUser() {
         if (userRepository.hasLoggedInUser()) {
-            throw new InvalidUserInputException(String.format(USER_LOGGED_IN_ALREADY,
+            throw new InvalidUserInputException(String.format(CommandsConstants.USER_LOGGED_IN_ALREADY,
                     userRepository.getLoggedInUser().getUsername())
             );
         }

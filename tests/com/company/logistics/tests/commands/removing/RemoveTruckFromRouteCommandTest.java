@@ -1,44 +1,44 @@
-package com.company.logistics.tests.commands.assigning;
+package com.company.logistics.tests.commands.removing;
 
 import com.company.logistics.commands.CommandsConstants;
-import com.company.logistics.commands.assigning.AssignPackageToRouteCommand;
-import com.company.logistics.dto.PackageSnapshot;
-import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.commands.removing.RemoveTruckFromRouteCommand;
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.services.assignment.AssignmentService;
-
 import com.company.logistics.utils.ErrorMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-public class AssignPackageToRouteCommandTest {
+public class RemoveTruckFromRouteCommandTest {
     private static final int EXPECTED_PARAMETER_COUNT = 2;
 
-    private AssignmentService mockAssignmentService;
+    List<String> parameters = List.of("1", "1");
+
+    private AssignmentService mockService;
     private UserRepository mockUserRepository;
     private User mockUser;
 
-    private AssignPackageToRouteCommand command;
+    private RemoveTruckFromRouteCommand command;
 
     @BeforeEach
     public void setUp() {
-        mockAssignmentService = mock(AssignmentService.class);
+        mockService = mock(AssignmentService.class);
         mockUserRepository = mock(UserRepository.class);
         mockUser = mock(User.class);
 
         when(mockUserRepository.getLoggedInUser()).thenReturn(mockUser);
         when(mockUser.getRole()).thenReturn(UserRole.EMPLOYEE);
 
-        command = new AssignPackageToRouteCommand(mockAssignmentService, mockUserRepository);
+        command = new RemoveTruckFromRouteCommand(mockService, mockUserRepository);
     }
 
     // Test parameter count
@@ -122,7 +122,7 @@ public class AssignPackageToRouteCommandTest {
         );
 
         String expectedMessage = String.format(ErrorMessages.INCORRECT_DATA_INPUT
-                ,"Package ID","number");
+                ,"Truck ID","number");
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
@@ -142,31 +142,23 @@ public class AssignPackageToRouteCommandTest {
 
     // Test that command works
     @Test
-    public void execute_Should_AssignPackageToRoute_When_UserIsEmployeeAndParametersAreValid() {
+    public void execute_Should_RemoveTruckFromRoute_When_UserIsEmployeeAndParametersAreValid() {
         // Arrange
-        int packageId = 6;
-        int routeId = 11;
-        PackageStatus expectedStatus = PackageStatus.IN_TRANSIT;
-        List<String> parameters = List.of(String.valueOf(packageId), String.valueOf(routeId));
+        int truckId = 1;
+        int routeId = 1;
 
-        PackageSnapshot snapshot = new PackageSnapshot(
-                packageId,
-                expectedStatus,
-                LocalDateTime.now()
-        );
-
-        when(mockAssignmentService.assignPackageToRoute(packageId, routeId)).thenReturn(snapshot);
+        when(mockService.removeTruckFromRoute(truckId, routeId)).thenReturn(new ArrayList<>());
 
         // Act
         String result = command.execute(parameters);
 
         // Assert
         String expected = String.format(
-                CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE,
-                "Package", packageId, routeId, expectedStatus
+                CommandsConstants.REMOVED_TRUCK_FROM_ROUTE,
+                "Truck", truckId, routeId
         );
 
         Assertions.assertEquals(expected, result);
-        verify(mockAssignmentService, times(1)).assignPackageToRoute(packageId, routeId);
+        verify(mockService, times(1)).removeTruckFromRoute(truckId, routeId);
     }
 }

@@ -55,6 +55,10 @@ public class DeliveryPackageImpl implements DeliveryPackage, Serializable {
     @Override public double getWeightKg()       { return weightKg; }
     @Override public String getContactInfo()    { return contactInfo; }
     @Override public PackageStatus getStatus()  { return status; }
+    @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
+    @Override public void setExpectedArrival(LocalDateTime eta) {
+        this.expectedArrival = eta;
+    }
 
     @Override
     public void advancePackageStatus() {
@@ -84,13 +88,6 @@ public class DeliveryPackageImpl implements DeliveryPackage, Serializable {
         if (status == PackageStatus.UNASSIGNED) {
             expectedArrival = null;
         }
-    }
-
-
-
-    @Override public LocalDateTime getExpectedArrival()    { return expectedArrival; }
-    @Override public void setExpectedArrival(LocalDateTime eta) {
-        this.expectedArrival = eta;
     }
 
     @Override

@@ -53,8 +53,7 @@ public class ListPackagesWithStatusCommand implements Command {
 
     private void parseParameters(List<String> parameters) {
         status = ParsingHelpers.tryParseEnum(parameters.get(0),
-                PackageStatus.class,
-                String.format(CommandsConstants.INVALID_STATUS_MESSEGE,parameters.get(0)));
+                PackageStatus.class);
     }
 
     private List<DeliveryPackage> getPackagesWithStatus(PackageStatus status) {

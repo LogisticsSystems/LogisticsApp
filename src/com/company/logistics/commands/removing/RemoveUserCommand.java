@@ -1,4 +1,4 @@
-package com.company.logistics.commands.removals;
+package com.company.logistics.commands.removing;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
@@ -6,14 +6,12 @@ import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
-import com.company.logistics.utils.ParsingHelpers;
 import com.company.logistics.utils.ValidationHelper;
 
 import java.util.List;
 
 public class RemoveUserCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
-    public static final String CURRENTLY_LOGGED_IN = "You cannot remove user %s, because they are currently logged in.";
 
     private final UserRepository userRepository;
     private final User loggedInUser;
@@ -42,7 +40,7 @@ public class RemoveUserCommand implements Command {
         ValidationHelper.validateUserHasRole(loggedInUser, UserRole.MANAGER);
 
         if (loggedInUser.getUsername().equals(this.username)) {
-            throw new InvalidUserInputException(String.format(CURRENTLY_LOGGED_IN, username));
+            throw new InvalidUserInputException(String.format(CommandsConstants.CURRENTLY_LOGGED_IN, username));
         }
     }
 

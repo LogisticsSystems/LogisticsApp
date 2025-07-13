@@ -1,4 +1,4 @@
-package com.company.logistics.commands.creation;
+package com.company.logistics.commands.creating;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
@@ -17,7 +17,6 @@ import java.util.List;
 
 public class CreateRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
-    public static final String ROUTE_CREATED_MESSAGE = "Route was created with ID %d.";
 
     private final RouteCreationService creationService;
     private final User loggedInUser;
@@ -40,7 +39,7 @@ public class CreateRouteCommand implements Command {
 
         Route createdRoute = creationService.createRoute(locations, departureTime);
 
-        return String.format(ROUTE_CREATED_MESSAGE, createdRoute.getId());
+        return String.format(CommandsConstants.ROUTE_CREATED_MESSAGE, createdRoute.getId());
     }
 
     private void validateLoggedInUser() {
@@ -50,7 +49,7 @@ public class CreateRouteCommand implements Command {
     private void parseParameters(List<String> parameters) {
         this.locations = Arrays.stream(parameters.get(0)
                         .split(","))
-                .map(c -> ParsingHelpers.tryParseEnum(c, City.class, CommandsConstants.INVALID_CITY_MESSAGE))
+                .map(c -> ParsingHelpers.tryParseEnum(c, City.class))
                 .toList();
         this.departureTime = ParsingHelpers.tryParseDateTime(parameters.get(1));
     }

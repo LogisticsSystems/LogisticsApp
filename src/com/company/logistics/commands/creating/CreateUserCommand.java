@@ -1,4 +1,4 @@
-package com.company.logistics.commands.creation;
+package com.company.logistics.commands.creating;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
@@ -34,9 +34,9 @@ public class CreateUserCommand implements Command {
 
         parseParameters(parameters);
 
-        userRepository.createUser(this.username, this.name, this.password, this.role);
+        User user = userRepository.createUser(this.username, this.name, this.password, this.role);
 
-        return String.format(CommandsConstants.USER_CREATED_MESSAGE, username);
+        return String.format(CommandsConstants.USER_CREATED_MESSAGE, user.getUsername());
     }
 
     private void validateLoggedInUser() {
@@ -48,7 +48,6 @@ public class CreateUserCommand implements Command {
         this.name = parameters.get(1);
         this.password = parameters.get(2);
         this.role = ParsingHelpers.tryParseEnum(parameters.get(3),
-                UserRole.class,
-                String.format(CommandsConstants.INVALID_ROLE_MESSAGE, parameters.get(3)));
+                UserRole.class);
     }
 }

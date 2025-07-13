@@ -14,7 +14,6 @@ import com.company.logistics.utils.ValidationHelper;
 import java.util.List;
 
 public class ListRoutesCommand implements Command {
-
     private final RouteRepository routeRepository;
     private final User loggedInUser;
 

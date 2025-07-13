@@ -14,9 +14,11 @@ import java.util.List;
 
 public class ListUserCommand implements Command {
     private final UserRepository userRepository;
+    private final User loggedInUser;
 
     public ListUserCommand(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.loggedInUser = userRepository.getLoggedInUser();
     }
 
     public String execute(List<String> parameters) {
@@ -31,6 +33,6 @@ public class ListUserCommand implements Command {
     }
 
     private void validateLoggedInUser() {
-        ValidationHelper.validateUserHasRole(userRepository.getLoggedInUser(), UserRole.DATA_ANALYST, UserRole.MANAGER);
+        ValidationHelper.validateUserHasRole(loggedInUser, UserRole.DATA_ANALYST, UserRole.MANAGER);
     }
 }

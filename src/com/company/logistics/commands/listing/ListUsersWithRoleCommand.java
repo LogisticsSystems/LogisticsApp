@@ -49,8 +49,7 @@ public class ListUsersWithRoleCommand implements Command {
 
     private void parseParameters(List<String> parameters) {
         role = ParsingHelpers.tryParseEnum(parameters.get(0),
-                UserRole.class,
-                String.format(CommandsConstants.INVALID_ROLE_MESSAGE,parameters.get(0)));
+                UserRole.class);
     }
 
     private List<User> getUsersWithRole(UserRole role) {

@@ -1,4 +1,4 @@
-package com.company.logistics.commands.removals;
+package com.company.logistics.commands.removing;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;

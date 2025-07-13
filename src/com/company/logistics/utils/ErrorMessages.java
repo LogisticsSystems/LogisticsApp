@@ -10,12 +10,12 @@ public final class ErrorMessages {
     // --- Null / General validation -------------------------------------------------
     public static final String NOT_NULL                  = "%s must not be null";
     public static final String NEGATIVE_DOUBLE           = "%s must be non negative";
-    public static final String NON_POSITIVE_INT          = "%s must be positive";
-    public static final String STRING_NOT_IN_RANGE       = "%s must be between %d and %d characters";
+    public static final String NON_POSITIVE_INT          = "%s must be non negative";
     public static final String NUMBER_NOT_IN_RANGE       = "%s must be between %d and %d.";
     public static final String MIN_LIST_SIZE             = "%s must contain at least %d elements";
     public static final String EXACT_LIST_SIZE           = "%s must contain exactly %d elements";
     public static final String SYMBOLS_PATTERN_ERR       = "%s contains invalid symbols!";
+    public static final String START_END_NOT_SAME_ERROR  = "Start and End cities cannot be the same.";
 
     // --- Parsing / Argument errors -------------------------------------------------
     public static final String INVALID_ARGUMENTS_COUNT   = "Invalid arguments count. Expected: %d, Given: %d.";

@@ -2,22 +2,22 @@ package com.company.logistics.core.implementation;
 
 import com.company.logistics.commands.assigning.AssignPackageToRouteCommand;
 import com.company.logistics.commands.assigning.AssignTruckToRouteCommand;
-import com.company.logistics.commands.authentications.LoginCommand;
-import com.company.logistics.commands.authentications.LogoutCommand;
+import com.company.logistics.commands.authenticating.LoginCommand;
+import com.company.logistics.commands.authenticating.LogoutCommand;
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.commands.creation.CreatePackageCommand;
-import com.company.logistics.commands.creation.CreateRouteCommand;
-import com.company.logistics.commands.creation.CreateUserCommand;
-import com.company.logistics.commands.delivery.DeliverPackageCommand;
+import com.company.logistics.commands.creating.CreatePackageCommand;
+import com.company.logistics.commands.creating.CreateRouteCommand;
+import com.company.logistics.commands.creating.CreateUserCommand;
+import com.company.logistics.commands.delivering.DeliverPackageCommand;
 import com.company.logistics.commands.listing.*;
 import com.company.logistics.commands.persistence.LoadCommand;
 import com.company.logistics.commands.persistence.SaveCommand;
-import com.company.logistics.commands.queries.FindRoute;
-import com.company.logistics.commands.queries.ViewPackageWithIDCommand;
-import com.company.logistics.commands.removals.RemovePackageFromRouteCommand;
-import com.company.logistics.commands.removals.RemoveTruckFromRouteCommand;
-import com.company.logistics.commands.queries.HelpCommand;
-import com.company.logistics.commands.removals.RemoveUserCommand;
+import com.company.logistics.commands.querying.FindRouteCommand;
+import com.company.logistics.commands.querying.ViewPackageWithIDCommand;
+import com.company.logistics.commands.removing.RemovePackageFromRouteCommand;
+import com.company.logistics.commands.removing.RemoveTruckFromRouteCommand;
+import com.company.logistics.commands.querying.HelpCommand;
+import com.company.logistics.commands.removing.RemoveUserCommand;
 import com.company.logistics.commands.speed.ChangeSpeedModelCommand;
 import com.company.logistics.commands.speed.ViewSpeedModelCommand;
 import com.company.logistics.core.context.EngineContext;
@@ -82,7 +82,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case REMOVEUSER       -> new RemoveUserCommand(userRepository);
 
             // ——— Queries & listings ———
-            case FINDROUTE                      -> new FindRoute(routeRepository, userRepository);
+            case FINDROUTE                      -> new FindRouteCommand(routeRepository, userRepository);
             case VIEWPACKAGEWITHID              -> new ViewPackageWithIDCommand(packageRepository, userRepository);
             case LISTPACKAGEINFO                -> new ListPackagesCommand(packageRepository, userRepository);
             case LISTROUTEINFO                  -> new ListRoutesCommand(routeRepository, userRepository);
@@ -109,7 +109,7 @@ public class CommandFactoryImpl implements CommandFactory {
             case DELIVERPACKAGE   -> new DeliverPackageCommand(deliveryService, userRepository);
 
             // ——— Speed model swap ———
-            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(routeRepository, speedModelService, routeRecalculatorService, userRepository);
+            case CHANGESPEEDMODEL -> new ChangeSpeedModelCommand(speedModelService, routeRecalculatorService, userRepository);
             case VIEWSPEEDMODEL   -> new ViewSpeedModelCommand(speedModelService, userRepository);
 
             // ——— Persistence ———

@@ -1,5 +1,6 @@
-package com.company.logistics.commands.delivery;
+package com.company.logistics.commands.delivering;
 
+import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.enums.UserRole;
@@ -13,7 +14,6 @@ import java.util.List;
 
 public class DeliverPackageCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 1;
-    public static final String PACKAGE_DELIVERED_MESSAGE = "Package %d has been delivered. Status: %s";
 
     private final PackageDeliveryService deliveryService;
     private final User loggedInUser;
@@ -35,7 +35,7 @@ public class DeliverPackageCommand implements Command {
 
         PackageSnapshot pkg = deliveryService.deliverPackage(this.packageId);
 
-        return String.format(PACKAGE_DELIVERED_MESSAGE, this.packageId, pkg.status());
+        return String.format(CommandsConstants.PACKAGE_DELIVERED_MESSAGE, pkg.id(), pkg.status());
     }
 
     private void validateLoggedInUser() {

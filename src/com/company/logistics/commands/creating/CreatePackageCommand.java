@@ -1,4 +1,4 @@
-package com.company.logistics.commands.creation;
+package com.company.logistics.commands.creating;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.*;
@@ -51,10 +51,8 @@ public class CreatePackageCommand implements Command {
         this.contactInfo = parameters.get(0);
         this.weight = ParsingHelpers.tryParseDouble(parameters.get(1), "Weight");
         this.startLocation = ParsingHelpers.tryParseEnum(parameters.get(2),
-                City.class,
-                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(2)));
+                City.class);
         this.endLocation = ParsingHelpers.tryParseEnum(parameters.get(3),
-                City.class,
-                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(3)));
+                City.class);
     }
 }

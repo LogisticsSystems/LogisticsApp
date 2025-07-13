@@ -27,19 +27,24 @@ public class ParsingHelpers {
         }
     }
 
-    public static <E extends Enum<E>> E tryParseEnum(String valueToParse, Class<E> type, String errorMessage) {
+    public static <E extends Enum<E>> E tryParseEnum(String valueToParse, Class<E> type) {
         try{
             return Enum.valueOf(type,valueToParse.toUpperCase());
         } catch (Exception e) {
-            String enumName=type.getSimpleName();
-            E[] enumValues=type.getEnumConstants();
-            String options= Arrays.stream(enumValues)
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
-            throw new InvalidUserInputException(String.format(ErrorMessages.INVALID_ENUM_VALUE
-                    ,enumName
-                    ,options));
+            throw new InvalidUserInputException(printEnum(type));
         }
+    }
+
+    public static <E extends Enum<E>> String printEnum(Class<E> type) {
+        String enumName=type.getSimpleName();
+        E[] enumValues=type.getEnumConstants();
+        String options= Arrays.stream(enumValues)
+                .map(Enum::name)
+                .collect(Collectors.joining(", "));
+
+        return String.format(ErrorMessages.INVALID_ENUM_VALUE
+                ,enumName
+                ,options);
     }
 
     public static LocalDateTime tryParseDateTime(String valueToParse) {

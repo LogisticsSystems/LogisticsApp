@@ -1,7 +1,7 @@
-package com.company.logistics.tests.commands.assigning;
+package com.company.logistics.tests.commands.removing;
 
 import com.company.logistics.commands.CommandsConstants;
-import com.company.logistics.commands.assigning.AssignPackageToRouteCommand;
+import com.company.logistics.commands.removing.RemovePackageFromRouteCommand;
 import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.enums.UserRole;
@@ -9,7 +9,6 @@ import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.services.assignment.AssignmentService;
-
 import com.company.logistics.utils.ErrorMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,26 +18,29 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-public class AssignPackageToRouteCommandTest {
+public class RemovePackageFromRouteCommandTest {
     private static final int EXPECTED_PARAMETER_COUNT = 2;
 
-    private AssignmentService mockAssignmentService;
+    List<String> parameters = List.of("1", "1");
+
+    private AssignmentService mockService;
     private UserRepository mockUserRepository;
     private User mockUser;
 
-    private AssignPackageToRouteCommand command;
+    private RemovePackageFromRouteCommand command;
 
     @BeforeEach
     public void setUp() {
-        mockAssignmentService = mock(AssignmentService.class);
+        mockService = mock(AssignmentService.class);
         mockUserRepository = mock(UserRepository.class);
         mockUser = mock(User.class);
 
         when(mockUserRepository.getLoggedInUser()).thenReturn(mockUser);
         when(mockUser.getRole()).thenReturn(UserRole.EMPLOYEE);
 
-        command = new AssignPackageToRouteCommand(mockAssignmentService, mockUserRepository);
+        command = new RemovePackageFromRouteCommand(mockService, mockUserRepository);
     }
 
     // Test parameter count
@@ -142,11 +144,11 @@ public class AssignPackageToRouteCommandTest {
 
     // Test that command works
     @Test
-    public void execute_Should_AssignPackageToRoute_When_UserIsEmployeeAndParametersAreValid() {
+    public void execute_Should_RemovePackageFromRoute_When_UserIsEmployeeAndParametersAreValid() {
         // Arrange
         int packageId = 6;
         int routeId = 11;
-        PackageStatus expectedStatus = PackageStatus.IN_TRANSIT;
+        PackageStatus expectedStatus = PackageStatus.UNASSIGNED;
         List<String> parameters = List.of(String.valueOf(packageId), String.valueOf(routeId));
 
         PackageSnapshot snapshot = new PackageSnapshot(
@@ -155,18 +157,18 @@ public class AssignPackageToRouteCommandTest {
                 LocalDateTime.now()
         );
 
-        when(mockAssignmentService.assignPackageToRoute(packageId, routeId)).thenReturn(snapshot);
+        when(mockService.removePackageFromRoute(packageId, routeId)).thenReturn(snapshot);
 
         // Act
         String result = command.execute(parameters);
 
         // Assert
         String expected = String.format(
-                CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE,
+                CommandsConstants.REMOVED_FROM_ROUTE,
                 "Package", packageId, routeId, expectedStatus
         );
 
         Assertions.assertEquals(expected, result);
-        verify(mockAssignmentService, times(1)).assignPackageToRoute(packageId, routeId);
+        verify(mockService, times(1)).removePackageFromRoute(packageId, routeId);
     }
 }

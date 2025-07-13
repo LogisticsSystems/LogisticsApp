@@ -1,7 +1,7 @@
 package com.company.logistics.tests.commands.assigning;
 
 import com.company.logistics.commands.CommandsConstants;
-import com.company.logistics.commands.assigning.AssignPackageToRouteCommand;
+import com.company.logistics.commands.assigning.AssignTruckToRouteCommand;
 import com.company.logistics.dto.PackageSnapshot;
 import com.company.logistics.enums.PackageStatus;
 import com.company.logistics.enums.UserRole;
@@ -9,7 +9,6 @@ import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
 import com.company.logistics.services.assignment.AssignmentService;
-
 import com.company.logistics.utils.ErrorMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,15 +18,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-public class AssignPackageToRouteCommandTest {
+public class AssignTruckToRouteCommandTest {
     private static final int EXPECTED_PARAMETER_COUNT = 2;
 
     private AssignmentService mockAssignmentService;
     private UserRepository mockUserRepository;
     private User mockUser;
 
-    private AssignPackageToRouteCommand command;
+    private AssignTruckToRouteCommand command;
 
     @BeforeEach
     public void setUp() {
@@ -38,7 +38,7 @@ public class AssignPackageToRouteCommandTest {
         when(mockUserRepository.getLoggedInUser()).thenReturn(mockUser);
         when(mockUser.getRole()).thenReturn(UserRole.EMPLOYEE);
 
-        command = new AssignPackageToRouteCommand(mockAssignmentService, mockUserRepository);
+        command = new AssignTruckToRouteCommand(mockAssignmentService, mockUserRepository);
     }
 
     // Test parameter count
@@ -122,7 +122,7 @@ public class AssignPackageToRouteCommandTest {
         );
 
         String expectedMessage = String.format(ErrorMessages.INCORRECT_DATA_INPUT
-                ,"Package ID","number");
+                ,"Truck ID","number");
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
@@ -142,31 +142,31 @@ public class AssignPackageToRouteCommandTest {
 
     // Test that command works
     @Test
-    public void execute_Should_AssignPackageToRoute_When_UserIsEmployeeAndParametersAreValid() {
+    public void execute_Should_AssignTruckToRoute_When_UserIsEmployeeAndParametersAreValid() {
         // Arrange
-        int packageId = 6;
+        int truckId = 6;
         int routeId = 11;
-        PackageStatus expectedStatus = PackageStatus.IN_TRANSIT;
-        List<String> parameters = List.of(String.valueOf(packageId), String.valueOf(routeId));
+        PackageStatus expectedStatus = PackageStatus.PENDING;
+        List<String> parameters = List.of(String.valueOf(truckId), String.valueOf(routeId));
 
         PackageSnapshot snapshot = new PackageSnapshot(
-                packageId,
+                truckId,
                 expectedStatus,
                 LocalDateTime.now()
         );
 
-        when(mockAssignmentService.assignPackageToRoute(packageId, routeId)).thenReturn(snapshot);
+        when(mockAssignmentService.assignPackageToRoute(truckId, routeId)).thenReturn(snapshot);
 
         // Act
         String result = command.execute(parameters);
 
         // Assert
         String expected = String.format(
-                CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE,
-                "Package", packageId, routeId, expectedStatus
+                CommandsConstants.ASSIGNED_TRUCK_ROUTE,
+                "Truck", truckId, routeId
         );
 
         Assertions.assertEquals(expected, result);
-        verify(mockAssignmentService, times(1)).assignPackageToRoute(packageId, routeId);
+        verify(mockAssignmentService, times(1)).assignTruckToRoute(truckId, routeId);
     }
 }

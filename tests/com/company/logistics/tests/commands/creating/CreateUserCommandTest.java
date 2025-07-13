@@ -1,50 +1,52 @@
-package com.company.logistics.tests.commands.assigning;
+package com.company.logistics.tests.commands.creating;
 
 import com.company.logistics.commands.CommandsConstants;
-import com.company.logistics.commands.assigning.AssignPackageToRouteCommand;
-import com.company.logistics.dto.PackageSnapshot;
-import com.company.logistics.enums.PackageStatus;
+import com.company.logistics.commands.creating.CreateUserCommand;
 import com.company.logistics.enums.UserRole;
 import com.company.logistics.exceptions.InvalidUserInputException;
 import com.company.logistics.models.contracts.User;
 import com.company.logistics.repositories.contracts.UserRepository;
-import com.company.logistics.services.assignment.AssignmentService;
-
 import com.company.logistics.utils.ErrorMessages;
+import com.company.logistics.utils.ParsingHelpers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
-public class AssignPackageToRouteCommandTest {
-    private static final int EXPECTED_PARAMETER_COUNT = 2;
+public class CreateUserCommandTest {
+    public static final int EXPECTED_PARAMETER_COUNT = 4;
 
-    private AssignmentService mockAssignmentService;
+    private static final String VALID_USERNAME = "sil";
+    private static final String VALID_NAME = "name";
+    private static final String VALID_PASSWORD = "sil123";
+    private static final UserRole VALID_ROLE = UserRole.EMPLOYEE;
+    private static final String INVALID_ROLE = "dhasjfl";
+    private static List<String> parameters = List.of(VALID_USERNAME, VALID_NAME, VALID_PASSWORD, VALID_ROLE.toString());
+
     private UserRepository mockUserRepository;
     private User mockUser;
 
-    private AssignPackageToRouteCommand command;
+    private CreateUserCommand command;
 
     @BeforeEach
     public void setUp() {
-        mockAssignmentService = mock(AssignmentService.class);
         mockUserRepository = mock(UserRepository.class);
         mockUser = mock(User.class);
 
         when(mockUserRepository.getLoggedInUser()).thenReturn(mockUser);
-        when(mockUser.getRole()).thenReturn(UserRole.EMPLOYEE);
+        when(mockUser.getRole()).thenReturn(UserRole.MANAGER);
 
-        command = new AssignPackageToRouteCommand(mockAssignmentService, mockUserRepository);
+        command = new CreateUserCommand(mockUserRepository);
     }
 
     // Test parameter count
     @Test
     public void execute_Should_ThrowException_When_NotEnoughParameters() {
-        List<String> parameters = List.of("5");
+        List<String> parameters = List.of(VALID_USERNAME, VALID_NAME, VALID_PASSWORD);
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -59,7 +61,7 @@ public class AssignPackageToRouteCommandTest {
 
     @Test
     public void execute_Should_ThrowException_When_TooManyParameters() {
-        List<String> parameters = List.of("5", "5", "5");
+        List<String> parameters = List.of(VALID_USERNAME, VALID_NAME, VALID_PASSWORD, VALID_PASSWORD, VALID_PASSWORD);
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -74,10 +76,8 @@ public class AssignPackageToRouteCommandTest {
 
     // Test role
     @Test
-    public void execute_Should_ThrowException_When_UserIsManager() {
-        when(mockUser.getRole()).thenReturn(UserRole.MANAGER);
-
-        List<String> parameters = List.of("5", "10");
+    public void execute_Should_ThrowException_When_UserIsEmployee() {
+        when(mockUser.getRole()).thenReturn(UserRole.EMPLOYEE);
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -86,7 +86,7 @@ public class AssignPackageToRouteCommandTest {
 
         String expectedMessage = String.format(
                 CommandsConstants.COMMAND_UNAVAILABLE_FOR_USER,
-                UserRole.MANAGER
+                UserRole.EMPLOYEE
         );
 
         Assertions.assertEquals(expectedMessage, ex.getMessage());
@@ -95,8 +95,6 @@ public class AssignPackageToRouteCommandTest {
     @Test
     public void execute_Should_ThrowException_When_UserIsDataAnalyst() {
         when(mockUser.getRole()).thenReturn(UserRole.DATA_ANALYST);
-
-        List<String> parameters = List.of("5", "10");
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
@@ -113,60 +111,36 @@ public class AssignPackageToRouteCommandTest {
 
     //Test that parameters parse correctly
     @Test
-    public void execute_Should_ThrowException_When_FirstParameterIsNotNumber() {
-        List<String> parameters = List.of("asd", "5");
+    public void execute_Should_ThrowException_When_FourthParameterIsNotRole() {
+        List<String> parameters = List.of(VALID_USERNAME, VALID_NAME, VALID_PASSWORD, INVALID_ROLE);
 
         Exception ex = Assertions.assertThrows(
                 InvalidUserInputException.class,
                 () -> command.execute(parameters)
         );
 
-        String expectedMessage = String.format(ErrorMessages.INCORRECT_DATA_INPUT
-                ,"Package ID","number");
-        Assertions.assertEquals(expectedMessage, ex.getMessage());
-    }
-
-    @Test
-    public void execute_Should_ThrowException_When_SecondParameterIsNotNumber() {
-        List<String> parameters = List.of("3", "asd");
-
-        Exception ex = Assertions.assertThrows(
-                InvalidUserInputException.class,
-                () -> command.execute(parameters)
-        );
-
-        String expectedMessage = String.format(ErrorMessages.INCORRECT_DATA_INPUT
-                ,"Route ID","number");
+        String expectedMessage = ParsingHelpers.printEnum(UserRole.class);
         Assertions.assertEquals(expectedMessage, ex.getMessage());
     }
 
     // Test that command works
     @Test
-    public void execute_Should_AssignPackageToRoute_When_UserIsEmployeeAndParametersAreValid() {
+    public void execute_Should_CreateUser_When_UserIsEmployeeAndParametersAreValid() {
         // Arrange
-        int packageId = 6;
-        int routeId = 11;
-        PackageStatus expectedStatus = PackageStatus.IN_TRANSIT;
-        List<String> parameters = List.of(String.valueOf(packageId), String.valueOf(routeId));
 
-        PackageSnapshot snapshot = new PackageSnapshot(
-                packageId,
-                expectedStatus,
-                LocalDateTime.now()
-        );
-
-        when(mockAssignmentService.assignPackageToRoute(packageId, routeId)).thenReturn(snapshot);
+        when(mockUserRepository.createUser(VALID_USERNAME, VALID_NAME, VALID_PASSWORD, VALID_ROLE)).thenReturn(mockUser);
+        when(mockUser.getUsername()).thenReturn(VALID_USERNAME);
 
         // Act
         String result = command.execute(parameters);
 
         // Assert
         String expected = String.format(
-                CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE,
-                "Package", packageId, routeId, expectedStatus
+                CommandsConstants.USER_CREATED_MESSAGE, VALID_USERNAME
         );
 
         Assertions.assertEquals(expected, result);
-        verify(mockAssignmentService, times(1)).assignPackageToRoute(packageId, routeId);
+        verify(mockUserRepository, times(1)).createUser(VALID_USERNAME, VALID_NAME, VALID_PASSWORD, VALID_ROLE);
     }
+
 }

@@ -1,4 +1,4 @@
-package com.company.logistics.commands.queries;
+package com.company.logistics.commands.querying;
 
 import com.company.logistics.commands.CommandsConstants;
 import com.company.logistics.commands.contracts.Command;
@@ -14,7 +14,7 @@ import com.company.logistics.utils.ValidationHelper;
 
 import java.util.List;
 
-public class FindRoute implements Command {
+public class FindRouteCommand implements Command {
     public static final int EXPECTED_NUMBER_OF_ARGUMENTS = 2;
 
     private final RouteRepository routeRepository;
@@ -23,7 +23,7 @@ public class FindRoute implements Command {
     private City startLocation;
     private City endLocation;
 
-    public FindRoute(RouteRepository routeRepository, UserRepository userRepository) {
+    public FindRouteCommand(RouteRepository routeRepository, UserRepository userRepository) {
         this.routeRepository = routeRepository;
         this.loggedInUser = userRepository.getLoggedInUser();
     }
@@ -52,11 +52,9 @@ public class FindRoute implements Command {
 
     private void parseParameters(List<String> parameters) {
         this.startLocation = ParsingHelpers.tryParseEnum(parameters.get(0),
-                City.class,
-                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(0)));
+                City.class);
         this.endLocation = ParsingHelpers.tryParseEnum(parameters.get(1),
-                City.class,
-                String.format(CommandsConstants.INVALID_CITY_MESSAGE, parameters.get(1)));
+                City.class);
     }
 
 

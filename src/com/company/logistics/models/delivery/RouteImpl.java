@@ -32,7 +32,7 @@ public class RouteImpl implements Route, Serializable {
     public RouteImpl(int id, List<City> locations, LocalDateTime departureTime) {
         ValidationHelper.validateIntPositive(id, "Route ID");
         ValidationHelper.validateListSizeAtLeast(locations, "Locations", MIN_LOCATIONS);
-        ValidationHelper.validateNotNull(departureTime, "departureTime");
+        ValidationHelper.validateNotNull(departureTime, "Departure time");
         ValidationHelper.validateUniqueIntermediateStops(locations);
 
         this.id            = id;
@@ -43,8 +43,8 @@ public class RouteImpl implements Route, Serializable {
     @Override public int getId()                      { return id; }
     @Override public LocalDateTime getDepartureTime() { return departureTime; }
     @Override public List<City> getLocations()        { return List.copyOf(locations); }
+    @Override public List<LocalDateTime> getSchedule(){ return schedule; }
 
-    @Override public List<LocalDateTime> getSchedule() { return schedule; }
     @Override public void setSchedule(List<LocalDateTime> schedule) {
         ValidationHelper.validateListSizeEquals(schedule, "Schedule", locations.size());
         this.schedule = List.copyOf(schedule);

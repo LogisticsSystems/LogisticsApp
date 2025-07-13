@@ -1,4 +1,4 @@
-package com.company.logistics.commands.queries;
+package com.company.logistics.commands.querying;
 
 import com.company.logistics.commands.contracts.Command;
 import com.company.logistics.enums.UserRole;

@@ -44,7 +44,7 @@ public class ValidationHelper {
     }
 
     public static void validateArgumentsCount(List<String> params, int expected) {
-        if (params.size() < expected) {
+        if (params.size() != expected) {
             throw new InvalidUserInputException(String.format(
                     ErrorMessages.INVALID_ARGUMENTS_COUNT, expected, params.size()));
         }
@@ -214,7 +214,7 @@ public class ValidationHelper {
 
     public static void validateNotSameCities(City startLocation, City endLocation) {
         if (startLocation == endLocation) {
-            throw new InvalidUserInputException("Start/End cities cannot be the same");
+            throw new InvalidUserInputException(ErrorMessages.START_END_NOT_SAME_ERROR);
         }
     }
 
