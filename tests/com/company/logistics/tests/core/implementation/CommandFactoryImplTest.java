@@ -1,8 +1,8 @@
 package com.company.logistics.tests.core.implementation;
 
 import com.company.logistics.commands.contracts.Command;
-import com.company.logistics.commands.creation.CreatePackageCommand;
-import com.company.logistics.commands.creation.CreateRouteCommand;
+import com.company.logistics.commands.creating.CreatePackageCommand;
+import com.company.logistics.commands.creating.CreateRouteCommand;
 import com.company.logistics.core.context.EngineContext;
 import com.company.logistics.core.implementation.CommandFactoryImpl;
 import com.company.logistics.exceptions.InvalidUserInputException;
