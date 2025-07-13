@@ -145,7 +145,7 @@ public class ValidationHelper {
     public static void validatePackageInRoute(DeliveryPackage deliveryPackage, Route route){
         if(route.getAssignedPackages().stream()
                 .noneMatch(pkg->pkg.equals(deliveryPackage))) {
-            throw new IllegalArgumentException(String.format(ErrorMessages.PACKAGE_NOT_OT_ROUTE,
+            throw new InvalidUserInputException(String.format(ErrorMessages.PACKAGE_NOT_OT_ROUTE,
                     deliveryPackage.getId(),
                     route.getId()));
         }
@@ -153,7 +153,7 @@ public class ValidationHelper {
 
     public static void validateTruckAssignedToRoute(Truck truck, Route route){
         if(route.getAssignedTruck().isEmpty() || !route.getAssignedTruck().get().equals(truck)){
-            throw new IllegalArgumentException(String.format(ErrorMessages.TRUCK_NOT_ON_ROUTE,
+            throw new InvalidUserInputException(String.format(ErrorMessages.TRUCK_NOT_ON_ROUTE,
                     truck.getId(),
                     route.getId()));
         }
