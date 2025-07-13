@@ -152,7 +152,8 @@ public class AssignPackageToRouteCommandTest {
         PackageSnapshot snapshot = new PackageSnapshot(
                 packageId,
                 expectedStatus,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ""
         );
 
         when(mockAssignmentService.assignPackageToRoute(packageId, routeId)).thenReturn(snapshot);

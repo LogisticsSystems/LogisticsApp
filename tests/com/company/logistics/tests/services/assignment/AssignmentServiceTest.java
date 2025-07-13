@@ -41,7 +41,7 @@ public class AssignmentServiceTest {
     public void assignPackageToRoute_Should_DelegateToStrategyAndReturnSnapshot() {
         int pkgId = 1;
         int routeId = 2;
-        PackageSnapshot expected = new PackageSnapshot(pkgId, null, LocalDateTime.now());
+        PackageSnapshot expected = new PackageSnapshot(pkgId, null, LocalDateTime.now(),"");
 
         when(mockPackageStrategy.assignPackage(pkgId, routeId)).thenReturn(expected);
 
@@ -83,7 +83,7 @@ public class AssignmentServiceTest {
     public void removePackageFromRoute_Should_DelegateToStrategyAndReturnSnapshot() {
         int packageId = 7;
         int routeId = 8;
-        PackageSnapshot expected = new PackageSnapshot(packageId, null, LocalDateTime.now());
+        PackageSnapshot expected = new PackageSnapshot(packageId, null, LocalDateTime.now(),"");
 
         when(mockPackageRemoval.removePackage(packageId, routeId)).thenReturn(expected);
 

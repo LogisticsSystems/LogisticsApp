@@ -152,7 +152,8 @@ public class AssignTruckToRouteCommandTest {
         PackageSnapshot snapshot = new PackageSnapshot(
                 truckId,
                 expectedStatus,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ""
         );
 
         when(mockAssignmentService.assignPackageToRoute(truckId, routeId)).thenReturn(snapshot);

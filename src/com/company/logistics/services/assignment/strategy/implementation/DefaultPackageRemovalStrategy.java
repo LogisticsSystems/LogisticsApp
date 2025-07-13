@@ -34,7 +34,8 @@ public class DefaultPackageRemovalStrategy implements PackageRemovalStrategy {
         return new PackageSnapshot(
                 deliveryPackage.getId(),
                 deliveryPackage.getStatus(),
-                deliveryPackage.getExpectedArrival()
+                deliveryPackage.getExpectedArrival(),
+                ""
         );
     }
 

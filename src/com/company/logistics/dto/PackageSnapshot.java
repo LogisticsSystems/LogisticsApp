@@ -7,5 +7,6 @@ import java.time.LocalDateTime;
 public record PackageSnapshot(
         int id,
         PackageStatus status,
-        LocalDateTime eta
+        LocalDateTime eta,
+        String message
 ) { }

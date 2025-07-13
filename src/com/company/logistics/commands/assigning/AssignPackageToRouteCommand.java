@@ -36,7 +36,11 @@ public class AssignPackageToRouteCommand implements Command {
 
         PackageSnapshot updated = assignmentService.assignPackageToRoute(this.packageId, this.routeId);
 
-        return String.format(CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE, "Package", this.packageId, this.routeId, updated.status());
+        if(updated.message().isEmpty()) {
+            return String.format(CommandsConstants.ASSIGNED_PACKAGE_TO_ROUTE, "Package", this.packageId, this.routeId, updated.status());
+        }else{
+            return updated.message();
+        }
     }
 
     private void validateLoggedInUser() {

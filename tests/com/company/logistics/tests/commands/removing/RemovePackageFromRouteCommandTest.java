@@ -154,7 +154,8 @@ public class RemovePackageFromRouteCommandTest {
         PackageSnapshot snapshot = new PackageSnapshot(
                 packageId,
                 expectedStatus,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                ""
         );
 
         when(mockService.removePackageFromRoute(packageId, routeId)).thenReturn(snapshot);

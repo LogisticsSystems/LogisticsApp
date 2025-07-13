@@ -6,6 +6,13 @@ public class CommandsConstants {
     public static final String ASSIGNED_PACKAGE_TO_ROUTE = "%s %d was assigned to route %d. New status: %s";
     public static final String NO_PACKAGES_WITH_STATUS = "No packages with status %s found.";
     public static final String PACKAGE_DELIVERED_MESSAGE = "Package %d has been delivered. Status: %s";
+    public static final String NEW_TRUCK_FOUND = "The current truck could not fit the package!\nA larger truck %d " +
+            "was assigned to route %d, and package: %d was successfully assigned.";
+    public static final String NEW_ROUTE_CREATED = "The package %d exceeds the maximum truck capacity.\n" +
+            "A new route %d was created and the package was assigned to it.";
+    public static final String COMPATIBLE_ROUTE_FOUND = "Due to exceeded load capacity,\n package %d was assigned to " +
+            "a compatible Route %d with sufficient load allowance.";
+    public static final String EMPTY_MESSAGE = "";
 
     // Truck
     public static final String ASSIGNED_TRUCK_ROUTE      = "%s %d was assigned to route %d";
